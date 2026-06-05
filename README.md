@@ -1,1 +1,0 @@
-# BirsaKisan_Drishti
