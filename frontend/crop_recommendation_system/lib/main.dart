@@ -1,4 +1,5 @@
 // import 'package:crop_recommendation_system/ApiServices/weather_api/home_page_screen_temp.dart';
+import 'package:crop_recommendation_system/crop_recommendation/crop_input_page.dart';
 import 'package:crop_recommendation_system/example.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: const Home(),
+      debugShowCheckedModeBanner: false,
+      home: const CropInputPage(),
     );
   }
 }

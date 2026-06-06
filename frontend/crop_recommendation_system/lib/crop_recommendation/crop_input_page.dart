@@ -7,13 +7,10 @@ class CropInputPage extends StatefulWidget {
   const CropInputPage({super.key});
 
   @override
-  State<CropInputPage> createState() =>
-      _CropInputPageState();
+  State<CropInputPage> createState() => _CropInputPageState();
 }
 
-class _CropInputPageState
-    extends State<CropInputPage> {
-
+class _CropInputPageState extends State<CropInputPage> {
   final controller = CropRecommendController();
 
   final nController = TextEditingController();
@@ -21,194 +18,310 @@ class _CropInputPageState
   final kController = TextEditingController();
   final phController = TextEditingController();
 
-  final soilMoistureController =
-      TextEditingController();
+  final soilMoistureController = TextEditingController();
 
-  final temperatureController =
-      TextEditingController();
+  final temperatureController = TextEditingController();
 
-  final humidityController =
-      TextEditingController();
+  final humidityController = TextEditingController();
 
-  final rainfallController =
-      TextEditingController();
+  final rainfallController = TextEditingController();
 
-  final solarRadiationController =
-      TextEditingController();
+  final solarRadiationController = TextEditingController();
 
-  final elevationController =
-      TextEditingController();
+  final elevationController = TextEditingController();
 
-  final irrigationController =
-      TextEditingController();
+  final irrigationController = TextEditingController();
 
-  final previousCropController =
-      TextEditingController();
+  final previousCropController = TextEditingController();
 
   bool isLoading = false;
 
   Future<void> submit() async {
-
     setState(() {
       isLoading = true;
     });
 
     try {
-
-      final result =
-          await controller.recommendCrop(
-        n: double.parse(
-            nController.text),
-        p: double.parse(
-            pController.text),
-        k: double.parse(
-            kController.text),
-        ph: double.parse(
-            phController.text),
-        soilMoisture: double.parse(
-            soilMoistureController.text),
-        temperature: double.parse(
-            temperatureController.text),
-        humidity: double.parse(
-            humidityController.text),
-        rainfall: double.parse(
-            rainfallController.text),
-        solarRadiation: double.parse(
-            solarRadiationController.text),
-        elevation: double.parse(
-            elevationController.text),
-        irrigation:
-            irrigationController.text,
-        previousCrop:
-            previousCropController.text,
+      final result = await controller.recommendCrop(
+        n: double.parse(nController.text),
+        p: double.parse(pController.text),
+        k: double.parse(kController.text),
+        ph: double.parse(phController.text),
+        soilMoisture: double.parse(soilMoistureController.text),
+        temperature: double.parse(temperatureController.text),
+        humidity: double.parse(humidityController.text),
+        rainfall: double.parse(rainfallController.text),
+        solarRadiation: double.parse(solarRadiationController.text),
+        elevation: double.parse(elevationController.text),
+        irrigation: irrigationController.text,
+        previousCrop: previousCropController.text,
       );
 
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (_) =>
-              CropOutputPage(
-            response: result,
-          ),
-        ),
+        MaterialPageRoute(builder: (_) => CropOutputPage(response: result)),
       );
-
     } catch (e) {
-
-      ScaffoldMessenger.of(context)
-          .showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
-
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
-
       setState(() {
         isLoading = false;
       });
     }
   }
 
-  Widget buildField(
-      String label,
-      TextEditingController controller) {
-
+  Widget buildField(String label, TextEditingController controller) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(
-              vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextField(
         controller: controller,
-        decoration:
-            InputDecoration(
-          labelText: label,
-        ),
+        decoration: InputDecoration(labelText: label),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF4F4F4),
+
       appBar: AppBar(
-        title:
-            const Text("Crop Input"),
+        backgroundColor: Colors.green,
+        elevation: 0,
+        title: const Text(
+          "Crops",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
+
       body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(16),
         child: Column(
           children: [
+            Container(height: 5, color: Color.fromARGB(255, 214, 214, 214)),
 
-            buildField("N",
-                nController),
+            /// TOP IMAGE
+            SizedBox(
+              height: height * 0.25,
+              width: double.infinity,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
 
-            buildField("P",
-                pController),
-
-            buildField("K",
-                kController),
-
-            buildField("pH",
-                phController),
-
-            buildField(
-              "Soil Moisture",
-              soilMoistureController,
+                child: Image.asset(
+                  "assets/images/crops.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
 
-            buildField(
-              "Temperature",
-              temperatureController,
-            ),
+            Transform.translate(
+              offset: const Offset(0, -45),
+              child: Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(35),
+                      topRight: Radius.circular(35),
+                      bottomLeft: Radius.circular(35),
+                      bottomRight: Radius.circular(35),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 25, 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: const Text(
+                                "Soil Details",
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
 
-            buildField(
-              "Humidity",
-              humidityController,
-            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green.shade800,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: const Text(
+                                "Fetch Soil Details",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
 
-            buildField(
-              "Rainfall",
-              rainfallController,
-            ),
+                        const SizedBox(height: 35),
 
-            buildField(
-              "Solar Radiation",
-              solarRadiationController,
-            ),
+                        buildCustomField(
+                          controller: nController,
+                          hint: "Enter Nitrogen Value",
+                          iconText: "N",
+                        ),
 
-            buildField(
-              "Elevation",
-              elevationController,
-            ),
+                        buildCustomField(
+                          controller: phController,
+                          hint: "Enter pH Value",
+                          iconText: "pH",
+                        ),
 
-            buildField(
-              "Irrigation",
-              irrigationController,
-            ),
+                        buildCustomField(
+                          controller: pController,
+                          hint: "Enter Phosphorous Value",
+                          iconText: "P",
+                        ),
 
-            buildField(
-              "Previous Crop",
-              previousCropController,
-            ),
+                        buildCustomField(
+                          controller: kController,
+                          hint: "Enter Potassium Value",
+                          iconText: "K",
+                        ),
 
-            const SizedBox(
-                height: 20),
+                        buildCustomField(
+                          controller: soilMoistureController,
+                          hint: "Enter Soil Moisture",
+                          iconText: "SM",
+                        ),
 
-            ElevatedButton(
-              onPressed:
-                  isLoading
-                      ? null
-                      : submit,
-              child: Text(
-                isLoading
-                    ? "Loading..."
-                    : "Get Recommendation",
+                        buildCustomField(
+                          controller: temperatureController,
+                          hint: "Enter Temperature",
+                          iconText: "T",
+                        ),
+
+                        buildCustomField(
+                          controller: humidityController,
+                          hint: "Enter Humidity",
+                          iconText: "H",
+                        ),
+
+                        buildCustomField(
+                          controller: rainfallController,
+                          hint: "Enter Rainfall",
+                          iconText: "R",
+                        ),
+
+                        buildCustomField(
+                          controller: solarRadiationController,
+                          hint: "Enter Solar Radiation",
+                          iconText: "SR",
+                        ),
+
+                        buildCustomField(
+                          controller: elevationController,
+                          hint: "Enter Elevation",
+                          iconText: "E",
+                        ),
+
+                        buildCustomField(
+                          controller: irrigationController,
+                          hint: "Enter Irrigation Method",
+                          iconText: "I",
+                        ),
+
+                        buildCustomField(
+                          controller: previousCropController,
+                          hint: "Enter Previous Crop",
+                          iconText: "PC",
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        SizedBox(
+                          width: width * 0.8,
+                          height: 55,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+
+                            onPressed: isLoading ? null : submit,
+
+                            child: Text(
+                              isLoading ? "Loading..." : "Get Recommendation",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildCustomField({
+    required TextEditingController controller,
+    required String hint,
+    required String iconText,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF1EFEF),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+
+            hintText: hint,
+
+            prefixIcon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text(
+                  iconText,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
+          ),
         ),
       ),
     );
