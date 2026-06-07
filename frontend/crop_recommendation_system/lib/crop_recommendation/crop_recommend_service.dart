@@ -38,9 +38,9 @@ class CropRecommendService {
       }),
     );
 
-    print("Status Code: ${response.statusCode}");
-    print("Response Body:");
-    print(response.body);
+    // print("Status Code: ${response.statusCode}");
+    // print("Response Body:");
+    // print(response.body);
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
