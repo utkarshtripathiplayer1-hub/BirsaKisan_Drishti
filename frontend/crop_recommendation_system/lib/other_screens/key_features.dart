@@ -19,7 +19,7 @@ class KeyFeatures extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFF0AA640),
-        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white, size: 30, weight: 40.0),
         elevation: 0,
       ),
 
