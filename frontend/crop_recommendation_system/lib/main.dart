@@ -1,6 +1,7 @@
 // import 'package:crop_recommendation_system/ApiServices/weather_api/home_page_screen_temp.dart';
 // import 'package:crop_recommendation_system/crop_recommendation/crop_input_page.dart';
-import 'package:crop_recommendation_system/example.dart';
+import 'package:crop_recommendation_system/ApiServices/weather_api/example1.dart';
+// import 'package:crop_recommendation_system/example.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:get/get_core/src/get_main.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      home: const HomePage(),
     );
   }
 }

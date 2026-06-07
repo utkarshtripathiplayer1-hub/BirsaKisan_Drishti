@@ -11,15 +11,15 @@ class WeatherApiController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("weather controller initialized");
+    // print("weather controller initialized");
     fetchWeather();
   }
 
   Future<void> fetchWeather() async {
     Position position = await getCurrentLocation();
 
-    print("Latitude: ${position.latitude}");
-    print("Longitude: ${position.longitude}");
+    // print("Latitude: ${position.latitude}");
+    // print("Longitude: ${position.longitude}");
 
     final response = await weatherApiService.getWeather(
       lat: position.latitude,
@@ -46,8 +46,16 @@ class WeatherApiController extends GetxController {
       throw Exception('Location permissions are permanently denied');
     }
 
+    // return await Geolocator.getCurrentPosition(
+    //   desiredAccuracy: LocationAccuracy.high,
+    // );
+
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+  locationSettings: const LocationSettings(
+    accuracy: LocationAccuracy.high,
+  ),
+  
+);
+
   }
 }
