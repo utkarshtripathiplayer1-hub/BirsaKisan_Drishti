@@ -19,7 +19,7 @@ class FAQS extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFF049B3A),
-        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white, size: 30, weight: 40.0),
         elevation: 0,
       ),
 
