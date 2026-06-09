@@ -1,6 +1,6 @@
-import 'package:crop_recommendation_system/other_screens/about_us.dart';
-import 'package:crop_recommendation_system/other_screens/faqs.dart';
-import 'package:crop_recommendation_system/other_screens/key_features.dart';
+import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
+import 'package:crop_recommendation_system/OtherScreens/faqs.dart';
+import 'package:crop_recommendation_system/OtherScreens/key_features.dart';
 import 'package:flutter/material.dart';
 
 class Setting extends StatelessWidget {
