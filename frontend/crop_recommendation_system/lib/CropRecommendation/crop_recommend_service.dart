@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
 class CropRecommendService {
-  static const String apiUrl =
-      'https://remedy-factsheet-empirical.ngrok-free.dev/crop/recommend';
+
+  static const String apiUrl = 'https://remedy-factsheet-empirical.ngrok-free.dev/crop/recommend';
 
   Future<Map<String, dynamic>> getRecommendation({
     required double n,
