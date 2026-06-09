@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 class WeatherApiService extends GetConnect {
 
+
   Future<Map<String, dynamic>> getWeather({
     required double lat,
     required double lon,
