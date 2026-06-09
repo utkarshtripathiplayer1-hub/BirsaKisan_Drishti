@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'crop_recommend_controller.dart';
 import 'crop_output_page.dart';
 

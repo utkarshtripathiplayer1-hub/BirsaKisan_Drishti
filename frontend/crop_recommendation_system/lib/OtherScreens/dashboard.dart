@@ -1,11 +1,9 @@
-// import 'package:crop_recommendation_system/about_us.dart';
-// import 'package:crop_recommendation_system/faqs.dart';
-// import 'package:crop_recommendation_system/key_features.dart';
-// import 'package:crop_recommendation_system/crop_recommendation/crop_input_page.dart';
+import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
+import 'package:crop_recommendation_system/CropRecommendation/crop_input_page.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:crop_recommendation_system/ApiServices/weather_api/weather_api_controller.dart';
-import 'package:crop_recommendation_system/other_screens/about_us.dart';
+import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_api_controller.dart';
+import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -321,7 +319,7 @@ class HomePage extends StatelessWidget {
                                 context,
                                 image: "assets/images/crop.png",
                                 title: "Crop",
-                                page: const AboutUs(),
+                                page: const CropInputPage(),
                               ),
 
                               farmCard(
@@ -335,7 +333,7 @@ class HomePage extends StatelessWidget {
                                 context,
                                 image: "assets/images/disease_detector.png",
                                 title: "Disease Detector",
-                                page: const AboutUs(),
+                                page: DiseaseDetectionInput(),
                               ),
                             ],
                           ),
@@ -363,7 +361,12 @@ class HomePage extends StatelessWidget {
           children: [
             // HOME
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage()),
+                );
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
