@@ -1,5 +1,5 @@
-import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
 import 'package:crop_recommendation_system/CropRecommendation/crop_input_page.dart';
+import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_api_controller.dart';
