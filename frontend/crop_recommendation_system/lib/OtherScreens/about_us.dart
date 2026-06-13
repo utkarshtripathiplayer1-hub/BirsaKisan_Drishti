@@ -17,6 +17,7 @@ class AboutUs extends StatelessWidget {
           ),
         ),
         backgroundColor: Color.fromARGB(255, 6, 122, 52),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(

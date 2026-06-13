@@ -29,7 +29,13 @@ class CropOutputPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Result"),
+        centerTitle: true,
+        title: const Text("Crop Recommended", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 24),),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 30,
+          weight: 40.0,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

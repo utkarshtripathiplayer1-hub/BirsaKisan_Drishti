@@ -93,12 +93,17 @@ class _CropInputPageState extends State<CropInputPage> {
         backgroundColor: Colors.green,
         elevation: 0,
         title: const Text(
-          "Crops",
+          "Crop Recommendation",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 32,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 30,
+          weight: 40.0,
         ),
         centerTitle: true,
       ),
