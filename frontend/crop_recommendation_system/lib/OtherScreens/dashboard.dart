@@ -1,4 +1,4 @@
-import 'package:crop_recommendation_system/CropRecommendation/crop_input_page.dart';
+import 'package:crop_recommendation_system/CropRecommendation/common_input_page.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -319,7 +319,7 @@ class HomePage extends StatelessWidget {
                                 context,
                                 image: "assets/images/crop.png",
                                 title: "Crop",
-                                page: const CropInputPage(),
+                                page: const CropPage(),
                               ),
 
                               farmCard(
