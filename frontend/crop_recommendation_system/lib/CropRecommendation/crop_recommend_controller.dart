@@ -14,10 +14,7 @@ class CropRecommendController {
     required double temperature,
     required double humidity,
     required double rainfall,
-    required double solarRadiation,
-    required double elevation,
-    required String irrigation,
-    required String previousCrop,
+    required String soilType,
   }) async {
 
     return await _service.getRecommendation(
@@ -29,10 +26,7 @@ class CropRecommendController {
       temperature: temperature,
       humidity: humidity,
       rainfall: rainfall,
-      solarRadiation: solarRadiation,
-      elevation: elevation,
-      irrigation: irrigation,
-      previousCrop: previousCrop,
+      soilType: soilType,
     );
   }
 }

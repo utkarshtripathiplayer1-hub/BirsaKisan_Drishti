@@ -25,13 +25,7 @@ class _CropInputPageState extends State<CropInputPage> {
 
   final rainfallController = TextEditingController();
 
-  final solarRadiationController = TextEditingController();
-
-  final elevationController = TextEditingController();
-
-  final irrigationController = TextEditingController();
-
-  final previousCropController = TextEditingController();
+  final soilTypeController = TextEditingController();
 
   bool isLoading = false;
 
@@ -50,10 +44,7 @@ class _CropInputPageState extends State<CropInputPage> {
         temperature: double.parse(temperatureController.text),
         humidity: double.parse(humidityController.text),
         rainfall: double.parse(rainfallController.text),
-        solarRadiation: double.parse(solarRadiationController.text),
-        elevation: double.parse(elevationController.text),
-        irrigation: irrigationController.text,
-        previousCrop: previousCropController.text,
+        soilType: soilTypeController.text,
       );
 
       Navigator.push(
@@ -87,7 +78,6 @@ class _CropInputPageState extends State<CropInputPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F4F4),
 
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -189,12 +179,6 @@ class _CropInputPageState extends State<CropInputPage> {
                         ),
 
                         buildCustomField(
-                          controller: phController,
-                          hint: "Enter pH Value",
-                          iconText: "pH",
-                        ),
-
-                        buildCustomField(
                           controller: pController,
                           hint: "Enter Phosphorous Value",
                           iconText: "P",
@@ -207,9 +191,9 @@ class _CropInputPageState extends State<CropInputPage> {
                         ),
 
                         buildCustomField(
-                          controller: soilMoistureController,
-                          hint: "Enter Soil Moisture",
-                          iconText: "SM",
+                          controller: phController,
+                          hint: "Enter pH Value",
+                          iconText: "pH",
                         ),
 
                         buildCustomField(
@@ -231,27 +215,15 @@ class _CropInputPageState extends State<CropInputPage> {
                         ),
 
                         buildCustomField(
-                          controller: solarRadiationController,
-                          hint: "Enter Solar Radiation",
-                          iconText: "SR",
+                          controller: soilMoistureController,
+                          hint: "Enter Soil Moisture",
+                          iconText: "SM",
                         ),
 
                         buildCustomField(
-                          controller: elevationController,
-                          hint: "Enter Elevation",
-                          iconText: "E",
-                        ),
-
-                        buildCustomField(
-                          controller: irrigationController,
-                          hint: "Enter Irrigation Method",
-                          iconText: "I",
-                        ),
-
-                        buildCustomField(
-                          controller: previousCropController,
-                          hint: "Enter Previous Crop",
-                          iconText: "PC",
+                          controller: soilTypeController,
+                          hint: "Enter Soil Type",
+                          iconText: "ST",
                         ),
 
                         const SizedBox(height: 25),

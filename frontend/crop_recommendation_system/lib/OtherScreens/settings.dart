@@ -1,3 +1,4 @@
+import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
 import 'package:crop_recommendation_system/OtherScreens/faqs.dart';
 import 'package:crop_recommendation_system/OtherScreens/key_features.dart';
@@ -10,7 +11,11 @@ class Setting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white, size: 30, weight: 40.0),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 30,
+          weight: 40.0,
+        ),
         centerTitle: true,
         title: Text(
           "Settings",
@@ -20,7 +25,7 @@ class Setting extends StatelessWidget {
             fontSize: 35,
           ),
         ),
-        backgroundColor: Color(0xFF067A34),
+        backgroundColor: Colors.green.shade900,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -115,7 +120,12 @@ class Setting extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ChatbotScreen()),
+                );
+              },
             ),
 
             Divider(),

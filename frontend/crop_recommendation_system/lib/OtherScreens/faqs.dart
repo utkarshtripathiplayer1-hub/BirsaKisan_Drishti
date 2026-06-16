@@ -6,19 +6,19 @@ class FAQS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEAEAEA),
+      // backgroundColor: const Color(0xFFEAEAEA),
 
       appBar: AppBar(
         title: const Text(
           "FAQs",
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 35,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF049B3A),
+        backgroundColor: Colors.green.shade900,
         iconTheme: const IconThemeData(color: Colors.white, size: 30, weight: 40.0),
         elevation: 0,
       ),

@@ -15,10 +15,7 @@ class CropRecommendService {
     required double temperature,
     required double humidity,
     required double rainfall,
-    required double solarRadiation,
-    required double elevation,
-    required String irrigation,
-    required String previousCrop,
+    required String soilType,
   }) async {
     final response = await http.post(
       Uri.parse(apiUrl),
@@ -28,20 +25,17 @@ class CropRecommendService {
         "P": p,
         "K": k,
         "pH": ph,
-        "soil_moisture": soilMoisture,
-        "temperature": temperature,
-        "humidity": humidity,
-        "rainfall": rainfall,
-        "solar_radiation": solarRadiation,
-        "elevation": elevation,
-        "irrigation": irrigation,
-        "previous_crop": previousCrop,
+        "Soil_Moisture": soilMoisture,
+        "Temperature": temperature,
+        "Humidity": humidity,
+        "Rainfall": rainfall,
+        "Soil_Type": soilType
       }),
     );
 
-    // print("Status Code: ${response.statusCode}");
-    // print("Response Body:");
-    // print(response.body);
+    print("Status Code: ${response.statusCode}");
+    print("Response Body:");
+    print(response.body);
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

@@ -1,5 +1,7 @@
+import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/CropRecommendation/common_input_page.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
+import 'package:crop_recommendation_system/OtherScreens/settings.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_api_controller.dart';
@@ -106,8 +108,7 @@ class HomePage extends StatelessWidget {
                 Container(
                   height: 260,
                   width: double.infinity,
-                  color: Colors.black.withValues(alpha: 0.20)
-
+                  color: Colors.black.withValues(alpha: 0.20),
                 ),
 
                 SafeArea(
@@ -149,7 +150,7 @@ class HomePage extends StatelessWidget {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (_) => AboutUs()),
+                                  MaterialPageRoute(builder: (_) => Setting()),
                                 );
                               },
                               child: const CircleAvatar(
@@ -400,7 +401,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const AboutUs()),
+                  MaterialPageRoute(builder: (_) => const ChatbotScreen()),
                 );
               },
               child: Column(

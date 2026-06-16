@@ -7,7 +7,7 @@ class CropOutputPage extends StatelessWidget {
     super.key,
     required this.response,
   });
-
+ 
   Widget item(String title, dynamic value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -25,7 +25,7 @@ class CropOutputPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final conditions =
-        response["recommended_conditions"] ?? {};
+        response["crop_details"] ?? {};
 
     return Scaffold(
       appBar: AppBar(
@@ -56,52 +56,62 @@ class CropOutputPage extends StatelessWidget {
 
             item(
               "Recommended N",
-              conditions["N"],
+              response["crop_details"]["recommended_npk"]["N"],
             ),
 
             item(
               "Recommended P",
-              conditions["P"],
+              response["crop_details"]["recommended_npk"]["P"],
             ),
 
             item(
               "Recommended K",
-              conditions["K"],
+              response["crop_details"]["recommended_npk"]["K"],
             ),
 
             item(
-              "Recommended pH",
-              conditions["pH"],
+              "Ideal pH",
+              conditions["ideal_ph"],
             ),
 
             item(
-              "Recommended Temperature",
-              conditions["temperature"],
+              "Ideal Temperature",
+              conditions["ideal_temperature"],
             ),
 
             item(
-              "Recommended Humidity",
-              conditions["humidity"],
+              "Ideal Humidity",
+              conditions["ideal_humidity"],
             ),
 
             item(
-              "Recommended Soil Moisture",
-              conditions["soil_moisture"],
+              "Ideal Soil Moisture",
+              conditions["ideal_soil_moisture"],
             ),
 
             item(
-              "Recommended Rainfall",
-              conditions["rainfall"],
+              "Water Requirement",
+              conditions["water_requirement"],
             ),
 
             item(
-              "Recommended Solar Radiation",
-              conditions["solar_radiation"],
+              "Irrigation Frequency",
+              conditions["irrigation_frequency"],
             ),
 
             item(
-              "Recommended Elevation",
-              conditions["elevation"],
+              "seasonal water need",
+              conditions["seasonal_water_need"],
+            ),
+
+            item(
+              "Season",
+              conditions["season"],
+            ),
+
+            item(
+              "Duration",
+              conditions["duration"],
             ),
           ],
         ),
