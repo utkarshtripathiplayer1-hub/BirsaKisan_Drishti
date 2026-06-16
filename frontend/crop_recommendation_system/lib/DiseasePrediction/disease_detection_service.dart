@@ -21,6 +21,7 @@ class DiseaseDetectionService {
     );
 
     var response = await request.send();
+    print(response);
 
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();

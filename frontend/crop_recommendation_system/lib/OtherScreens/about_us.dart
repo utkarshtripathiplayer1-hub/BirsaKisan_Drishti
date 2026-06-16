@@ -16,7 +16,7 @@ class AboutUs extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 6, 122, 52),
+        backgroundColor: Colors.green.shade900,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -62,7 +62,7 @@ class AboutUs extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Container(
                   height: 3,
-                  width: 200,
+                  width: 150,
                   color: Color.fromARGB(255, 3, 196, 99),
                 ),
               ),
@@ -90,7 +90,7 @@ class AboutUs extends StatelessWidget {
 
                   featureCard(
                     "assets/images/soil_parameters.png",
-                    "Uses soil parameters\n(N,P,K,pH) & weather\nto suggest best crop",
+                    "Uses soil parameters (N,P,K,pH)",
                   ),
 
                   featureCard(

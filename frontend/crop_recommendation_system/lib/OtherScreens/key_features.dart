@@ -6,19 +6,19 @@ class KeyFeatures extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0AA640),
+      backgroundColor: const Color.fromARGB(255, 58, 108, 75),
 
       appBar: AppBar(
         title: const Text(
           "Key Features",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 35,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF0AA640),
+        backgroundColor: Colors.green.shade900,
         iconTheme: const IconThemeData(color: Colors.white, size: 30, weight: 40.0),
         elevation: 0,
       ),
@@ -29,7 +29,7 @@ class KeyFeatures extends StatelessWidget {
             // GREEN HEADER SECTION
             Container(
               width: double.infinity,
-              color: const Color(0xFF0AA640),
+              color: const Color.fromARGB(255, 58, 108, 75),
               padding: const EdgeInsets.only(
                 left: 15,
                 right: 15,
@@ -102,7 +102,7 @@ class KeyFeatures extends StatelessWidget {
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color(0xFFE8E8E8),
+                color: Color(0xFFF8FAF2),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(35),
                   topRight: Radius.circular(35),
