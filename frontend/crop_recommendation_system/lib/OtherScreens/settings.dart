@@ -1,6 +1,7 @@
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
 import 'package:crop_recommendation_system/OtherScreens/faqs.dart';
+import 'package:crop_recommendation_system/OtherScreens/feedback.dart';
 import 'package:crop_recommendation_system/OtherScreens/key_features.dart';
 import 'package:flutter/material.dart';
 
@@ -215,7 +216,12 @@ class Setting extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => FeedBack()),
+                );
+              },
             ),
 
             Divider(),

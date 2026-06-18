@@ -35,7 +35,7 @@ class DiseaseDetectionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      // backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white,size: 30,weight: 40.0,),
         title: const Text(
@@ -54,7 +54,7 @@ class DiseaseDetectionInput extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  // color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: const Center(
@@ -77,7 +77,7 @@ class DiseaseDetectionInput extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                // color: Colors.white,
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Row(
@@ -87,14 +87,14 @@ class DiseaseDetectionInput extends StatelessWidget {
                     onTap: () {
                       pickImage(ImageSource.gallery);
                     },
-                    child: const Icon(Icons.photo_library, size: 70),
+                    child: Icon(Icons.photo_library, size: 70, color: const Color.fromARGB(255, 23, 76, 26),),
                   ),
 
                   GestureDetector(
                     onTap: () {
                       pickImage(ImageSource.camera);
                     },
-                    child: const Icon(Icons.camera_alt, size: 70),
+                    child: Icon(Icons.camera_alt, size: 70, color: const Color.fromARGB(255, 23, 76, 26),),
                   ),
                   Obx(
                     () => controller.isLoading.value

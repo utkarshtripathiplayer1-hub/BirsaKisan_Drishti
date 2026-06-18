@@ -1,10 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class ApiConfig {
+  static String get baseUrl => dotenv.env['BASE_URL']!;
+}
 
 
 class CropRecommendService {
 
-  static const String apiUrl = 'https://remedy-factsheet-empirical.ngrok-free.dev/crop/recommend';
+  static String apiUrl = '${ApiConfig.baseUrl}/crop/recommend';
 
   Future<Map<String, dynamic>> getRecommendation({
     required double n,
