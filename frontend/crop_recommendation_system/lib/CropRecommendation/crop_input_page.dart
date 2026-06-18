@@ -49,7 +49,7 @@ class _CropInputPageState extends State<CropInputPage> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => CropOutputPage(response: result)),
+        MaterialPageRoute(builder: (_) => CropOutputPage(response: result, recommendationId: result['recommendation_id'],)),
       );
     } catch (e) {
       ScaffoldMessenger.of(
@@ -80,8 +80,7 @@ class _CropInputPageState extends State<CropInputPage> {
     return Scaffold(
 
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        elevation: 0,
+        backgroundColor: Colors.green.shade900,
         title: const Text(
           "Crop Recommendation",
           style: TextStyle(
@@ -128,7 +127,7 @@ class _CropInputPageState extends State<CropInputPage> {
                 padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
                 child: Container(
                   width: double.infinity,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(35),
@@ -233,7 +232,7 @@ class _CropInputPageState extends State<CropInputPage> {
                           height: 55,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: Colors.green.shade900,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -295,7 +294,6 @@ class _CropInputPageState extends State<CropInputPage> {
                 ),
               ),
             ),
-
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
           ),
         ),

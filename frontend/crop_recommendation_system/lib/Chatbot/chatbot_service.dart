@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'conversation_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class ApiConfig {
+  static String get baseUrl => dotenv.env['BASE_URL']!;
+}
 
 class ChatbotService {
   Future<Map<String, dynamic>> sendMessage({
@@ -12,7 +16,7 @@ class ChatbotService {
     String? conversationId,
   }) async {
     final response = await http.post(
-      Uri.parse("https://remedy-factsheet-empirical.ngrok-free.dev/chat"),
+      Uri.parse("${ApiConfig.baseUrl}/chat"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "user_id": userId,
@@ -36,7 +40,7 @@ class ChatbotService {
   }) async {
     final response = await http.get(
       Uri.parse(
-        "https://remedy-factsheet-empirical.ngrok-free.dev/conversations"
+        "${ApiConfig.baseUrl}/conversations"
         "?user_id=$userId"
         "&domain=$domain",
       ),
@@ -53,9 +57,7 @@ class ChatbotService {
 
   Future<dynamic> getConversation(String conversationId) async {
     final response = await http.get(
-      Uri.parse(
-        "https://remedy-factsheet-empirical.ngrok-free.dev/conversations/$conversationId",
-      ),
+      Uri.parse("${ApiConfig.baseUrl}/$conversationId"),
     );
 
     print(response.body);
@@ -72,9 +74,7 @@ class ChatbotService {
     required String title,
   }) async {
     final response = await http.patch(
-      Uri.parse(
-        "https://remedy-factsheet-empirical.ngrok-free.dev/conversations/$conversationId",
-      ),
+      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
 
       headers: {"Content-Type": "application/json"},
 
@@ -91,9 +91,7 @@ class ChatbotService {
 
   Future<void> deleteConversation({required String conversationId}) async {
     final response = await http.delete(
-      Uri.parse(
-        "https://remedy-factsheet-empirical.ngrok-free.dev/conversations/$conversationId",
-      ),
+      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
     );
 
     if (response.statusCode != 200) {

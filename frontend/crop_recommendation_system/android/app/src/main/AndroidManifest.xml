@@ -6,7 +6,7 @@
 
     <application
         android:usesCleartextTraffic="true"
-        android:label="crop_recommendation_system"
+        android:label="Birsa Kisan Drishti"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">

@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class ApiConfig {
+  static String get baseUrl => dotenv.env['BASE_URL']!;
+}
 
 class DiseaseDetectionService {
   Future<Map<String, dynamic>> predictDisease(File imageFile) async {
@@ -9,7 +14,7 @@ class DiseaseDetectionService {
 
       // PUT TANISHA'S URL HERE
       Uri.parse(
-        "https://remedy-factsheet-empirical.ngrok-free.dev/disease/predict",
+        "${ApiConfig.baseUrl}/disease/predict",
       ),
     );
 

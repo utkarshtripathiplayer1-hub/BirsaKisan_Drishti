@@ -24,13 +24,9 @@ class AboutUs extends StatelessWidget {
           padding: EdgeInsetsGeometry.all(10),
           child: Column(
             children: [
-              Text(
-                "BirsaKisanDrishti",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "Timmana",
-                ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Image.asset("assets/images/Birsa_Kisan_Drishti_Logo.png", fit: BoxFit.contain,),
               ),
 
               Text(
