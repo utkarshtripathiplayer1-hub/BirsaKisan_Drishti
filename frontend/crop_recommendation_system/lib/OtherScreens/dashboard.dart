@@ -360,18 +360,17 @@ class HomePage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // HOME
+            // COMMUNITY
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                ScaffoldMessenger.of(
                   context,
-                  MaterialPageRoute(builder: (_) => const HomePage()),
-                );
+                ).showSnackBar(const SnackBar(content: Text("Coming Soon")));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/home.png", height: 35),
+                  Image.asset("assets/images/communitybg.png", height: 33),
 
                   const SizedBox(height: 4),
                 ],
@@ -381,10 +380,9 @@ class HomePage extends StatelessWidget {
             // NOTIFICATION
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                ScaffoldMessenger.of(
                   context,
-                  MaterialPageRoute(builder: (_) => const AboutUs()),
-                );
+                ).showSnackBar(const SnackBar(content: Text("Coming Soon")));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -392,6 +390,23 @@ class HomePage extends StatelessWidget {
                   Icon(Icons.notifications, size: 35, color: Colors.black87),
 
                   SizedBox(height: 4),
+                ],
+              ),
+            ),
+
+            // // HOME
+            GestureDetector(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Already on the home page")),
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/home.png", height: 35),
+
+                  const SizedBox(height: 4),
                 ],
               ),
             ),
@@ -421,31 +436,12 @@ class HomePage extends StatelessWidget {
                   "https://agriwelfare.gov.in/en/Major",
                 );
 
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                }
+                await launchUrl(url, mode: LaunchMode.externalApplication);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset("assets/images/agriculture.png", height: 33),
-
-                  const SizedBox(height: 4),
-                ],
-              ),
-            ),
-
-            // COMMUNITY
-            GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text("Coming Soon")));
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/community.png", height: 33),
 
                   const SizedBox(height: 4),
                 ],
