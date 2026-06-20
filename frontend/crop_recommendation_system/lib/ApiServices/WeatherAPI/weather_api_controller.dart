@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'weather_api_service.dart';
 
 class WeatherApiController extends GetxController {
   final WeatherApiService weatherApiService = WeatherApiService();
+  var isRefreshing = false.obs;
 
   RxMap<String, dynamic> weather = <String, dynamic>{}.obs;
 
@@ -15,24 +17,35 @@ class WeatherApiController extends GetxController {
   }
 
   Future<void> fetchWeather() async {
-    Position position = await getCurrentLocation();
+    try {
+      isRefreshing.value = true;
 
-    // print("Latitude: ${position.latitude}");
-    // print("Longitude: ${position.longitude}");
+      Position position = await getCurrentLocation();
 
-    final response = await weatherApiService.getWeather(
-      lat: position.latitude,
-      lon: position.longitude,
-    );
+      final response = await weatherApiService.getWeather(
+        lat: position.latitude,
+        lon: position.longitude,
+      );
 
-    weather.value = response;
+      weather.value = response;
+    } catch (e) {
+      print("Weather Error: $e");
+    } finally {
+      isRefreshing.value = false;
+    }
   }
 
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
-      throw Exception('Location services are disabled');
+      Get.snackbar(
+        "Location service disabled",
+        "Try again after enabling location service",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.shade900,
+        colorText: Colors.white,
+      );
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
@@ -50,11 +63,7 @@ class WeatherApiController extends GetxController {
     // );
 
     return await Geolocator.getCurrentPosition(
-  locationSettings: const LocationSettings(
-    accuracy: LocationAccuracy.high,
-  ),
-  
-);
-
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+    );
   }
 }

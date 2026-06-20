@@ -24,8 +24,12 @@ class CropRecommendService {
   }) async {
     final response = await http.post(
       Uri.parse(apiUrl),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "x-user-id": "Samyak",
+        },
       body: jsonEncode({
+        
         "N": n,
         "P": p,
         "K": k,

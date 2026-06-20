@@ -41,11 +41,6 @@ class KeyFeatures extends StatelessWidget {
                     mainAxisAlignment:
                         MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        "assets/images/tractor_left.png",
-                        height: 80,
-                      ),
-
                       Expanded(
                         child: Column(
                           children: const [
@@ -53,7 +48,7 @@ class KeyFeatures extends StatelessWidget {
                               "BirsaKisanDrishti",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 30,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -70,11 +65,6 @@ class KeyFeatures extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ),
-
-                      Image.asset(
-                        "assets/images/tractor_right.png",
-                        height: 80,
                       ),
                     ],
                   ),
@@ -235,8 +225,7 @@ class FeatureCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             imagePath,
@@ -248,8 +237,9 @@ class FeatureCard extends StatelessWidget {
 
           Text(
             title,
+            textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 17,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
           ),
