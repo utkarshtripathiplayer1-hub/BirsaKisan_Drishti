@@ -11,16 +11,18 @@ class DiseaseDetectionService {
   Future<Map<String, dynamic>> predictDisease(File imageFile) async {
     var request = http.MultipartRequest(
       'POST',
-
-      // PUT TANISHA'S URL HERE
       Uri.parse(
         "${ApiConfig.baseUrl}/disease/predict",
       ),
     );
 
+    request.headers.addAll({
+      "x-user-id": "Samyak",
+    });
+
     request.files.add(
       await http.MultipartFile.fromPath(
-        'image', // keep same as backend
+        'image',
         imageFile.path,
       ),
     );

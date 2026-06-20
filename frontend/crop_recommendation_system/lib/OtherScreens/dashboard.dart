@@ -273,6 +273,32 @@ class HomePage extends StatelessWidget {
                                           style: const TextStyle(fontSize: 13),
                                         ),
                                       ),
+
+                                      GestureDetector(
+                                        onTap: () async {
+                                          ctrl.isRefreshing.value = true;
+
+                                          await ctrl.fetchWeather();
+
+                                          ctrl.isRefreshing.value = false;
+                                        },
+                                        child: Obx(
+                                          () => ctrl.isRefreshing.value
+                                              ? const SizedBox(
+                                                  width: 22,
+                                                  height: 22,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                )
+                                              : const Icon(
+                                                  Icons.refresh,
+                                                  color: Colors.green,
+                                                  size: 22,
+                                                ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -370,7 +396,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/communitybg.png", height: 33),
+                  Image.asset("assets/images/community.png", height: 33),
 
                   const SizedBox(height: 4),
                 ],
