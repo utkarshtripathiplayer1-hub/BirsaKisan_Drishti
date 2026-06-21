@@ -1,0 +1,171 @@
+{
+  "wheat": {
+    "recommended_npk": {
+      "N": 120,
+      "P": 60,
+      "K": 40
+    },
+    "ideal_ph": "6.0-7.0",
+    "ideal_temperature": "20-25°C",
+    "ideal_humidity": "50-70%",
+    "ideal_soil_moisture": "30-40%",
+    "water_requirement": "Moderate",
+    "irrigation_frequency": "Every 10-15 days",
+    "seasonal_water_need": "450-650 mm",
+    "season": "Rabi",
+    "duration": "110-130 days"
+  },
+
+  "rice": {
+    "recommended_npk": {
+      "N": 100,
+      "P": 50,
+      "K": 50
+    },
+    "ideal_ph": "5.5-7.0",
+    "ideal_temperature": "25-35°C",
+    "ideal_humidity": "70-90%",
+    "ideal_soil_moisture": "60-80%",
+    "water_requirement": "Very High",
+    "irrigation_frequency": "Maintain standing water",
+    "seasonal_water_need": "1200-1500 mm",
+    "season": "Kharif",
+    "duration": "120-150 days"
+  },
+
+  "maize": {
+    "recommended_npk": {
+      "N": 120,
+      "P": 60,
+      "K": 40
+    },
+    "ideal_ph": "5.8-7.0",
+    "ideal_temperature": "18-27°C",
+    "ideal_humidity": "50-80%",
+    "ideal_soil_moisture": "40-60%",
+    "water_requirement": "Moderate",
+    "irrigation_frequency": "Every 7-10 days",
+    "seasonal_water_need": "500-800 mm",
+    "season": "Kharif",
+    "duration": "90-120 days"
+  },
+
+  "millets": {
+    "recommended_npk": {
+      "N": 60,
+      "P": 30,
+      "K": 20
+    },
+    "ideal_ph": "5.5-7.5",
+    "ideal_temperature": "25-35°C",
+    "ideal_humidity": "40-60%",
+    "ideal_soil_moisture": "20-35%",
+    "water_requirement": "Low",
+    "irrigation_frequency": "Every 12-18 days",
+    "seasonal_water_need": "350-500 mm",
+    "season": "Kharif",
+    "duration": "80-110 days"
+  },
+
+  "pulses": {
+    "recommended_npk": {
+      "N": 20,
+      "P": 40,
+      "K": 20
+    },
+    "ideal_ph": "6.0-7.5",
+    "ideal_temperature": "20-30°C",
+    "ideal_humidity": "40-70%",
+    "ideal_soil_moisture": "25-40%",
+    "water_requirement": "Low",
+    "irrigation_frequency": "Every 12-15 days",
+    "seasonal_water_need": "300-500 mm",
+    "season": "Rabi/Kharif",
+    "duration": "90-120 days"
+  },
+
+  "oilseeds": {
+    "recommended_npk": {
+      "N": 80,
+      "P": 40,
+      "K": 40
+    },
+    "ideal_ph": "6.0-7.5",
+    "ideal_temperature": "20-30°C",
+    "ideal_humidity": "40-70%",
+    "ideal_soil_moisture": "25-40%",
+    "water_requirement": "Low to Moderate",
+    "irrigation_frequency": "Every 10-15 days",
+    "seasonal_water_need": "350-600 mm",
+    "season": "Rabi/Kharif",
+    "duration": "90-140 days"
+  },
+
+  "sugarcane": {
+    "recommended_npk": {
+      "N": 250,
+      "P": 115,
+      "K": 115
+    },
+    "ideal_ph": "6.0-8.0",
+    "ideal_temperature": "20-35°C",
+    "ideal_humidity": "70-85%",
+    "ideal_soil_moisture": "50-70%",
+    "water_requirement": "Very High",
+    "irrigation_frequency": "Every 7-10 days",
+    "seasonal_water_need": "1500-2500 mm",
+    "season": "Spring",
+    "duration": "10-18 months"
+  },
+
+  "cotton": {
+    "recommended_npk": {
+      "N": 120,
+      "P": 60,
+      "K": 60
+    },
+    "ideal_ph": "5.8-8.0",
+    "ideal_temperature": "21-30°C",
+    "ideal_humidity": "50-70%",
+    "ideal_soil_moisture": "35-50%",
+    "water_requirement": "Moderate",
+    "irrigation_frequency": "Every 7-12 days",
+    "seasonal_water_need": "700-1300 mm",
+    "season": "Kharif",
+    "duration": "150-180 days"
+  },
+
+  "tea": {
+    "recommended_npk": {
+      "N": 150,
+      "P": 50,
+      "K": 150
+    },
+    "ideal_ph": "4.5-5.5",
+    "ideal_temperature": "18-30°C",
+    "ideal_humidity": "70-90%",
+    "ideal_soil_moisture": "60-80%",
+    "water_requirement": "High",
+    "irrigation_frequency": "Regular moisture maintenance",
+    "seasonal_water_need": "1200-2500 mm",
+    "season": "Perennial",
+    "duration": "Perennial Crop"
+  },
+
+  "coffee": {
+    "recommended_npk": {
+      "N": 120,
+      "P": 90,
+      "K": 120
+    },
+    "ideal_ph": "5.5-6.5",
+    "ideal_temperature": "18-28°C",
+    "ideal_humidity": "70-85%",
+    "ideal_soil_moisture": "50-70%",
+    "water_requirement": "High",
+    "irrigation_frequency": "Every 7-10 days during dry periods",
+    "seasonal_water_need": "1200-2000 mm",
+    "season": "Perennial",
+    "duration": "Perennial Crop"
+  }
+}
