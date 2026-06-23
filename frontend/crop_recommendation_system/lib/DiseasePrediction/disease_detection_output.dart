@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class DiseaseDetectionOutput extends StatelessWidget {
@@ -33,7 +33,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
       backgroundColor: Color.fromARGB(255, 170, 199, 164),
       appBar: AppBar(
         title: Text(
-          "Disease Detection",
+          AppLocalizations.of(context)!.diseaseDetection,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Color(0xFF067A34),
@@ -81,8 +81,6 @@ class DiseaseDetectionOutput extends StatelessWidget {
                 children: [
                   Text(
                     formatDiseaseName(response['disease_name']?.toString()),
-                    // response['disease_name'],
-                    // response['disease_name']?.toString() ?? 'No Disease Found',
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                       fontSize: 30,
@@ -95,24 +93,24 @@ class DiseaseDetectionOutput extends StatelessWidget {
                       Icon(Icons.favorite_border, color: Colors.red),
                       SizedBox(width: 5),
                       Text(
-                        "Mortality Rate: ${response["mortality_rate"] ?? "N/A"}",
+                        "${AppLocalizations.of(context)!.mortalityRate}: ${response["mortality_rate"] ?? "N/A"}",
                         style: const TextStyle(fontSize: 18),
                         textAlign: TextAlign.start,
                       ),
                     ],
                   ),
                   Text(
-                    "Crop Type: ${response["crop_type"] ?? "N/A"}",
+                    "${AppLocalizations.of(context)!.cropType}: ${response["crop_type"] ?? "N/A"}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(fontSize: 18),
                   ),
                   Text(
-                    "Disease Stage: ${response["disease_stage"] ?? "N/A"}",
+                    "${AppLocalizations.of(context)!.diseaseStage}: ${response["disease_stage"] ?? "N/A"}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(fontSize: 18),
                   ),
                   Text(
-                    "Severity: ${response["severity"] ?? "N/A"}",
+                    "${AppLocalizations.of(context)!.delete} : ${response["severity"] ?? "N/A"}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(fontSize: 18),
                   ),
@@ -132,8 +130,8 @@ class DiseaseDetectionOutput extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Overview",
+                  Text(
+                    AppLocalizations.of(context)!.overview,
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
 
@@ -164,8 +162,8 @@ class DiseaseDetectionOutput extends StatelessWidget {
 
                       const SizedBox(width: 10),
 
-                      const Text(
-                        "Weather Conditions",
+                      Text(
+                        AppLocalizations.of(context)!.weatherCondition,
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -237,7 +235,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
             SizedBox(height: 20),
 
             buildListContainer(
-              title: "Precautions",
+              title: AppLocalizations.of(context)!.precaution,
               icon: Icons.warning,
               iconColor: Colors.red,
               data: response["precautions"],
@@ -246,7 +244,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
             const SizedBox(height: 20),
 
             buildListContainer(
-              title: "Cure: Organic",
+              title: AppLocalizations.of(context)!.organicCure,
               icon: Icons.eco,
               iconColor: Colors.green,
               data: response["organic_cure"],
@@ -255,7 +253,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
             const SizedBox(height: 20),
 
             buildListContainer(
-              title: "Cure: Inorganic",
+              title: AppLocalizations.of(context)!.inOrganicCure,
               icon: Icons.medication,
               iconColor: Colors.blue,
               data: response["chemical_cure"],

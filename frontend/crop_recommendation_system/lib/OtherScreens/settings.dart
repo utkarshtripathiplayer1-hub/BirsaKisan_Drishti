@@ -3,7 +3,11 @@ import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
 import 'package:crop_recommendation_system/OtherScreens/faqs.dart';
 import 'package:crop_recommendation_system/OtherScreens/feedback.dart';
 import 'package:crop_recommendation_system/OtherScreens/key_features.dart';
+import 'package:crop_recommendation_system/OtherScreens/language_selection.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -18,8 +22,9 @@ class Setting extends StatelessWidget {
           weight: 40.0,
         ),
         centerTitle: true,
-        title: Text(
-          "Settings",
+        title: AutoSizeText(
+          minFontSize: 15,
+          AppLocalizations.of(context)!.settings,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -41,7 +46,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.person_outline),
               title: Text(
-                "Update Your Profile",
+                AppLocalizations.of(context)!.updateProfile,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -66,9 +71,9 @@ class Setting extends StatelessWidget {
               leading: const Icon(Icons.language),
               title: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Text(
-                    "Language",
+                    AppLocalizations.of(context)!.language,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -79,12 +84,12 @@ class Setting extends StatelessWidget {
                   Icon(Icons.edit, size: 18),
                 ],
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => AboutUs()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => LanguageSelectionScreen()),
+                );
+              },
             ),
 
             Divider(),
@@ -93,7 +98,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.key),
               title: Text(
-                "Key Features",
+                AppLocalizations.of(context)!.keyFeatures,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -114,7 +119,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.chat_bubble_outline),
               title: Text(
-                "Ask to our AI chatbot",
+                AppLocalizations.of(context)!.askChatbot,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -135,7 +140,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.help),
               title: Text(
-                "BirsaKisanDrishti FAQs",
+                AppLocalizations.of(context)!.goToFAQs,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -156,7 +161,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.groups),
               title: Text(
-                "About us",
+                AppLocalizations.of(context)!.aboutUs,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -177,7 +182,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.logout),
               title: Text(
-                "Logout",
+                AppLocalizations.of(context)!.logout,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -193,7 +198,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.delete_outline),
               title: Text(
-                "Delete Account",
+                AppLocalizations.of(context)!.deleteAccount,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -209,7 +214,7 @@ class Setting extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
               leading: Icon(Icons.rate_review),
               title: Text(
-                "Feedback",
+                AppLocalizations.of(context)!.feedback,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,

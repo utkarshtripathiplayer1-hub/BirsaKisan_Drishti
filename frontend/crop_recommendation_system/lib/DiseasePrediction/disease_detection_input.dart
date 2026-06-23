@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_controller.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_output.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,8 +38,7 @@ class DiseaseDetectionInput extends StatelessWidget {
       // backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white,size: 30,weight: 40.0,),
-        title: const Text(
-          "Disease Detection",
+        title: Text( AppLocalizations.of(context)!.diseaseDetection,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -57,21 +56,16 @@ class DiseaseDetectionInput extends StatelessWidget {
                   // color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    "Upload image \n or \n click the live image",
+                    AppLocalizations.of(context)!.uploadImage,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ),
               ),
             ),
-
-            // Center(
-            //   child: Center(
-            //     child: Text("Upload Image \n or \n click a live Image"),
-            //   ),
-            // ),
+            
             SizedBox(height: 20),
 
             Container(

@@ -1,4 +1,6 @@
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class FAQS extends StatelessWidget {
   const FAQS({super.key});
@@ -9,8 +11,10 @@ class FAQS extends StatelessWidget {
       // backgroundColor: const Color(0xFFEAEAEA),
 
       appBar: AppBar(
-        title: const Text(
-          "FAQs",
+        title: AutoSizeText(
+          AppLocalizations.of(context)!.faqsHeading,
+          minFontSize: 15,
+          maxLines: 1,
           style: TextStyle(
             fontSize: 35,
             fontWeight: FontWeight.bold,
@@ -30,66 +34,58 @@ class FAQS extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const FAQCard(
-              question: "How does disease detection work?",
-              answer:
-                  "Using AI image recognition, you just need to take a clear photo of the affected leaf with your phone camera, and the app compares it with thousands of known disease images to detect the problem. After detection, it shows likely causes, suggested treatments, and basic prevention tips in simple language.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question1,
+              answer: AppLocalizations.of(context)!.answer1,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "How is water requirement calculated?",
-              answer:
-                  "The app estimates water requirement by combining crop type, soil moisture, local temperature, humidity, and recent rainfall data. Using standard irrigation formulas, it converts this into an easy schedule like 'water every 3 days' so farmers can plan irrigation without doing any calculations.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question2,
+              answer: AppLocalizations.of(context)!.answer2,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "Are market prices updated daily?",
-              answer:
-                  "Mandi prices in the app are refreshed several times a day using government and trusted market data sources to keep rates current. During busy trading hours, prices may update as frequently as every few minutes so farmers can decide the best time and place to sell.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question3,
+              answer: AppLocalizations.of(context)!.answer3,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "Does the app work offline?",
-              answer:
-                  "Key information already loaded on the device, like saved recommendations and last-viewed tips, can be accessed even without internet. Features that need live data, such as new weather forecasts or fresh mandi prices, will update automatically the next time the phone is online.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question4,
+              answer: AppLocalizations.of(context)!.answer4,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "Can farmers check government schemes?",
-              answer:
-                  "The app shows recent agriculture schemes and subsidies from official portals, focusing on those useful for small and marginal farmers. For each scheme, farmers can quickly see who is eligible, important benefits, and basic steps to apply.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question5,
+              answer: AppLocalizations.of(context)!.answer5,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "Is my data safe?",
-              answer:
-                  "Only the minimum information needed to run the service is collected, and it is stored using standard security practices similar to other modern apps. Personal data is never sold, and any sharing (for example with government platforms or partners) happens only to provide core services and in line with data protection rules.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question6,
+              answer:AppLocalizations.of(context)!.answer6,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "How can I use AI to predict crop yield?",
-              answer:
-                  "Using AI models, historical yield data, and local weather patterns, the app gives an estimated yield range for the recommended crop. This estimate is meant as guidance to help with planning and is not a guarantee, since actual yield also depends on field practices and unexpected weather.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question7,
+              answer: AppLocalizations.of(context)!.answer7,
             ),
 
             const SizedBox(height: 20),
 
-            const FAQCard(
-              question: "Does the app support regional languages?",
-              answer:
-                  "The app supports multiple Indian languages commonly spoken by farmers so they can read information in a familiar script. Farmers can change language anytime from settings, and important labels and buttons are translated for easier use.",
+            FAQCard(
+              question: AppLocalizations.of(context)!.question8,
+              answer: AppLocalizations.of(context)!.answer8,
             ),
 
             const SizedBox(height: 30),

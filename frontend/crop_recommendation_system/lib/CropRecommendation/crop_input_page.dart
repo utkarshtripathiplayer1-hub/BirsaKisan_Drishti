@@ -1,3 +1,4 @@
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'crop_recommend_controller.dart';
 import 'crop_output_page.dart';
@@ -81,8 +82,8 @@ class _CropInputPageState extends State<CropInputPage> {
 
       appBar: AppBar(
         backgroundColor: Colors.green.shade900,
-        title: const Text(
-          "Crop Recommendation",
+        title: Text(
+          AppLocalizations.of(context)!.cropRecommendation,
           style: TextStyle(
             color: Colors.white,
             fontSize: 24,
@@ -144,8 +145,8 @@ class _CropInputPageState extends State<CropInputPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: const Text(
-                                "Soil Details",
+                              child: Text(
+                                AppLocalizations.of(context)!.soilDetails,
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -161,8 +162,8 @@ class _CropInputPageState extends State<CropInputPage> {
                                 ),
                               ),
                               onPressed: () {},
-                              child: const Text(
-                                "Fetch Soil Details",
+                              child: Text(
+                                AppLocalizations.of(context)!.fetchDetails,
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -173,55 +174,55 @@ class _CropInputPageState extends State<CropInputPage> {
 
                         buildCustomField(
                           controller: nController,
-                          hint: "Enter Nitrogen Value",
+                          hint: AppLocalizations.of(context)!.enterN,
                           iconText: "N",
                         ),
 
                         buildCustomField(
                           controller: pController,
-                          hint: "Enter Phosphorous Value",
+                          hint: AppLocalizations.of(context)!.enterP,
                           iconText: "P",
                         ),
 
                         buildCustomField(
                           controller: kController,
-                          hint: "Enter Potassium Value",
+                          hint: AppLocalizations.of(context)!.enterK,
                           iconText: "K",
                         ),
 
                         buildCustomField(
                           controller: phController,
-                          hint: "Enter pH Value",
+                          hint: AppLocalizations.of(context)!.enterPh,
                           iconText: "pH",
                         ),
 
                         buildCustomField(
                           controller: temperatureController,
-                          hint: "Enter Temperature",
+                          hint: AppLocalizations.of(context)!.enterTemp,
                           iconText: "T",
                         ),
 
                         buildCustomField(
                           controller: humidityController,
-                          hint: "Enter Humidity",
+                          hint: AppLocalizations.of(context)!.enterHumidity,
                           iconText: "H",
                         ),
 
                         buildCustomField(
                           controller: rainfallController,
-                          hint: "Enter Rainfall",
+                          hint: AppLocalizations.of(context)!.enterRainfall,
                           iconText: "R",
                         ),
 
                         buildCustomField(
                           controller: soilMoistureController,
-                          hint: "Enter Soil Moisture",
+                          hint: AppLocalizations.of(context)!.enterMoisture,
                           iconText: "SM",
                         ),
 
                         buildCustomField(
                           controller: soilTypeController,
-                          hint: "Enter Soil Type",
+                          hint: AppLocalizations.of(context)!.enterSoilType,
                           iconText: "ST",
                         ),
 
@@ -241,7 +242,7 @@ class _CropInputPageState extends State<CropInputPage> {
                             onPressed: isLoading ? null : submit,
 
                             child: Text(
-                              isLoading ? "Loading..." : "Get Recommendation",
+                              isLoading ? AppLocalizations.of(context)!.loading : AppLocalizations.of(context)!.getRecommendation,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,

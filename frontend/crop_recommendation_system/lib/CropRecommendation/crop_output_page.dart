@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:crop_recommendation_system/PdfGeneration/pdf_service.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 
@@ -28,7 +29,7 @@ class CropOutputPage extends StatelessWidget {
     try {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Please wait...')));
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.pleaseWait,)));
 
       print('Recommendation ID = $recommendationId');
 
@@ -46,7 +47,7 @@ class CropOutputPage extends StatelessWidget {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error,)));
     }
   }
 
@@ -58,8 +59,8 @@ class CropOutputPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.green.shade900,
-        title: const Text(
-          "Crop Recommended",
+        title: Text(
+          AppLocalizations.of(context)!.cropRecommendation,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
