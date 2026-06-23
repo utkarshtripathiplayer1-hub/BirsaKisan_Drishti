@@ -1,8 +1,11 @@
 import 'package:crop_recommendation_system/Chatbot/chat_history_screen.dart';
+import 'package:crop_recommendation_system/Chatbot/chatbot_voice_service.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'chatbot_service.dart';
+import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ChatbotScreen extends StatefulWidget {
   final Map<String, dynamic>? conversationData;
@@ -14,6 +17,10 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
+  final AudioRecorder recorder = AudioRecorder();
+
+  bool isRecording = false;
+
   final TextEditingController _messageController = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
@@ -113,6 +120,70 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     });
   }
 
+  Future<String> getAudioPath() async {
+    final dir = await getTemporaryDirectory();
+
+    return '${dir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+  }
+
+  Future<void> startRecording() async {
+    if (await recorder.hasPermission()) {
+      final path = await getAudioPath();
+
+      await recorder.start(const RecordConfig(), path: path);
+
+      setState(() {
+        isRecording = true;
+      });
+    }
+  }
+
+  Future<void> stopRecording() async {
+    final path = await recorder.stop();
+
+    setState(() {
+      isRecording = false;
+    });
+
+    if (path != null) {
+      await sendVoiceToBackend(path);
+    }
+  }
+
+  Future<void> sendVoiceToBackend(String path) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final voiceService = ChatbotVoiceService();
+
+      final data = await voiceService.sendVoiceMessage(
+        audioPath: path,
+        userId: "test_user",
+        language: "English",
+        domain: "agriculture",
+        conversationId: currentConversationId,
+      );
+
+      print("DATA = $data");
+      print("TRANSCRIPT = ${data["transcript"]}");
+      print("RESPONSE = ${data["response"]}");
+
+      setState(() {
+        messages.add({"text": data["transcript"], "isUser": true});
+
+        messages.add({"text": data["response"], "isUser": false});
+      });
+    } catch (e) {
+      Get.snackbar("Error", "Failed to process voice");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Future<void> loadConversation() async {
     try {
       final oldMessages = await service.getConversation(currentConversationId!);
@@ -128,7 +199,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         }
       });
     } catch (e) {
-      Get.snackbar(AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.failLoadConvo);
+      Get.snackbar(
+        AppLocalizations.of(context)!.error,
+        AppLocalizations.of(context)!.failLoadConvo,
+      );
     }
   }
 
@@ -165,7 +239,9 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               itemCount: messages.length + (isLoading ? 1 : 0),
               itemBuilder: (context, index) {
                 if (isLoading && index == messages.length) {
-                  return ListTile(title: Text(AppLocalizations.of(context)!.typing));
+                  return ListTile(
+                    title: Text(AppLocalizations.of(context)!.typing),
+                  );
                 }
                 final msg = messages[index];
                 return Align(
@@ -198,13 +274,26 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(hintText: AppLocalizations.of(context)!.askAnything,),
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.askAnything,
+                    ),
                   ),
                 ),
 
                 IconButton(
                   onPressed: sendMessage,
                   icon: const Icon(Icons.send),
+                ),
+
+                IconButton(
+                  onPressed: () async {
+                    if (isRecording) {
+                      await stopRecording();
+                    } else {
+                      await startRecording();
+                    }
+                  },
+                  icon: Icon(isRecording ? Icons.stop : Icons.mic),
                 ),
               ],
             ),
