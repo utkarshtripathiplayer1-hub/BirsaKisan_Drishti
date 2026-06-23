@@ -57,7 +57,7 @@ class ChatbotService {
 
   Future<dynamic> getConversation(String conversationId) async {
     final response = await http.get(
-      Uri.parse("${ApiConfig.baseUrl}/$conversationId"),
+      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
     );
 
     print(response.body);
