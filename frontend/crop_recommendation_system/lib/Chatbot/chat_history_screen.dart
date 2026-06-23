@@ -1,12 +1,16 @@
 import 'dart:convert';
-
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 import 'chatbot_service.dart';
 import 'conversation_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class ApiConfig {
+  static String get baseUrl => dotenv.env['BASE_URL']!;
+}
 
 class ChatHistoryScreen extends StatefulWidget {
   const ChatHistoryScreen({super.key});
@@ -48,7 +52,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
 
     Get.dialog(
       AlertDialog(
-        title: const Text("Rename Chat"),
+        title: Text(AppLocalizations.of(context)!.renameChat,),
 
         content: TextField(controller: controller),
 
@@ -57,7 +61,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
             onPressed: () {
               Get.back();
             },
-            child: const Text("Cancel"),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
 
           TextButton(
@@ -71,7 +75,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
 
               loadConversations();
             },
-            child: const Text("Save"),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ],
       ),
@@ -81,16 +85,16 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   void showDeleteDialog(ConversationModel item) {
     Get.dialog(
       AlertDialog(
-        title: const Text("Delete Conversation"),
+        title: Text(AppLocalizations.of(context)!.deleteConvo),
 
-        content: const Text("This chat will not be available after deletion."),
+        content: Text(AppLocalizations.of(context)!.deleteConvoDesc,),
 
         actions: [
           TextButton(
             onPressed: () {
               Get.back();
             },
-            child: const Text("No"),
+            child: Text(AppLocalizations.of(context)!.no),
           ),
 
           TextButton(
@@ -100,14 +104,14 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                   conversationId: item.conversationId,
                 );
               } catch (e) {
-                Get.snackbar("Error", "Failed to delete conversation");
+                Get.snackbar(AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.failDeleteConvo);
               }
 
               Get.back();
 
               loadConversations();
             },
-            child: const Text("Yes"),
+            child: Text(AppLocalizations.of(context)!.yes,),
           ),
         ],
       ),
@@ -116,7 +120,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
 
   Future<List<dynamic>> getConversationMessages(String conversationId) async {
     final response = await http.get(
-      Uri.parse("https://remedy-factsheet-empirical.ngrok-free.dev/conversations/$conversationId"),
+      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
     );
 
     return jsonDecode(response.body);
@@ -133,7 +137,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
           weight: 40.0,
         ),
         backgroundColor: Colors.green.shade900,
-        title: const Text("Chat History", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
+        title: Text(AppLocalizations.of(context)!.chatHistory, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
         ),
 
       body: isLoading
@@ -165,12 +169,12 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                     itemBuilder: (context) => [
                       PopupMenuItem(
                         value: "rename",
-                        child: Text("Rename", style: TextStyle(color: Colors.green.shade900, fontWeight: FontWeight.bold),),
+                        child: Text(AppLocalizations.of(context)!.rename, style: TextStyle(color: Colors.green.shade900, fontWeight: FontWeight.bold),),
                       ),
 
                       PopupMenuItem(
                         value: "delete",
-                        child: Text("Delete", style: TextStyle(color: Colors.green.shade900, fontWeight: FontWeight.bold),),
+                        child: Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.green.shade900, fontWeight: FontWeight.bold),),
                       ),
                     ],
                   ),

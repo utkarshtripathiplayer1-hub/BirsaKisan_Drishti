@@ -1,3 +1,4 @@
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AboutUs extends StatelessWidget {
@@ -7,9 +8,13 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white, size: 30, weight: 40.0),
-        title: const Text(
-          'About Us',
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 30,
+          weight: 40.0,
+        ),
+        title: Text(
+          AppLocalizations.of(context)!.aboutUs,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -26,11 +31,14 @@ class AboutUs extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Image.asset("assets/images/Birsa_Kisan_Drishti_Logo.png", fit: BoxFit.contain,),
+                child: Image.asset(
+                  "assets/images/Birsa_Kisan_Drishti_Logo.png",
+                  fit: BoxFit.contain,
+                ),
               ),
 
               Text(
-                "-Your Smart Farming Companion",
+                AppLocalizations.of(context)!.aboutusDesc1,
                 style: TextStyle(
                   // fontSize: 25,
                   fontWeight: FontWeight.w600,
@@ -43,14 +51,12 @@ class AboutUs extends StatelessWidget {
                 color: Color.fromARGB(255, 3, 196, 99),
               ),
               SizedBox(height: 20),
-              Text(
-                "BirsaKisanDrishti is an innovative Al-powered farming assistant built to help farmers make smarter decisions. Our mission is to boost crop yield, maximize profit, and simplify farming through technology.",
-              ),
+              Text(AppLocalizations.of(context)!.aboutusDesc2),
               SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "What We Provide",
+                  AppLocalizations.of(context)!.provided,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
               ),
@@ -76,39 +82,41 @@ class AboutUs extends StatelessWidget {
                 children: [
                   featureCard(
                     "assets/images/crop_recommendation.png",
-                    "Smart Crop\nRecommendation",
+                    AppLocalizations.of(context)!.smartCrop,
                   ),
 
                   featureCard(
                     "assets/images/satellite.png",
-                    "Satellite\nBased Soil\nInsights",
+                    AppLocalizations.of(context)!.soilInsight,
                   ),
 
                   featureCard(
                     "assets/images/soil_parameters.png",
-                    "Uses soil parameters (N,P,K,pH)",
+                    AppLocalizations.of(context)!.soilParameters,
                   ),
 
                   featureCard(
                     "assets/images/ai_assistant.png",
-                    "AI Farming\nAssistance",
+                    AppLocalizations.of(context)!.aiFarming,
                   ),
 
                   featureCard(
                     "assets/images/fertilizer.png",
-                    "Fertilizer\nRecommendation",
+                    AppLocalizations.of(context)!.fertilizerRecommendation,
                   ),
 
                   featureCard(
                     "assets/images/water_requirement_green.png",
-                    "Water\nRequirement\nGuide",
+                    AppLocalizations.of(context)!.waterReq,
                   ),
 
-                  featureCard("assets/images/yield.png", "Yield\nProduction"),
+                  featureCard("assets/images/yield.png",
+                  AppLocalizations.of(context)!.yeildProduction
+                  ),
 
                   featureCard(
                     "assets/images/weather_forecast.png",
-                    "Weather\nBased Soil\nInsights",
+                    AppLocalizations.of(context)!.weatherPrediction,
                   ),
                 ],
               ),
@@ -118,7 +126,7 @@ class AboutUs extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "Our Mission",
+                    AppLocalizations.of(context)!.mission,
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
 
@@ -160,7 +168,7 @@ class AboutUs extends StatelessWidget {
 
                   Expanded(
                     child: Text(
-                      "Empowering every farmer with AI-driven knowledge to increase productivity and sustainability",
+                      AppLocalizations.of(context)!.missionDesc,
                       style: TextStyle(fontSize: 15, height: 1.4),
                     ),
                   ),
@@ -198,6 +206,9 @@ class AboutUs extends StatelessWidget {
           Expanded(
             child: Text(
               title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
             ),
           ),

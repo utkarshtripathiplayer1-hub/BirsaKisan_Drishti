@@ -2,6 +2,7 @@ import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/CropRecommendation/common_input_page.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
 import 'package:crop_recommendation_system/OtherScreens/settings.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_api_controller.dart';
@@ -21,7 +22,7 @@ class HomePage extends StatelessWidget {
 
           const SizedBox(height: 5),
 
-          Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          Text(title, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true, style: const TextStyle(color: Colors.grey, fontSize: 12)),
 
           Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
@@ -126,7 +127,7 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _getGreeting(),
+                                  _getGreeting(context),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 28,
@@ -224,28 +225,36 @@ class HomePage extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    weatherInfo(
-                                      Icons.water_drop,
-                                      "Humidity",
-                                      "${ctrl.weather['humidity'] ?? ''}",
+                                    Expanded(
+                                      child: weatherInfo(
+                                        Icons.water_drop,
+                                        AppLocalizations.of(context)!.humidity,
+                                        "${ctrl.weather['humidity'] ?? ''}",
+                                      ),
                                     ),
 
-                                    weatherInfo(
-                                      Icons.device_thermostat,
-                                      "Feels Like",
-                                      "${ctrl.weather['feels_like'] ?? ''}",
+                                    Expanded(
+                                      child: weatherInfo(
+                                        Icons.device_thermostat,
+                                        AppLocalizations.of(context)!.feelsLike,
+                                        "${ctrl.weather['feels_like'] ?? ''}",
+                                      ),
                                     ),
 
-                                    weatherInfo(
-                                      Icons.air,
-                                      "Wind",
-                                      "${ctrl.weather['wind_speed'] ?? ''}",
+                                    Expanded(
+                                      child: weatherInfo(
+                                        Icons.air,
+                                        AppLocalizations.of(context)!.wind,
+                                        "${ctrl.weather['wind_speed'] ?? ''}",
+                                      ),
                                     ),
 
-                                    weatherInfo(
-                                      Icons.compress,
-                                      "Pressure",
-                                      "${ctrl.weather['pressure'] ?? ''}",
+                                    Expanded(
+                                      child: weatherInfo(
+                                        Icons.compress,
+                                        AppLocalizations.of(context)!.pressure,
+                                        "${ctrl.weather['pressure'] ?? ''}",
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -311,12 +320,14 @@ class HomePage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Row(
-                            children: const [
-                              Text(
-                                "Manage Your Farm",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  AppLocalizations.of(context)!.manageFarm,
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
@@ -333,33 +344,37 @@ class HomePage extends StatelessWidget {
                             crossAxisCount: 2,
                             crossAxisSpacing: 20,
                             mainAxisSpacing: 15,
-                            mainAxisExtent: 180,
+                            mainAxisExtent: 190,
                             children: [
                               farmCard(
                                 context,
                                 image: "assets/images/my_farm.png",
-                                title: "My Farm",
+                                title: AppLocalizations.of(context)!.myFarm,
                                 page: const AboutUs(),
                               ),
 
                               farmCard(
                                 context,
                                 image: "assets/images/crop.png",
-                                title: "Crop",
+                                title: AppLocalizations.of(context)!.myCrop,
                                 page: const CropPage(),
                               ),
 
                               farmCard(
                                 context,
                                 image: "assets/images/market_price.png",
-                                title: "Market Price",
+                                title: AppLocalizations.of(
+                                  context,
+                                )!.marketPrices,
                                 page: const AboutUs(),
                               ),
 
                               farmCard(
                                 context,
                                 image: "assets/images/disease_detector.png",
-                                title: "Disease Detector",
+                                title: AppLocalizations.of(
+                                  context,
+                                )!.diseaseDetection,
                                 page: DiseaseDetectionInput(),
                               ),
                             ],
@@ -479,15 +494,15 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  String _getGreeting() {
+  String _getGreeting(BuildContext context) {
     final hour = DateTime.now().hour;
 
     if (hour < 12) {
-      return "Good Morning";
+      return AppLocalizations.of(context)!.goodMorning;
     } else if (hour < 17) {
-      return "Good Afternoon";
+      return AppLocalizations.of(context)!.goodAfternoon;
     } else {
-      return "Good Evening";
+      return AppLocalizations.of(context)!.goodEvening;
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:crop_recommendation_system/CropRecommendation/crop_input_page.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CropPage extends StatelessWidget {
@@ -81,7 +82,7 @@ class CropPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Crop Recommendation",
+          AppLocalizations.of(context)!.cropRecommendation,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -107,8 +108,8 @@ class CropPage extends StatelessWidget {
                 context: context,
                 page: CropInputPage(),
                 imagePath: "assets/images/soil_sensor.png",
-                title: "Live Soil Scan",
-                description: "Get instant soil data from your soil sensor",
+                title: AppLocalizations.of(context)!.liveSoilScan,
+                description: AppLocalizations.of(context)!.liveSoilScanDesc,
                 colors: Color(0xFF067A34),
               ),
 
@@ -118,8 +119,8 @@ class CropPage extends StatelessWidget {
                 context: context,
                 page: CropInputPage(),
                 imagePath: "assets/images/soil_data.png",
-                title: "Enter Soil Data",
-                description: "Enter your soil values manually",
+                title: AppLocalizations.of(context)!.manualSoilData,
+                description: AppLocalizations.of(context)!.manualSoilDataDesc,
                 colors: Color(0xFF013465),
               ),
 
@@ -129,8 +130,8 @@ class CropPage extends StatelessWidget {
                 context: context,
                 page: CropInputPage(),
                 imagePath: "assets/images/upload_data.png",
-                title: "Upload Soil Report",
-                description: "Upload your existing soil test report",
+                title: AppLocalizations.of(context)!.uploadReport,
+                description: AppLocalizations.of(context)!.uploadReportDesc,
                 colors: Color(0xFF013365),
               ),
 
@@ -140,8 +141,8 @@ class CropPage extends StatelessWidget {
                 context: context,
                 page: CropInputPage(),
                 imagePath: "assets/images/collect_data.png",
-                title: "Book Soil Collection",
-                description: "Schedule a soil sample collection from farm",
+                title: AppLocalizations.of(context)!.bookSoilCollection,
+                description: AppLocalizations.of(context)!.bookSoilCollectionDesc,
                 colors: Color(0xFF5C0844),
               ),
 

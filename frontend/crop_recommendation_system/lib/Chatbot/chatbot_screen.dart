@@ -1,7 +1,7 @@
 import 'package:crop_recommendation_system/Chatbot/chat_history_screen.dart';
+import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'chatbot_service.dart';
 
 class ChatbotScreen extends StatefulWidget {
@@ -26,6 +26,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
   String? currentConversationId;
 
+  bool _initialized = false;
+
   @override
   void initState() {
     super.initState();
@@ -41,9 +43,18 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           "isUser": msg["role"] == "user",
         });
       }
-    } else {
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_initialized && widget.conversationData == null) {
+      _initialized = true;
+
       messages.add({
-        "text": "Hello! I'm your AI farming companion...",
+        "text": AppLocalizations.of(context)!.chatBotMessage,
         "isUser": false,
       });
     }
@@ -86,7 +97,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         });
       });
 
-      Get.snackbar("Error", e.toString());
+      Get.snackbar(AppLocalizations.of(context)!.error, e.toString());
     }
 
     setState(() {
@@ -117,7 +128,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         }
       });
     } catch (e) {
-      Get.snackbar("Error", "Failed to load conversation");
+      Get.snackbar(AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.failLoadConvo);
     }
   }
 
@@ -132,8 +143,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         ),
         centerTitle: true,
         backgroundColor: Colors.green.shade900,
-        title: const Text(
-          "Chat Bot",
+        title: Text(
+          AppLocalizations.of(context)!.chatBot,
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
@@ -154,7 +165,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               itemCount: messages.length + (isLoading ? 1 : 0),
               itemBuilder: (context, index) {
                 if (isLoading && index == messages.length) {
-                  return const ListTile(title: Text("Typing..."));
+                  return ListTile(title: Text(AppLocalizations.of(context)!.typing));
                 }
                 final msg = messages[index];
                 return Align(
@@ -187,7 +198,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: const InputDecoration(hintText: "Ask Anything"),
+                    decoration: InputDecoration(hintText: AppLocalizations.of(context)!.askAnything,),
                   ),
                 ),
 
