@@ -1,4 +1,5 @@
 import 'package:crop_recommendation_system/OtherScreens/dashboard.dart';
+import 'package:crop_recommendation_system/OtherScreens/permission_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,13 @@ class LanguageSelectionScreen extends StatelessWidget {
           children: [
             SizedBox(height: 10),
 
-            Center(child: Icon(Icons.language, color: Colors.green.shade900, size: 150)),
+            Center(
+              child: Icon(
+                Icons.language,
+                color: Colors.green.shade900,
+                size: 150,
+              ),
+            ),
 
             SizedBox(height: 10),
 
@@ -59,6 +66,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('en');
                 Get.updateLocale(const Locale('en'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -86,6 +94,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('hi');
                 Get.updateLocale(const Locale('hi'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -113,6 +122,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('as');
                 Get.updateLocale(const Locale('as'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -140,6 +150,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('bn');
                 Get.updateLocale(const Locale('bn'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -167,6 +178,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('or');
                 Get.updateLocale(const Locale('or'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -194,6 +206,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('pa');
                 Get.updateLocale(const Locale('pa'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -221,6 +234,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('gu');
                 Get.updateLocale(const Locale('gu'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -248,6 +262,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('ml');
                 Get.updateLocale(const Locale('ml'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -275,6 +290,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('kn');
                 Get.updateLocale(const Locale('kn'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -302,6 +318,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('te');
                 Get.updateLocale(const Locale('te'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -329,6 +346,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('ta');
                 Get.updateLocale(const Locale('ta'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),
@@ -355,6 +373,7 @@ class LanguageSelectionScreen extends StatelessWidget {
               onTap: () async {
                 await localeProvider.setLocale('mr');
                 Get.updateLocale(const Locale('mr'));
+                await PermissionService.requestAllPermissions();
                 Get.off(() => const HomePage());
               },
             ),

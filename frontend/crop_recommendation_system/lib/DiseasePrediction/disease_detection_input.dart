@@ -42,7 +42,7 @@ class DiseaseDetectionInput extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xFF067A34),
+        backgroundColor: Colors.green.shade900,
       ),
 
       body: Padding(

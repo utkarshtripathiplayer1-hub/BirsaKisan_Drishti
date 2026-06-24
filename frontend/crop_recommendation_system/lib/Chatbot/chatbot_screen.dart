@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:crop_recommendation_system/Chatbot/chat_history_screen.dart';
 import 'package:crop_recommendation_system/Chatbot/chatbot_voice_service.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
@@ -34,6 +35,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   String? currentConversationId;
 
   bool _initialized = false;
+
+  DateTime? recordingStartTime;
+
+  bool isCancelled = false;
 
   @override
   void initState() {
@@ -92,7 +97,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       currentConversationId = response["conversation_id"];
 
       setState(() {
-        messages.add({"text": response["response"], "isUser": false});
+        messages.add({
+          "text": response["response"].replaceAll("**", ""),
+          "isUser": false,
+        });
       });
     } catch (e) {
       print("ERROR => $e");
@@ -132,22 +140,50 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
       await recorder.start(const RecordConfig(), path: path);
 
+      recordingStartTime = DateTime.now();
+
       setState(() {
         isRecording = true;
+        isCancelled = false;
       });
     }
   }
 
   Future<void> stopRecording() async {
+    if (isCancelled) {
+      return;
+    }
+
     final path = await recorder.stop();
+
+    final duration = DateTime.now().difference(recordingStartTime!);
 
     setState(() {
       isRecording = false;
     });
 
+    if (duration.inMilliseconds < 1000) {
+      isCancelled = true;
+      return;
+    }
+
     if (path != null) {
+      final file = File(path);
+
+      print("Audio path: $path");
+      print("Audio size: ${await file.length()} bytes");
       await sendVoiceToBackend(path);
     }
+  }
+
+  void cancelRecording() async {
+    isCancelled = true;
+
+    await recorder.stop();
+
+    setState(() {
+      isRecording = false;
+    });
   }
 
   Future<void> sendVoiceToBackend(String path) async {
@@ -173,7 +209,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       setState(() {
         messages.add({"text": data["transcript"], "isUser": true});
 
-        messages.add({"text": data["response"], "isUser": false});
+        messages.add({
+          "text": data["response"].replaceAll("**", ""),
+          "isUser": false,
+        });
       });
     } catch (e) {
       Get.snackbar("Error", "Failed to process voice");
@@ -272,28 +311,55 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.askAnything,
-                    ),
-                  ),
+                  child: isRecording
+                      ? Container(
+                          height: 50,
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            isCancelled
+                                ? "Recording Cancelled"
+                                : "Slide Left to Cancel ⬅️",
+                            style: TextStyle(color: Colors.green.shade900),
+                          ),
+                        )
+                      : TextField(
+                          controller: _messageController,
+                          style: TextStyle(color: Colors.green.shade900),
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.askAnything,
+                          ),
+                        ),
                 ),
 
                 IconButton(
                   onPressed: sendMessage,
-                  icon: const Icon(Icons.send),
+                  icon: Icon(Icons.send, color: Colors.green.shade900),
                 ),
 
-                IconButton(
-                  onPressed: () async {
-                    if (isRecording) {
-                      await stopRecording();
-                    } else {
-                      await startRecording();
+                GestureDetector(
+                  onLongPressStart: (_) async {
+                    await startRecording();
+                  },
+
+                  onLongPressMoveUpdate: (details) {
+                    if (details.offsetFromOrigin.dx < -120) {
+                      cancelRecording();
                     }
                   },
-                  icon: Icon(isRecording ? Icons.stop : Icons.mic),
+
+                  onLongPressEnd: (_) async {
+                    await stopRecording();
+                  },
+
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(
+                      Icons.mic,
+                      size: 28,
+                      color: Colors.green.shade900,
+                    ),
+                  ),
                 ),
               ],
             ),
