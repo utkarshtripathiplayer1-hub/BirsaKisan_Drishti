@@ -27,9 +27,9 @@ class CropOutputPage extends StatelessWidget {
 
   Future<void> generateAndOpenPdf(BuildContext context) async {
     try {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.pleaseWait,)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.pleaseWait)),
+      );
 
       print('Recommendation ID = $recommendationId');
 
@@ -45,15 +45,16 @@ class CropOutputPage extends StatelessWidget {
 
       await OpenFilex.open(pdfFile.path);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error,)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.error)),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final conditions = response["crop_details"] ?? {};
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -73,52 +74,101 @@ class CropOutputPage extends StatelessWidget {
           weight: 40.0,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            item("Recommended Crop", response["recommended_crop"]),
-
-            item("Confidence", response["confidence"]),
-
-            item(
-              "Recommended N",
-              response["crop_details"]["recommended_npk"]["N"],
-            ),
-
-            item(
-              "Recommended P",
-              response["crop_details"]["recommended_npk"]["P"],
-            ),
-
-            item(
-              "Recommended K",
-              response["crop_details"]["recommended_npk"]["K"],
-            ),
-
-            item("Ideal pH", conditions["ideal_ph"]),
-
-            item("Ideal Temperature", conditions["ideal_temperature"]),
-
-            item("Ideal Humidity", conditions["ideal_humidity"]),
-
-            item("Ideal Soil Moisture", conditions["ideal_soil_moisture"]),
-
-            item("Water Requirement", conditions["water_requirement"]),
-
-            item("Irrigation Frequency", conditions["irrigation_frequency"]),
-
-            item("seasonal water need", conditions["seasonal_water_need"]),
-
-            item("Season", conditions["season"]),
-
-            item("Duration", conditions["duration"]),
-            ElevatedButton(
-              onPressed: () => generateAndOpenPdf(context),
-              child: const Text('Generate PDF'),
-            ),
-          ],
+      
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 10),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Column(
+                  children: [
+                    Text("Crop recommended Sucessfully", textAlign: TextAlign.center,maxLines: 3, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                    item("Recommended Crop", response["recommended_crop"] ?? "N/A"),
+                    SizedBox(height: 10),
+                    item("Confidence", response["confidence"] ?? "N/A"),
+                  ],
+                ),
+              ),
+          
+              SizedBox(height: 20),
+          
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Column(
+                  children: [
+                    Text("Planting Information", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                      
+                    item("Season", conditions["season"]),
+                    
+                    item("Water Requirement", conditions["water_requirement"]),
+                    
+                    item("Irrigation Frequency", conditions["irrigation_frequency"]),
+                    
+                    item("seasonal water need", conditions["seasonal_water_need"]),
+                    
+                    item("Duration", conditions["duration"]),
+                  ],
+                ),
+              ),
+          
+              SizedBox(height: 20),
+          
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Column(
+                  children: [
+                    Text("Soil Information",textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                      
+                    SizedBox(height: 5,),
+                      
+                    item("Ideal pH", conditions["ideal_ph"]),
+                      
+                    item("Ideal Temperature", conditions["ideal_temperature"]),
+                      
+                    item("Ideal Humidity", conditions["ideal_humidity"]),
+                      
+                    item("Ideal Soil Moisture", conditions["ideal_soil_moisture"]),
+                  ],
+                ),
+              ),
+          
+              SizedBox(height: 20),
+          
+              SizedBox(
+                height: 55,
+                width: width * 0.8,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade900,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () => generateAndOpenPdf(context),
+                  child: Text("Generate PDF", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

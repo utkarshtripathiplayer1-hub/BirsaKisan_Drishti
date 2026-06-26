@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'chatbot_service.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:vibration/vibration.dart';
 
 class ChatbotScreen extends StatefulWidget {
   final Map<String, dynamic>? conversationData;
@@ -340,6 +341,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 GestureDetector(
                   onLongPressStart: (_) async {
                     await startRecording();
+                    Vibration.vibrate(duration: 40);
                   },
 
                   onLongPressMoveUpdate: (details) {
@@ -350,6 +352,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
                   onLongPressEnd: (_) async {
                     await stopRecording();
+                    Vibration.vibrate(duration: 40);
                   },
 
                   child: Padding(
