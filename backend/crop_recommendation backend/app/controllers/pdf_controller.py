@@ -10,6 +10,8 @@ def generate_pdf(recommendation_id: str):
     recommendation = crop_repository.get_by_id(
         recommendation_id
     )
+    print("Recommendation from Mongodb")
+    print(recommendation)
 
     if not recommendation:
         raise HTTPException(

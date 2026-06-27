@@ -35,6 +35,14 @@ class PDFService:
         )
 
         content.append(Spacer(1, 12))
+        crop_details = recommendation.get(
+
+            "crop_details",
+            {}
+            )
+        print(crop_details)
+        print(crop_details.get("recommended_npk"))
+
 
         content.append(
             Paragraph(
@@ -54,7 +62,16 @@ class PDFService:
 
         content.append(Spacer(1, 10))
 
-        npk = recommendation.get("recommended_npk", {})
+        crop_details = recommendation.get("crop_details", {})
+        npk = crop_details.get("recommended_npk", {})
+
+        print("Crop Details:", crop_details)
+        print("NPK:", npk)
+        print("N:", npk.get("N"))
+        print("P:", npk.get("P"))
+        print("K:", npk.get("K"))
+
+    
 
         content.append(
             Paragraph("Nutrient Requirements", styles["Heading3"])
@@ -102,7 +119,7 @@ class PDFService:
         for label, key in fields:
             content.append(
                 Paragraph(
-                    f"{label}: {recommendation.get(key, '-')}",
+                    f"{label}: {crop_details.get(key, '-')}",
                     styles["Normal"]
                 )
             )
@@ -124,6 +141,6 @@ class PDFService:
         )
 
         return str(pdf_path)  
-
+       
 
 pdf_service = PDFService()
