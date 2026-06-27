@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Dict, Any
 
 
 class CropRecommendationRequest(BaseModel):
@@ -7,17 +6,8 @@ class CropRecommendationRequest(BaseModel):
     P: float
     K: float
     pH: float
-    soil_moisture: float
-    temperature: float
-    humidity: float
-    rainfall: float
-    solar_radiation: float
-    elevation: float
-    irrigation: str 
-    previous_crop: str
-
-
-class CropRecommendationResponse(BaseModel):
-    recommended_crop: str
-    confidence: float
-    recommended_conditions: Dict[str, Any]
+    Temperature: float
+    Humidity: float
+    Rainfall: float
+    Soil_Moisture: float
+    Soil_Type: str

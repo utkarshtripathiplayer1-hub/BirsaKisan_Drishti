@@ -1,67 +1,11 @@
-from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import MongoClient
+#ADD MONNGODBURL
 
-from app.config.settings import settings
+client = MongoClient(MONGO_URI)
 
+db = client["crop_recommendation_database"]
 
-client = None
-database = None
-
-
-async def connect_to_mongo():
-
-    global client
-    global database
-
-    client = AsyncIOMotorClient(
-        settings.MONGODB_URL
-    )
-
-    database = client[
-        settings.DATABASE_NAME
-    ]
-
-    print("✅ MongoDB Atlas Connected")
-
-
-async def close_mongo_connection():
-
-    global client
-
-    if client:
-        client.close()
-
-    print("❌ MongoDB Connection Closed")from motor.motor_asyncio import AsyncIOMotorClient
-
-from app.config.settings import settings
-
-
-client = None
-database = None
-
-
-async def connect_to_mongo():
-
-    global client
-    global database
-
-    client = AsyncIOMotorClient(
-        settings.MONGODB_URL
-    )
-
-    await client.admin.command("ping")
-    
-    database = client[
-        settings.DATABASE_NAME
-    ]
-
-    print("✅ MongoDB Atlas Connected")
-
-
-async def close_mongo_connection():
-
-    global client
-
-    if client:
-        client.close()
-
-    print("❌ MongoDB Connection Closed")
+crop_collection = db["crop_recommendations"]
+disease_collection = db["disease_detections"]
+weather_collection = db["weather_history"]
+report_collection = db["reports"]

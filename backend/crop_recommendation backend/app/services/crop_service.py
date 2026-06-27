@@ -1,154 +1,81 @@
+from pathlib import Path
 import joblib
 import pandas as pd
-from pathlib import Path
+
+from app.repositories.crop_repository import crop_repository
+from app.services.crop_knowledge_service import crop_knowledge_service
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MODEL_DIR = BASE_DIR / "ml_models"
-DATA_DIR = BASE_DIR / "data"
-
-
-
-crop_dataset = pd.read_csv(
-    DATA_DIR / "synthetic_crop_dataset_10k.csv"
-)
-
-model = joblib.load(
-    MODEL_DIR / "crop_model.pkl"
-)
-
-
-irrigation_encoder = joblib.load(
-    MODEL_DIR / "irrigation_encoder.pkl"
-)
-
-previous_crop_encoder = joblib.load(
-    MODEL_DIR / "previous_crop_encoder.pkl"
-)
-
-crop_encoder = joblib.load(
-    MODEL_DIR / "crop_label_encoder.pkl"
-)
-
+MODEL_PATH = BASE_DIR / "ml_models" / "crop_model.pkl"
+CROP_ENCODER_PATH = BASE_DIR / "ml_models" / "crop_encoder.pkl"
+SOIL_ENCODER_PATH = BASE_DIR / "ml_models" / "soil_encoder.pkl"
 
 
 class CropRecommendationService:
 
-    @staticmethod
-    def predict(data):
+    def __init__(self):
+        self.model = joblib.load(MODEL_PATH)
+        self.crop_encoder = joblib.load(CROP_ENCODER_PATH)
+        self.soil_encoder = joblib.load(SOIL_ENCODER_PATH)
 
+    def predict(
+        self,
+        data,
+        user_id
+    ):
 
+        # Encode soil type
+        soil_encoded = self.soil_encoder.transform(
+            [data.Soil_Type]
+        )[0]
 
-        irrigation_encoded = (
-            irrigation_encoder.transform(
-                [data.irrigation]
-            )[0]
-        )
+        # Feature order must match training data
+        features = pd.DataFrame([{
+            "N": data.N,
+            "P": data.P,
+            "K": data.K,
+            "pH": data.pH,
+            "Temperature": data.Temperature,
+            "Humidity": data.Humidity,
+            "Rainfall": data.Rainfall,
+            "Soil_Moisture": data.Soil_Moisture,
+            "Soil_Type": soil_encoded
+        }])
 
-        previous_crop_encoded = (
-            previous_crop_encoder.transform(
-                [data.previous_crop]
-            )[0]
-        )
+        # Predict crop
+        prediction = self.model.predict(features)
 
-        features = pd.DataFrame(
-            [[
-                data.N,
-                data.P,
-                data.K,
-                data.pH,
-                data.soil_moisture,
-                data.temperature,
-                data.humidity,
-                data.rainfall,
-                data.solar_radiation,
-                data.elevation,
-                irrigation_encoded,
-                previous_crop_encoded
-            ]],
-            columns=[
-                "N",
-                "P",
-                "K",
-                "pH",
-                "soil_moisture",
-                "temperature",
-                "humidity",
-                "rainfall",
-                "solar_radiation",
-                "elevation",
-                "irrigation",
-                "previous_crop"
-            ]
-        )
+        crop = self.crop_encoder.inverse_transform(
+            prediction
+        )[0]
 
-        prediction = model.predict(features)
-
-        probabilities = model.predict_proba(
-            features
-        )
+        # Confidence score
+        probabilities = self.model.predict_proba(features)
 
         confidence = round(
-            float(probabilities.max()) * 100,
+            max(probabilities[0]) * 100,
             2
         )
 
+        # Crop information from knowledge file
+        crop_info = crop_knowledge_service.get_crop_info(crop)
 
-        crop_name = (
-            crop_encoder.inverse_transform(
-                prediction
-            )[0]
+        result = {
+            "user_id": user_id,
+            "recommended_crop": crop,
+            "confidence": confidence,
+            "crop_details": crop_info
+        }
+
+        # Save to MongoDB
+        recommendation_id = crop_repository.save(
+            result.copy()
         )
 
-        crop_rows = crop_dataset[
-            crop_dataset["crop_label"] == crop_name
-        ]
+        result["recommendation_id"] = recommendation_id
 
-        recommended_conditions = {
-            "N": round(
-                crop_rows["N"].mean(),
-                2
-            ),
-            "P": round(
-                crop_rows["P"].mean(),
-                2
-            ),
-            "K": round(
-                crop_rows["K"].mean(),
-                2
-            ),
-            "pH": round(
-                crop_rows["pH"].mean(),
-                2
-            ),
-            "soil_moisture": round(
-                crop_rows["soil_moisture"].mean(),
-                2
-            ),
-            "temperature": round(
-                crop_rows["temperature"].mean(),
-                2
-            ),
-            "humidity": round(
-                crop_rows["humidity"].mean(),
-                2
-            ),
-            "rainfall": round(
-                crop_rows["rainfall"].mean(),
-                2
-            ),
-            "solar_radiation": round(
-                crop_rows["solar_radiation"].mean(),
-                2
-            ),
-            "elevation": round(
-                crop_rows["elevation"].mean(),
-                2
-            )
-        }
+        return result
 
-        return {
-            "recommended_crop": crop_name,
-            "confidence": confidence,
-            "recommended_conditions": recommended_conditions
-        }
+
+crop_service = CropRecommendationService()

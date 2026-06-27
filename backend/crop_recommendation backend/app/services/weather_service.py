@@ -1,11 +1,12 @@
 import httpx
 
 from app.config.settings import settings
-
+from app.repositories.weather_repository import weather_repository
 
 async def get_current_weather(
     lat: float,
     lon: float
+    
 ):
 
     url = (
@@ -32,7 +33,10 @@ async def get_current_weather(
             )
         }
 
-    return {
+    result = {
+        
+        "latitude": lat,
+        "longitude": lon,
 
         "city": data["name"],
 
@@ -50,3 +54,13 @@ async def get_current_weather(
 
         "feels_like": data["main"]["feels_like"]
     }
+
+    weather_id = weather_repository.save(
+        result.copy()
+    )
+
+    result["weather_id"] = weather_id
+
+    return result
+
+

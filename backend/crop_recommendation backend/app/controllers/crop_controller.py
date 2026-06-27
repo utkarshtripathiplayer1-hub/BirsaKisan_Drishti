@@ -1,15 +1,12 @@
-from app.services.crop_service import (
-    CropRecommendationService
-)
+from app.services.crop_service import crop_service
 
 
-class CropController:
+async def recommend_crop(
+    request,
+    user_id: str
+):
 
-    @staticmethod
-    async def recommend_crop(data):
-
-        result = CropRecommendationService.predict(
-            data
+    return crop_service.predict(
+        request,
+        user_id
         )
-
-        return result
