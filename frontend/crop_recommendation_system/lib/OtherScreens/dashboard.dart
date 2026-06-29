@@ -1,6 +1,7 @@
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/CropRecommendation/common_input_page.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
+import 'package:crop_recommendation_system/MarketPlace/cereals.dart';
 import 'package:crop_recommendation_system/OtherScreens/settings.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -370,7 +371,7 @@ class HomePage extends StatelessWidget {
                                 title: AppLocalizations.of(
                                   context,
                                 )!.marketPrices,
-                                page: const AboutUs(),
+                                page: const Cereals(),
                               ),
 
                               farmCard(

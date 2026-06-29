@@ -293,13 +293,42 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: msg["isUser"]
-                          ? const Color(0xFF4CAF50)
-                          : const Color(0xFF067A34),
+                          ? Colors.green.shade900
+                          : const Color.fromARGB(255, 255, 255, 255),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
-                      msg["text"],
-                      style: TextStyle(color: Colors.white),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: msg["isUser"]
+                          ? [
+                              Flexible(
+                                child: Text(
+                                  msg["text"],
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ]
+                          : [
+                              Icon(
+                                Icons.smart_toy,
+                                color: Colors.green.shade900,
+                                size: 30,
+                              ),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  msg["text"],
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ],
                     ),
                   ),
                 );
