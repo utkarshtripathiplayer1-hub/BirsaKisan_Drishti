@@ -1,10 +1,77 @@
-# 🌱 Crop Recommendation System
+<img width="4320" height="1440" alt="image" src="https://github.com/user-attachments/assets/c7473b76-a6b7-425a-a879-7a411c6c8a58" />
 
-A Machine Learning-based Crop Recommendation System that suggests the most suitable crop to grow based on environmental and soil parameters. This project helps farmers make informed decisions to improve crop yield and optimize agricultural productivity.
+
+
+
+
+
+
+
+# PROJECT TITLE
+# 🌱  Smart Crop Recommendation System
+
+## PROBLEM 
+Agriculture is the backbone of many economies, yet farmers often struggle to select the most suitable crop for their land due to varying soil conditions, environmental factors, and limited access to expert guidance. Incorrect crop selection can lead to lower yields, inefficient use of resources, and financial losses.
+
+Our project is an AI-powered Smart Crop Recommendation System that analyzes key agricultural parameters and recommends the most suitable crop for cultivation. By providing personalized recommendations based on data, the platform helps farmers improve productivity and make informed farming decisions.
 
 ---
+# OBJECTIVE
+## Target users
+- Farmers
+- researchers
+- Agricultural organizations
+## Pain point
+- Difficulty in selecting the right crop
+- Lack of personalized agricultural guidance
+- Low productivity due to unsuitable crop choices
+- Limited access to data-driven decision support.
+## Value our solution provides
+- AI-powered crop recommendations.
+- Personalized farmer and crop profiles
+- Data-driven farming decisions
+- Improved crop productivity
+- Better utilization of available resources.
 
-## 📌 Features
+# TEAM AND APPROACH
+# Team Name: 
+Krishi Drishti
+# Team Members:
+- Utkarsh Tripathi (Github = https://github.com/utkarshtripathiplayer1-hub , Linkedin = https://www.linkedin.com/in/utkarsh-tripathi-616788327 ,Role = Team leader , UI/UX Designer)
+- Tanisha Bhatt (Github = https://github.com/tanishabhatt06 ,Linkedin = https://www.linkedin.com/in/tanisha-bhatt-685b273a9 ,Role =  Backend Developer)
+- Samyak jain ( Github = , Linkedin = https://www.linkedin.com/in/samyak-jain0195/ , Role = Frontend Developer)
+
+# Our Approach
+We identified that many farmers still rely on traditional methods or generalized advice when choosing crops. Our goal was to develop a system that provides personalized recommendations using machine learning and agricultural data.
+
+# Key Challenges
+- Building an accurate recommendation model.
+- Managing agricultural datasets.
+- Designing a scalable backend architecture.
+- Creating an easy-to-use interface for farmers.
+
+## TECH STACK
+# Frontend 
+- Flutter
+- Dart
+
+# Backend
+- Python
+- FastAPI
+# Machine Learning
+- Pandas
+- Numpy
+- Scikit-learn
+- tensorflow
+# Database
+- Mongodb
+
+# API's
+- openweather API
+- groq API
+- Sarvam API
+
+## KEY FEATURES
 
 - Predicts the best crop based on input parameters.
 - User-friendly interface.
@@ -12,38 +79,7 @@ A Machine Learning-based Crop Recommendation System that suggests the most suita
 - Fast and accurate crop recommendations.
 - Easy to deploy and customize.
 
----
-
-## 🛠️ Technologies Used
-
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Flask / Streamlit (Choose whichever you used)
-- HTML, CSS (if applicable)
-- Jupyter Notebook
-
----
-
-## 📊 Dataset
-
-The dataset contains agricultural parameters such as:
-
-- Nitrogen (N)
-- Phosphorus (P)
-- Potassium (K)
-- Temperature (°C)
-- Humidity (%)
-- pH Value
-- Rainfall (mm)
-
-**Target Variable:**
-- Crop Name
-
----
-
-## 🚀 Installation
+## How to run the project
 
 ### Clone the repository
 
