@@ -1,4 +1,4 @@
-package com.example.crop_recommendation_system
+package com.birsakisandrishti.crop
 
 import io.flutter.embedding.android.FlutterActivity
 
