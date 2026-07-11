@@ -22,5 +22,25 @@ class CropRepository:
             {"_id": ObjectId(recommendation_id)}
         )
 
+    # NEW
+    def get_latest_by_user(self, user_id: str):
+
+        return crop_collection.find_one(
+            {"user_id": user_id},
+            sort=[("created_at", -1)]
+        )
+    def get_latest_by_user(
+        self,
+        user_id: str
+    ):
+
+        return crop_collection.find_one(
+            {"user_id": user_id},
+            sort=[("created_at", -1)]
+        )
+
 
 crop_repository = CropRepository()
+
+
+    

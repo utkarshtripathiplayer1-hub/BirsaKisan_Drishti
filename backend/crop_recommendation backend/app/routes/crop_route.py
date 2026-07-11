@@ -1,23 +1,18 @@
-from fastapi import APIRouter, Header 
+from fastapi import APIRouter, Depends
 
+from app.auth.dependencies import get_current_user
 from app.schemas.crop_schema import CropRecommendationRequest
 from app.controllers.crop_controller import recommend_crop
 
-router = APIRouter(
-    prefix="/crop",
-    tags=["Crop Recommendation"]
-)
+router = APIRouter()
 
 
-@router.post("/recommend")
+@router.post("/crop/recommend")
 async def crop_recommendation(
     request: CropRecommendationRequest,
-    x_user_id: str = Header(...)
-
-
+    current_user=Depends(get_current_user)
 ):
     return await recommend_crop(
-
         request,
-        x_user_id
-        )
+        current_user["sub"]
+    )

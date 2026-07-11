@@ -63,4 +63,19 @@ async def get_current_weather(
 
     return result
 
+class WeatherService:
+
+    async def current_weather(
+        self,
+        lat: float,
+        lon: float
+    ):
+        return await get_current_weather(
+            lat,
+            lon
+        )
+
+
+weather_service = WeatherService()
+
 

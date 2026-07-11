@@ -1,7 +1,7 @@
 from pathlib import Path
 import joblib
 import pandas as pd
-
+from fastapi import HTTPException
 from app.repositories.crop_repository import crop_repository
 from app.services.crop_knowledge_service import crop_knowledge_service
 
@@ -25,11 +25,22 @@ class CropRecommendationService:
         user_id
     ):
 
-        # Encode soil type
-        soil_encoded = self.soil_encoder.transform(
-            [data.Soil_Type]
-        )[0]
+       
 
+        soil_type = data.Soil_Type.strip().title()
+
+        try:
+            soil_encoded = self.soil_encoder.transform([soil_type])[0]
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail={
+
+                    "message": "Invalid soil type.",
+                    "allowed_values": list(self.soil_encoder.classes_)
+                }
+            )
+    
         # Feature order must match training data
         features = pd.DataFrame([{
             "N": data.N,
@@ -62,12 +73,26 @@ class CropRecommendationService:
         crop_info = crop_knowledge_service.get_crop_info(crop)
 
         result = {
+
             "user_id": user_id,
+
             "recommended_crop": crop,
             "confidence": confidence,
-            "crop_details": crop_info
-        }
+            "crop_details": crop_info,
 
+            # Save the complete input for future dashboard/analytics
+            "soil_data": {
+                "N": data.N,
+                "P": data.P,
+                "K": data.K,
+                "pH": data.pH,
+                "Temperature": data.Temperature,
+                "Humidity": data.Humidity,
+                "Rainfall": data.Rainfall,
+                "Soil_Moisture": data.Soil_Moisture,
+                "Soil_Type": data.Soil_Type
+            }
+        }
         # Save to MongoDB
         recommendation_id = crop_repository.save(
             result.copy()

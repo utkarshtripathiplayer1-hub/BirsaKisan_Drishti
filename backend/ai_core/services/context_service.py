@@ -3,13 +3,16 @@ import requests
 CROP_BACKEND_URL = "http://127.0.0.1:8000"
 
 def get_user_context(user_id: str):
- 
     try:
+        print("Fetching context for user:", user_id)
 
         response = requests.get(
             f"{CROP_BACKEND_URL}/ai/user-context/{user_id}",
             timeout=5
         )
+
+        print("Status Code:", response.status_code)
+        print("Response:", response.text)
 
         if response.status_code == 200:
             return response.json()
@@ -19,4 +22,3 @@ def get_user_context(user_id: str):
     except Exception as e:
         print("Context Service Error:", e)
         return None
-

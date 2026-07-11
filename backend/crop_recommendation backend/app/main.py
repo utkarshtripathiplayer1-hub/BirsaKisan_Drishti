@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+load_dotenv()
 from fastapi import FastAPI
 from app.routes.dashboard import router as dashboard_router
 from app.routes.weather import router as weather_router
@@ -6,7 +9,15 @@ from app.routes.crop_route import router as crop_router
 from app.routes.pdf_route import router as pdf_router
 from app.routes.ai import router as ai_router
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.routes.rotation_route import (
+    router as rotation_router
+)
+from app.routes.my_farm_route import (
+    router as my_farm_router
+)
+from app.routes.active_crop_route import (
+    router as active_crop_router
+)
 
 app = FastAPI(
     title = "Crop Backend",
@@ -45,6 +56,19 @@ app.include_router(
     ai_router,
     prefix="/ai",
     tags=["AI Context"]
+)
+
+#CROP ROTATION
+
+app.include_router(rotation_router)
+
+
+app.include_router(
+    my_farm_router
+)
+
+app.include_router(
+    active_crop_router
 )
 
 @app.get("/")

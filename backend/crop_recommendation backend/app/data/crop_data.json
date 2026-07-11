@@ -1,0 +1,179 @@
+{
+  "Maize": {
+    "next_crop": "Chickpea",
+    "reason": "Legumes restore nitrogen consumed by maize.",
+    "benefits": [
+      "Improves soil fertility",
+      "Breaks pest cycle",
+      "Reduces fertilizer requirement"
+    ],
+    "avoid": ["Maize"]
+  },
+
+  "Rice": {
+    "next_crop": "Lentil",
+    "reason": "Lentils fix nitrogen after rice cultivation.",
+    "benefits": [
+      "Improves soil structure",
+      "Reduces fertilizer use",
+      "Enhances soil microbes"
+    ],
+    "avoid": ["Rice"]
+  },
+
+  "Wheat": {
+    "next_crop": "Soybean",
+    "reason": "Soybean replenishes nitrogen used by wheat.",
+    "benefits": [
+      "Nitrogen fixation",
+      "Higher soil fertility",
+      "Better soil texture"
+    ],
+    "avoid": ["Wheat"]
+  },
+
+  "Cotton": {
+    "next_crop": "Groundnut",
+    "reason": "Groundnut restores nutrients after cotton cultivation.",
+    "benefits": [
+      "Improves soil fertility",
+      "Reduces soil exhaustion",
+      "Fixes nitrogen"
+    ],
+    "avoid": ["Cotton"]
+  },
+
+  "Tomato": {
+    "next_crop": "Beans",
+    "reason": "Beans reduce soil-borne diseases and improve fertility.",
+    "benefits": [
+      "Nitrogen fixation",
+      "Disease suppression",
+      "Better soil health"
+    ],
+    "avoid": ["Tomato", "Potato", "Brinjal"]
+  },
+
+  "Potato": {
+    "next_crop": "Pea",
+    "reason": "Peas restore nitrogen after potato cultivation.",
+    "benefits": [
+      "Improves fertility",
+      "Reduces disease pressure",
+      "Enhances soil quality"
+    ],
+    "avoid": ["Potato", "Tomato"]
+  },
+
+  "Sugarcane": {
+    "next_crop": "Green Gram",
+    "reason": "Green gram replenishes nutrients after heavy-feeding sugarcane.",
+    "benefits": [
+      "Improves nitrogen",
+      "Increases organic matter",
+      "Reduces fertilizer need"
+    ],
+    "avoid": ["Sugarcane"]
+  },
+
+  "Groundnut": {
+    "next_crop": "Maize",
+    "reason": "Maize benefits from nitrogen fixed by groundnut.",
+    "benefits": [
+      "Higher maize yield",
+      "Better nutrient utilization",
+      "Healthy soil"
+    ],
+    "avoid": ["Groundnut"]
+  },
+
+  "Soybean": {
+    "next_crop": "Wheat",
+    "reason": "Wheat efficiently utilizes nitrogen fixed by soybean.",
+    "benefits": [
+      "Higher wheat yield",
+      "Balanced nutrient cycle",
+      "Reduced fertilizer cost"
+    ],
+    "avoid": ["Soybean"]
+  },
+
+  "Chickpea": {
+    "next_crop": "Maize",
+    "reason": "Maize utilizes residual nitrogen from chickpea.",
+    "benefits": [
+      "Improved productivity",
+      "Better nutrient availability",
+      "Healthy crop rotation"
+    ],
+    "avoid": ["Chickpea"]
+  },
+
+  "Black Gram": {
+    "next_crop": "Rice",
+    "reason": "Rice benefits from nitrogen fixed by black gram.",
+    "benefits": [
+      "Improves rice yield",
+      "Maintains soil fertility",
+      "Less fertilizer needed"
+    ],
+    "avoid": ["Black Gram"]
+  },
+
+  "Green Gram": {
+    "next_crop": "Wheat",
+    "reason": "Wheat utilizes residual nutrients left by green gram.",
+    "benefits": [
+      "Higher wheat production",
+      "Healthy soil",
+      "Reduced nutrient depletion"
+    ],
+    "avoid": ["Green Gram"]
+  },
+
+  "Mustard": {
+    "next_crop": "Maize",
+    "reason": "Maize performs well after mustard harvest.",
+    "benefits": [
+      "Balanced nutrient cycle",
+      "Reduced disease occurrence",
+      "Improved productivity"
+    ],
+    "avoid": ["Mustard"]
+  },
+
+  "Sunflower": {
+    "next_crop": "Chickpea",
+    "reason": "Chickpea replenishes nutrients removed by sunflower.",
+    "benefits": [
+      "Nitrogen fixation",
+      "Better soil structure",
+      "Reduced fertilizer usage"
+    ],
+    "avoid": ["Sunflower"]
+  },
+
+  "Millets": {
+    "next_crop": "Cowpea",
+    "reason": "Cowpea enriches nitrogen after millet cultivation.",
+    "benefits": [
+      "Improves fertility",
+      "Enhances organic matter",
+      "Breaks pest cycles"
+    ],
+    "avoid": ["Millet"]
+  },
+  "Pulses": {
+  "next_crop": "Maize",
+  "reason": "Maize benefits from the nitrogen fixed by pulse crops, improving productivity and maintaining soil fertility.",
+  "benefits": [
+    "Improves nutrient utilization",
+    "Breaks disease cycle",
+    "Higher crop yield",
+    "Maintains soil fertility"
+  ],
+  "avoid": [
+    "Pulses"
+  ]
+}
+}

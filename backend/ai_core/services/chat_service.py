@@ -1,81 +1,150 @@
+from fastapi import HTTPException
+
+from core.prompts import AGRICULTURE_SYSTEM_PROMPT
+
 from services.conversation_service import (
     create_conversation,
-    update_conversation_timestamp
+    update_conversation_timestamp,
 )
 
 from services.message_service import (
     save_user_message,
     save_ai_message,
-    get_recent_messages
+    get_recent_messages,
 )
 
 from services.groq_service import ask_groq
 from services.context_service import get_user_context
 from services.sarvam_service import translate_text
 
+from db.conversation_repository import ConversationRepository
+
+from schemas.chat import (
+    ConversationResponse,
+    ConversationListResponse,
+)
+
+
 async def process_chat(
     user_id: str,
     domain: str,
     language: str,
     query: str,
-    conversation_id: str | None = None
+    conversation_id: str | None = None,
 ):
     """
     Main chat orchestration service.
     """
 
-    # Create conversation if this is a new chat
-    if conversation_id is None:
+    # --------------------------------------------------
+    # Validate existing conversation
+    # --------------------------------------------------
+    if conversation_id:
+
+        conversation = await ConversationRepository.get_by_conversation_id(
+            conversation_id
+        )
+
+        if conversation is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Conversation not found",
+            )
+
+        if conversation["user_id"] != user_id:
+            raise HTTPException(
+                status_code=403,
+                detail="You are not allowed to access this conversation",
+            )
+
+    else:
 
         conversation = await create_conversation(
             user_id=user_id,
             domain=domain,
             language=language,
-            first_message=query
+            first_message=query,
         )
-
         conversation_id = conversation["conversation_id"]
-    # Keep original user message
+
+    # --------------------------------------------------
+    # Translate user query to English
+    # --------------------------------------------------
     original_query = query
 
-    # Translate to English for AI processing
     if language != "en":
-
 
         query = translate_text(
             text=query,
             source_language=language,
-            target_language="en"
+            target_language="en",
         )
-    # Save user message
-        await save_user_message(
-            conversation_id=conversation_id,
-            original_text=original_query,
-            english_text=query,
-            language=language
-        )
+    print("Reach conevrsation")
+    print("Convo_ID",conversation_id)
+    print("language",language)
+    print("Og_query",original_query)
 
+    # --------------------------------------------------
+    # Save user message
+    # --------------------------------------------------
+    await save_user_message(
+        conversation_id=conversation_id,
+        original_text=original_query,
+        english_text=query,
+        language=language,
+    )
+
+    # --------------------------------------------------
     # Update conversation timestamp
+    # --------------------------------------------------
     await update_conversation_timestamp(
         conversation_id
     )
 
-    # Get recent messages for context
+    # --------------------------------------------------
+    # Load recent conversation history
+    # --------------------------------------------------
     history = await get_recent_messages(
         conversation_id=conversation_id,
-        limit=10
+        limit=10,
     )
 
-    # Get crop backend context
+    # --------------------------------------------------
+    # Fetch farming context
+    # --------------------------------------------------
     try:
         context = get_user_context(user_id)
+        print("Fetched Context:", context)
     except Exception as e:
         print("Context Fetch Error:", e)
         context = None
+    print("========== USER CONTEXT ==========")
+    print(context)
+    print("==================================")
+    
+    # --------------------------------------------------
+    # Build prompt for Groq
+    # --------------------------------------------------
+    groq_messages = [
+        {
+            "role": "system",
+            "content": f"""
+{AGRICULTURE_SYSTEM_PROMPT}
 
-    groq_messages = []
+IMPORTANT:
 
+- Always answer in {language}.
+- Current domain is {domain}.
+- Continue the conversation naturally.
+- Use previous conversation when relevant.
+- Keep answers practical and farmer-friendly.
+""",
+        }
+    ]
+
+    # --------------------------------------------------
     # Add farming context
+    # --------------------------------------------------
     if context:
 
         farming_context = f"""
@@ -91,47 +160,85 @@ Last Crop Recommendation:
         groq_messages.append(
             {
                 "role": "system",
-                "content": farming_context
+                "content": farming_context,
             }
         )
 
-    # Add conversation history
+    # --------------------------------------------------
+    # Add previous messages
+    # --------------------------------------------------
     for msg in history:
 
         groq_messages.append(
             {
                 "role": msg["role"],
-                "content": msg["english_text"]
+                "content": msg["english_text"],
             }
         )
 
-    # Generate AI response
-    ai_response = ask_groq(
-        groq_messages
+    # --------------------------------------------------
+    # Current user query
+    # --------------------------------------------------
+    groq_messages.append(
+        {
+            "role": "user",
+            "content": query,
+        }
     )
 
+    # --------------------------------------------------
+    # Generate AI response
+    # --------------------------------------------------
+    ai_response =   ask_groq(
+        groq_messages
+    )
+    print("LLM Response:", ai_response)
 
-    final_response = ai_response
+    # --------------------------------------------------
+    # Translate response back
+    # --------------------------------------------------
+    final_response =  ai_response
 
     if language != "en":
-
 
         final_response = translate_text(
             text=ai_response,
             source_language="en",
-            target_language=language
+            target_language=language,
         )
+    print("Translation query",query)
+    print("Calling LLM...")
 
+    # --------------------------------------------------
     # Save AI response
+    # --------------------------------------------------
     await save_ai_message(
         conversation_id=conversation_id,
         original_text=final_response,
         english_text=ai_response,
-        language=language
+        language=language,
     )
 
     return {
         "conversation_id": conversation_id,
-        "response": final_response
+        "response": final_response,
     }
 
+
+async def get_conversations(user_id: str):
+
+    conversations = await ConversationRepository.get_user_conversations(
+        user_id
+    )
+
+    return ConversationListResponse(
+        conversations=[
+            ConversationResponse(
+                conversation_id=conv["conversation_id"],
+                title=conv["title"],
+                domain=conv["domain"],
+                updated_at=conv["updated_at"],
+            )
+            for conv in conversations
+        ]
+    )

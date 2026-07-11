@@ -2,5 +2,3 @@
 __pycache__/
 venv/
 .env
-app/ml_models
-app/database 
