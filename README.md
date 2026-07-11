@@ -39,7 +39,7 @@ Krishi Drishti
 # Team Members:
 - Utkarsh Tripathi (Github = https://github.com/utkarshtripathiplayer1-hub , Linkedin = https://www.linkedin.com/in/utkarsh-tripathi-616788327 ,Role = Team leader , UI/UX Designer)
 - Tanisha Bhatt (Github = https://github.com/tanishabhatt06 ,Linkedin = https://www.linkedin.com/in/tanisha-bhatt-685b273a9 ,Role =  Backend Developer)
-- Samyak jain ( Github = , Linkedin = https://www.linkedin.com/in/samyak-jain0195/ , Role = Frontend Developer)
+- Samyak jain ( Github = https://github.com/SamyakJain0195, Linkedin = https://www.linkedin.com/in/samyak-jain0195/ , Role = Frontend Developer)
 
 # Our Approach
 We identified that many farmers still rely on traditional methods or generalized advice when choosing crops. Our goal was to develop a system that provides personalized recommendations using machine learning and agricultural data.
@@ -84,7 +84,7 @@ We identified that many farmers still rely on traditional methods or generalized
 ### Clone the repository
 
 ```bash
-git clone https://github.com/your-username/crop-recommendation.git
+git clone https://github.com/utkarshtripathiplayer1/BirsaKisan_Drishti.git
 cd crop-recommendation
 ```
 
