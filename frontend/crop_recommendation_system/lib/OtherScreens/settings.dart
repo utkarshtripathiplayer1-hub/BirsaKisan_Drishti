@@ -1,13 +1,20 @@
+import 'package:crop_recommendation_system/Authentication/auth_api_service.dart';
+import 'package:crop_recommendation_system/Authentication/auth_provider.dart';
+import 'package:crop_recommendation_system/Authentication/login_screen.dart';
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
 import 'package:crop_recommendation_system/OtherScreens/faqs.dart';
-import 'package:crop_recommendation_system/OtherScreens/feedback.dart';
 import 'package:crop_recommendation_system/OtherScreens/key_features.dart';
 import 'package:crop_recommendation_system/OtherScreens/language_selection.dart';
+import 'package:crop_recommendation_system/Profile/profile_page.dart';
+import 'package:crop_recommendation_system/feedBack/feedback.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
+import 'package:crop_recommendation_system/l10n/locale_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:provider/provider.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -44,7 +51,7 @@ class Setting extends StatelessWidget {
 
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.person_outline),
+              leading: Icon(Icons.person_outline, color: Colors.green.shade900),
               title: Text(
                 AppLocalizations.of(context)!.updateProfile,
                 style: TextStyle(
@@ -53,12 +60,12 @@ class Setting extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => AboutUs()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ProfilePage()),
+                );
+              },
             ),
 
             Divider(),
@@ -68,7 +75,7 @@ class Setting extends StatelessWidget {
                 horizontal: 28,
                 vertical: 2,
               ),
-              leading: const Icon(Icons.language),
+              leading: Icon(Icons.language, color: Colors.green.shade900),
               title: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -81,7 +88,7 @@ class Setting extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 8),
-                  Icon(Icons.edit, size: 18),
+                  Icon(Icons.edit, size: 18, color: Colors.green.shade900),
                 ],
               ),
               onTap: () {
@@ -96,7 +103,7 @@ class Setting extends StatelessWidget {
 
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.key),
+              leading: Icon(Icons.key, color: Colors.green.shade900),
               title: Text(
                 AppLocalizations.of(context)!.keyFeatures,
                 style: TextStyle(
@@ -117,7 +124,10 @@ class Setting extends StatelessWidget {
 
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.chat_bubble_outline),
+              leading: Icon(
+                Icons.chat_bubble_outline,
+                color: Colors.green.shade900,
+              ),
               title: Text(
                 AppLocalizations.of(context)!.askChatbot,
                 style: TextStyle(
@@ -138,7 +148,7 @@ class Setting extends StatelessWidget {
 
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.help),
+              leading: Icon(Icons.help, color: Colors.green.shade900),
               title: Text(
                 AppLocalizations.of(context)!.goToFAQs,
                 style: TextStyle(
@@ -159,7 +169,7 @@ class Setting extends StatelessWidget {
 
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.groups),
+              leading: Icon(Icons.groups, color: Colors.green.shade900),
               title: Text(
                 AppLocalizations.of(context)!.aboutUs,
                 style: TextStyle(
@@ -180,39 +190,7 @@ class Setting extends StatelessWidget {
 
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.logout),
-              title: Text(
-                AppLocalizations.of(context)!.logout,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onTap: () {},
-            ),
-
-            Divider(),
-
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.delete_outline),
-              title: Text(
-                AppLocalizations.of(context)!.deleteAccount,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onTap: () {},
-            ),
-
-            Divider(),
-
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
-              leading: Icon(Icons.rate_review),
+              leading: Icon(Icons.rate_review, color: Colors.green.shade900),
               title: Text(
                 AppLocalizations.of(context)!.feedback,
                 style: TextStyle(
@@ -226,6 +204,226 @@ class Setting extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (_) => FeedBack()),
                 );
+              },
+            ),
+
+            Divider(),
+
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
+              leading: Icon(
+                Icons.logout,
+                color: const Color.fromARGB(255, 166, 36, 13),
+              ),
+              title: Text(
+                AppLocalizations.of(context)!.logout,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () async {
+                final shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      title: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Color.fromARGB(255, 166, 36, 13),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              "Logout",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                      content: const Text(
+                        "Are you sure you want to log out of BirsaKisanDrishti?",
+                      ),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: BorderSide(
+                              color: Color.fromARGB(255, 166, 36, 13),
+                              width: 2,
+                            ),
+                          ),
+
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 166, 36, 13),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 166, 36, 13),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: Text(
+                            "Logout",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (shouldLogout == true) {
+                  try {
+                    if (!context.mounted) return;
+                    await context.read<AuthProvider>().logout();
+                    if (!context.mounted) return;
+                    await context.read<LocaleProvider>().resetLocale();
+                    Get.updateLocale(const Locale('en'));
+                    if (!context.mounted) return;
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      (_) => false,
+                    );
+                  } catch (e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Failed to logout account.\n$e"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+
+            Divider(),
+
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 28, vertical: 2),
+              leading: Icon(
+                Icons.delete_outline,
+                color: Color.fromARGB(255, 166, 36, 13),
+              ),
+              title: Text(
+                AppLocalizations.of(context)!.deleteAccount,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () async {
+                final shouldDelete = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      title: Row(
+                        children: const [
+                          Icon(
+                            Icons.delete_outline,
+                            color: Color.fromARGB(255, 166, 36, 13),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              "Delete Account",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                      content: const Text(
+                        "Are you sure you want to permanently delete your BirsaKisanDrishti account? This action cannot be undone.",
+                      ),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: BorderSide(
+                              color: Color.fromARGB(255, 166, 36, 13),
+                              width: 2,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 166, 36, 13),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 166, 36, 13),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (shouldDelete == true) {
+                  try {
+                    if (!context.mounted) return;
+                    await AuthApiService.deleteAccount();
+                    if (!context.mounted) return;
+                    await context.read<AuthProvider>().logout();
+                    if (!context.mounted) return;
+                    await context.read<LocaleProvider>().resetLocale();
+                    Get.updateLocale(const Locale('en'));
+                    if (!context.mounted) return;
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      (_) => false,
+                    );
+                  } catch (e) {
+                    if (!context.mounted) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Failed to delete account.\n$e"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               },
             ),
 

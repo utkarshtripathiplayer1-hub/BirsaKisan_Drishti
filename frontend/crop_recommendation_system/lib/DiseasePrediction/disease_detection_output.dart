@@ -30,13 +30,12 @@ class DiseaseDetectionOutput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 170, 199, 164),
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.diseaseDetection,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color(0xFF067A34),
+        backgroundColor: Colors.green.shade900,
         iconTheme: const IconThemeData(
           color: Colors.white,
           size: 30,
@@ -51,7 +50,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
             SizedBox(height: 15),
             Container(
               margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(8), // White border thickness
+              padding: const EdgeInsets.all(4), // White border thickness
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
@@ -67,7 +66,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 15),
 
             Container(
               width: double.infinity,
@@ -82,10 +81,10 @@ class DiseaseDetectionOutput extends StatelessWidget {
                   Text(
                     formatDiseaseName(response['disease_name']?.toString()),
                     textAlign: TextAlign.start,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF067A34),
+                      color: Colors.green.shade900,
                     ),
                   ),
                   Row(

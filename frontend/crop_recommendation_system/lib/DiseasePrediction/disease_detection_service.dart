@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crop_recommendation_system/Authentication/secure_storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -9,22 +10,23 @@ class ApiConfig {
 
 class DiseaseDetectionService {
   Future<Map<String, dynamic>> predictDisease(File imageFile) async {
+    final token = await SecureStorageService.getAccessToken();
+
+    print("Token: $token");
+
+    if (token == null) {
+      throw Exception("User is not logged in");
+    }
+
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse(
-        "${ApiConfig.baseUrl}/disease/predict",
-      ),
+      Uri.parse("${ApiConfig.baseUrl}/disease/predict"),
     );
 
-    request.headers.addAll({
-      "x-user-id": "Samyak",
-    });
+    request.headers.addAll({"Authorization": "Bearer $token"});
 
     request.files.add(
-      await http.MultipartFile.fromPath(
-        'image',
-        imageFile.path,
-      ),
+      await http.MultipartFile.fromPath('image', imageFile.path),
     );
 
     var response = await request.send();

@@ -1,5 +1,6 @@
+import 'package:crop_recommendation_system/Authentication/auth_provider.dart';
+import 'package:crop_recommendation_system/Authentication/splash_screen.dart';
 import 'package:crop_recommendation_system/l10n/locale_provider.dart';
-import 'package:crop_recommendation_system/OtherScreens/startup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,12 +11,20 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // await AuthService.initialize();
+
   final localeProvider = LocaleProvider();
   await localeProvider.loadLocale();
   await dotenv.load(fileName: ".env");
 
   runApp(
-    ChangeNotifierProvider.value(value: localeProvider, child: const MyApp()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: localeProvider),
+        ChangeNotifierProvider(create: (_) => AuthProvider()..restoreSession()),
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -51,7 +60,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.interTextTheme(),
       ),
-      home: const StartupScreen(),
+      home: const SplashScreen(),
     );
   }
 }

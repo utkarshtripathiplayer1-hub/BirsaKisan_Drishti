@@ -1,5 +1,6 @@
+import 'package:crop_recommendation_system/Authentication/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'dashboard.dart';
 import 'language_selection.dart';
 
@@ -18,36 +19,27 @@ class _StartupScreenState extends State<StartupScreen> {
   }
 
   Future<void> _checkLanguage() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final language =
-        prefs.getString('selected_language');
+    final authProvider = context.read<AuthProvider>();
+    final language = authProvider.currentUser?.preferredLanguage;
 
     if (!mounted) return;
 
-    if (language == null) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const LanguageSelectionScreen(),
+          builder: (_) => language == null
+              ? const LanguageSelectionScreen()
+              : const HomePage(),
         ),
       );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const HomePage(),
-        ),
-      );
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

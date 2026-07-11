@@ -1,12 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/CropRecommendation/common_input_page.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
+import 'package:crop_recommendation_system/MarketPlace/cereals.dart';
 import 'package:crop_recommendation_system/OtherScreens/settings.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_api_controller.dart';
-import 'package:crop_recommendation_system/OtherScreens/about_us.dart';
+import 'package:crop_recommendation_system/myFarm/my_farm.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +24,14 @@ class HomePage extends StatelessWidget {
 
           const SizedBox(height: 5),
 
-          Text(title, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
+            style: const TextStyle(color: Colors.grey, fontSize: 12),
+          ),
 
           Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
@@ -137,9 +146,9 @@ class HomePage extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                              
+
                                   const SizedBox(height: 5),
-                              
+
                                   Text(
                                     _getFormattedDate(),
                                     style: const TextStyle(
@@ -158,10 +167,10 @@ class HomePage extends StatelessWidget {
                                   MaterialPageRoute(builder: (_) => Setting()),
                                 );
                               },
-                              child: const CircleAvatar(
+                              child: CircleAvatar(
                                 radius: 28,
-                                backgroundColor: Colors.white,
-                                child: Icon(Icons.person, color: Colors.black),
+                                backgroundColor: Colors.transparent,
+                                child: Icon(Icons.person, color: Colors.white),
                               ),
                             ),
                           ],
@@ -194,7 +203,9 @@ class HomePage extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
+                                        AutoSizeText(
+                                          minFontSize: 12,
+                                          maxLines: 2,
                                           ctrl.weather['city'] ?? '',
                                           style: const TextStyle(
                                             fontSize: 22,
@@ -213,11 +224,14 @@ class HomePage extends StatelessWidget {
                                       ],
                                     ),
 
-                                    Text(
-                                      "${ctrl.weather['temperature'] ?? ''}°C",
-                                      style: const TextStyle(
-                                        fontSize: 34,
-                                        fontWeight: FontWeight.bold,
+                                    Flexible(
+                                      child: AutoSizeText(
+                                        minFontSize: 15,
+                                        "${ctrl.weather['temperature'] ?? ''}°C",
+                                        style: const TextStyle(
+                                          fontSize: 34,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -354,7 +368,7 @@ class HomePage extends StatelessWidget {
                                 context,
                                 image: "assets/images/my_farm.png",
                                 title: AppLocalizations.of(context)!.myFarm,
-                                page: const AboutUs(),
+                                page: const MyFarmPage(),
                               ),
 
                               farmCard(
@@ -370,7 +384,7 @@ class HomePage extends StatelessWidget {
                                 title: AppLocalizations.of(
                                   context,
                                 )!.marketPrices,
-                                page: const AboutUs(),
+                                page: const Cereals(),
                               ),
 
                               farmCard(

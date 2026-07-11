@@ -10,22 +10,28 @@ class LocaleProvider extends ChangeNotifier {
     _locale = Locale(languageCode);
 
     final prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString(
-      'selected_language',
-      languageCode,
-    );
+    await prefs.setString('selected_language', languageCode);
 
     notifyListeners();
   }
 
+  /// Used only during app startup before login.
   Future<void> loadLocale() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final languageCode =
-        prefs.getString('selected_language') ?? 'en';
+    final languageCode = prefs.getString('selected_language') ?? 'en';
 
     _locale = Locale(languageCode);
+
+    notifyListeners();
+  }
+
+  /// Reset to English on logout (optional)
+  Future<void> resetLocale() async {
+    _locale = const Locale('en');
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('selected_language');
 
     notifyListeners();
   }

@@ -10,12 +10,12 @@ class WeatherApiService extends GetConnect {
     required double lat,
     required double lon,
   }) async {
-    final response = await get('${ApiConfig.baseUrl}/weather/current?lat=$lat&lon=$lon',);
+    final response = await get(
+      '${ApiConfig.baseUrl}/weather/current?lat=$lat&lon=$lon',
+    );
     if (response.statusCode == 200) {
       return response.body;
     }
-    throw Exception(
-    'Failed to fetch weather: ${response.statusCode}',
-  );
+    throw Exception('Failed to fetch weather: ${response.statusCode}');
   }
 }

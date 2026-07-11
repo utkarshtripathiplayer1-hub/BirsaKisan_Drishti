@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crop_recommendation_system/Authentication/secure_storage_service.dart';
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +35,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
 
   Future<void> loadConversations() async {
     try {
-      conversations = await service.getConversations(
-        userId: "test_user",
-        domain: "agriculture",
-      );
+      conversations = await service.getConversations(domain: "agriculture");
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -52,7 +50,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
 
     Get.dialog(
       AlertDialog(
-        title: Text(AppLocalizations.of(context)!.renameChat,),
+        title: Text(AppLocalizations.of(context)!.renameChat),
 
         content: TextField(controller: controller),
 
@@ -87,7 +85,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
       AlertDialog(
         title: Text(AppLocalizations.of(context)!.deleteConvo),
 
-        content: Text(AppLocalizations.of(context)!.deleteConvoDesc,),
+        content: Text(AppLocalizations.of(context)!.deleteConvoDesc),
 
         actions: [
           TextButton(
@@ -104,14 +102,18 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                   conversationId: item.conversationId,
                 );
               } catch (e) {
-                Get.snackbar(AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.failDeleteConvo);
+                if (!mounted) return;
+                Get.snackbar(
+                  AppLocalizations.of(context)!.error,
+                  AppLocalizations.of(context)!.failDeleteConvo,
+                );
               }
 
               Get.back();
 
               loadConversations();
             },
-            child: Text(AppLocalizations.of(context)!.yes,),
+            child: Text(AppLocalizations.of(context)!.yes),
           ),
         ],
       ),
@@ -119,8 +121,17 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   }
 
   Future<List<dynamic>> getConversationMessages(String conversationId) async {
+    final token = await SecureStorageService.getAccessToken();
+
+    print("Token: $token");
+
+    if (token == null) {
+      throw Exception("User is not logged in");
+    }
+
     final response = await http.get(
       Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
+      headers: {"Authorization": "Bearer $token"},
     );
 
     return jsonDecode(response.body);
@@ -137,8 +148,11 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
           weight: 40.0,
         ),
         backgroundColor: Colors.green.shade900,
-        title: Text(AppLocalizations.of(context)!.chatHistory, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
+        title: Text(
+          AppLocalizations.of(context)!.chatHistory,
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
+      ),
 
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -148,7 +162,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                 final item = conversations[index];
 
                 return ListTile(
-                  leading: Icon(Icons.chat, color: Colors.green.shade900,),
+                  leading: Icon(Icons.chat, color: Colors.green.shade900),
 
                   title: Text(item.title),
 
@@ -169,12 +183,24 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                     itemBuilder: (context) => [
                       PopupMenuItem(
                         value: "rename",
-                        child: Text(AppLocalizations.of(context)!.rename, style: TextStyle(color: Colors.green.shade900, fontWeight: FontWeight.bold),),
+                        child: Text(
+                          AppLocalizations.of(context)!.rename,
+                          style: TextStyle(
+                            color: Colors.green.shade900,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
 
                       PopupMenuItem(
                         value: "delete",
-                        child: Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.green.shade900, fontWeight: FontWeight.bold),),
+                        child: Text(
+                          AppLocalizations.of(context)!.delete,
+                          style: TextStyle(
+                            color: Colors.green.shade900,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),

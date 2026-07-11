@@ -47,7 +47,7 @@ class _CropInputPageState extends State<CropInputPage> {
         rainfall: double.parse(rainfallController.text),
         soilType: soilTypeController.text,
       );
-
+      if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => CropOutputPage(response: result, recommendationId: result['recommendation_id'],)),
