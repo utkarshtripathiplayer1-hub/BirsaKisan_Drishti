@@ -84,17 +84,17 @@ class _MyFarmPageState extends State<MyFarmPage> {
 
                 const SizedBox(height: 20),
 
-                _recommendationCard(farm),
+                // _recommendationCard(farm),
 
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
 
-                _cropDetailsCard(farm),
+                // _cropDetailsCard(farm),
 
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
 
-                _npkCard(farm),
+                // _npkCard(farm),
 
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
 
                 _soilCard(farm),
 

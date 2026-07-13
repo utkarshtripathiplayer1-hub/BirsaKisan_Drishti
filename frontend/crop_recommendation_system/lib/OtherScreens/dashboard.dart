@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            // overflow: TextOverflow.ellipsis,
             softWrap: true,
             style: const TextStyle(color: Colors.grey, fontSize: 12),
           ),
@@ -198,35 +198,40 @@ class HomePage extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        AutoSizeText(
-                                          minFontSize: 12,
-                                          maxLines: 2,
-                                          ctrl.weather['city'] ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AutoSizeText(
+                                            minFontSize: 16,
+                                            maxLines: 2,
+                                            wrapWords: true,
+                                            overflow: TextOverflow.visible,
+                                            ctrl.weather['city'] ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
 
-                                        const SizedBox(height: 4),
+                                          const SizedBox(height: 4),
 
-                                        Text(
-                                          ctrl.weather['condition'] ?? '',
-                                          style: const TextStyle(
-                                            color: Colors.grey,
+                                          Text(
+                                            ctrl.weather['condition'] ?? '',
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
 
                                     Flexible(
                                       child: AutoSizeText(
-                                        minFontSize: 15,
+                                        maxLines: 1,
                                         "${ctrl.weather['temperature'] ?? ''}°C",
                                         style: const TextStyle(
                                           fontSize: 34,
