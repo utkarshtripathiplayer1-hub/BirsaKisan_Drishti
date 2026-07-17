@@ -1,4 +1,5 @@
-*.pkl
+reports/
+uploads/
 __pycache__/
 venv/
 .env
