@@ -12,6 +12,7 @@ dnspython==2.8.0
 fastapi==0.136.3
 flatbuffers==25.12.19
 fonttools==4.63.0
+groq==0.18.0
 gast==0.7.0
 google-pasta==0.2.0
 grpcio==1.81.0
