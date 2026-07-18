@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from auth.config import MONGODB_URL
+from app.auth.config import MONGODB_URL
 
 db = client["crop_recommendation_database"]
 
