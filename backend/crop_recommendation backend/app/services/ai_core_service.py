@@ -1,6 +1,6 @@
 import requests
 
-AI_CORE_URL = "http://127.0.0.1:8002"
+from auth.config import AI_CORE_URL
 
 
 class AICoreService:
@@ -15,9 +15,7 @@ class AICoreService:
             timeout=5
         )
 
-        print("STATUS:", response.status_code)
-        print("RESPONSE:", response.text)
-
+        
         if response.status_code != 200:
             return None
 

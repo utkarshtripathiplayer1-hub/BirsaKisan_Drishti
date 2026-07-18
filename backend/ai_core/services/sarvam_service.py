@@ -55,6 +55,4 @@ def translate_text(
     
     except Exception as e:
 
-        print("Sarvam Translation Error:", e)
-
         return text

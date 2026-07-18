@@ -10,7 +10,7 @@ security = HTTPBearer(auto_error=False)
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ):
-    print("Credentials:", credentials)
+
     if credentials is None:
         raise HTTPException(
             status_code=401,

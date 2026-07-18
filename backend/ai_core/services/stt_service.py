@@ -16,9 +16,7 @@ def speech_to_text(audio_path: str):
             model="saaras:v3",
             mode="transcribe"
         )
-        print("STT Response:", response)
-        print(type(response))
-        print(dir(response))
+    
 
         return response.transcript
 

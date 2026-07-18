@@ -18,7 +18,7 @@ def analyze_leaf(image_path: str):
 
     response = client.chat.completions.create(
 
-        model="meta-llama/llama-4-scout-17b-16e-instruct",
+        model="qwen/qwen3.6-27b",
 
         messages=[
             {

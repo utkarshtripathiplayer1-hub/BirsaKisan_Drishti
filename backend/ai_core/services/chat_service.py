@@ -79,11 +79,7 @@ async def process_chat(
             source_language=language,
             target_language="en",
         )
-    print("Reach conevrsation")
-    print("Convo_ID",conversation_id)
-    print("language",language)
-    print("Og_query",original_query)
-
+    
     # --------------------------------------------------
     # Save user message
     # --------------------------------------------------
@@ -114,13 +110,10 @@ async def process_chat(
     # --------------------------------------------------
     try:
         context = get_user_context(user_id)
-        print("Fetched Context:", context)
+        
     except Exception as e:
-        print("Context Fetch Error:", e)
         context = None
-    print("========== USER CONTEXT ==========")
-    print(context)
-    print("==================================")
+    
     
     # --------------------------------------------------
     # Build prompt for Groq
@@ -192,7 +185,7 @@ Last Crop Recommendation:
     ai_response =   ask_groq(
         groq_messages
     )
-    print("LLM Response:", ai_response)
+
 
     # --------------------------------------------------
     # Translate response back
@@ -206,9 +199,7 @@ Last Crop Recommendation:
             source_language="en",
             target_language=language,
         )
-    print("Translation query",query)
-    print("Calling LLM...")
-
+   
     # --------------------------------------------------
     # Save AI response
     # --------------------------------------------------

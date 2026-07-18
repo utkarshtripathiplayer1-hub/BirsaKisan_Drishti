@@ -30,5 +30,3 @@ app.include_router(voice_router)
 app.include_router(crop_profile_router)
 app.include_router(account_router)
 app.include_router(feedback_router)
-for route in app.routes:
-    print(route.path, route.methods)

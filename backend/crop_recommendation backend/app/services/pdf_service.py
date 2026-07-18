@@ -40,8 +40,7 @@ class PDFService:
             "crop_details",
             {}
             )
-        print(crop_details)
-        print(crop_details.get("recommended_npk"))
+       
 
 
         content.append(
@@ -65,11 +64,7 @@ class PDFService:
         crop_details = recommendation.get("crop_details", {})
         npk = crop_details.get("recommended_npk", {})
 
-        print("Crop Details:", crop_details)
-        print("NPK:", npk)
-        print("N:", npk.get("N"))
-        print("P:", npk.get("P"))
-        print("K:", npk.get("K"))
+        
 
     
 

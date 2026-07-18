@@ -11,8 +11,6 @@ def get_current_user(
 
     token = credentials.credentials
 
-    print("JWT TOKEN:", token)
-
     payload = verify_access_token(token)
 
     if payload is None:

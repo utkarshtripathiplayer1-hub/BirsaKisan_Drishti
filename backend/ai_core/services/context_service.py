@@ -1,6 +1,5 @@
 import requests
-
-CROP_BACKEND_URL = "http://127.0.0.1:8000"
+from core.config import CROP_BACKEND_URL
 
 def get_user_context(user_id: str):
     try:
@@ -11,8 +10,6 @@ def get_user_context(user_id: str):
             timeout=5
         )
 
-        print("Status Code:", response.status_code)
-        print("Response:", response.text)
 
         if response.status_code == 200:
             return response.json()

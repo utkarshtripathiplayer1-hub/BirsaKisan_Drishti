@@ -89,8 +89,6 @@ class MyFarmService:
         )
         
 
-        print("LOCATION FROM AI CORE:", location)
-
         # Live Weather
         weather = None
 

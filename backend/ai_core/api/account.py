@@ -12,7 +12,7 @@ router = APIRouter(
 async def remove_account(
     current_user=Depends(get_current_user)
 ):
-    print("DELETE endpoint reached")
+
 
     user_id = str(current_user["_id"])
 
