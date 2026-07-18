@@ -1,7 +1,5 @@
 from pymongo import MongoClient
-from app.auth.config import MONGODB_URL
-
-client = AsyncIOMotorClient(MONGODB_URL)
+from auth.config import MONGODB_URL
 
 db = client["crop_recommendation_database"]
 
