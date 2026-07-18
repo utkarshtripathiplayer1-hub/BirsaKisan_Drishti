@@ -1,6 +1,6 @@
 import requests
 
-from auth.config import AI_CORE_URL
+from app.auth.config import AI_CORE_URL
 
 
 class AICoreService:
