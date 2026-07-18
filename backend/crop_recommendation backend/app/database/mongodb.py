@@ -1,6 +1,10 @@
 from pymongo import MongoClient
 from app.auth.config import MONGODB_URL
+<<<<<<< HEAD
 
+=======
+client = AsyncIOMotorClient(MONGODB_URL)
+>>>>>>> feature/backend
 db = client["crop_recommendation_database"]
 
 crop_collection = db["crop_recommendations"]
