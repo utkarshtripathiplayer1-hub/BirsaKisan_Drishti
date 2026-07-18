@@ -232,6 +232,7 @@ class HomePage extends StatelessWidget {
                                     Flexible(
                                       child: AutoSizeText(
                                         maxLines: 1,
+                                        minFontSize: 12,
                                         "${ctrl.weather['temperature'] ?? ''}°C",
                                         style: const TextStyle(
                                           fontSize: 34,

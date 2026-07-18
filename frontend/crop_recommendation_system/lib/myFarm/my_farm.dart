@@ -21,23 +21,6 @@ class _MyFarmPageState extends State<MyFarmPage> {
     dashboardFuture = controller.getDashboard();
   }
 
-  Widget heading(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 8),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget item(String title, dynamic value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Text("$title : $value"),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +78,6 @@ class _MyFarmPageState extends State<MyFarmPage> {
                 // _npkCard(farm),
 
                 // const SizedBox(height: 20),
-
                 _soilCard(farm),
 
                 const SizedBox(height: 20),
@@ -116,6 +98,23 @@ class _MyFarmPageState extends State<MyFarmPage> {
           );
         },
       ),
+    );
+  }
+
+  Widget heading(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget item(String title, dynamic value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Text("$title : $value"),
     );
   }
 
@@ -419,75 +418,6 @@ class _MyFarmPageState extends State<MyFarmPage> {
     );
   }
 
-  Widget _recommendationCard(MyFarmModel farm) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.12),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "RECOMMENDATION",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-          ),
-
-          const SizedBox(height: 20),
-
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.eco, color: Colors.orange.shade700, size: 32),
-              ),
-
-              const SizedBox(width: 16),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      farm.recommendedCrop,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-
-                    const SizedBox(height: 6),
-
-                    Text(
-                      "Confidence : ${farm.confidence.toStringAsFixed(1)} %",
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _infoTile(IconData icon, String title, String value) {
     return Container(
       padding: const EdgeInsets.all(15),
@@ -528,73 +458,6 @@ class _MyFarmPageState extends State<MyFarmPage> {
     );
   }
 
-  Widget _cropDetailsCard(MyFarmModel farm) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.12),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "CROP DETAILS",
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 18),
-
-          _detailRow(Icons.science, "Ideal pH", farm.cropDetails.idealPh),
-          _detailRow(
-            Icons.thermostat,
-            "Temperature",
-            farm.cropDetails.idealTemperature,
-          ),
-          _detailRow(
-            Icons.water_drop,
-            "Humidity",
-            farm.cropDetails.idealHumidity,
-          ),
-          _detailRow(
-            Icons.opacity,
-            "Soil Moisture",
-            farm.cropDetails.idealSoilMoisture,
-          ),
-          _detailRow(
-            Icons.water,
-            "Water Requirement",
-            farm.cropDetails.waterRequirement,
-          ),
-          _detailRow(
-            Icons.repeat,
-            "Irrigation",
-            farm.cropDetails.irrigationFrequency,
-          ),
-          _detailRow(
-            Icons.waves,
-            "Seasonal Water",
-            farm.cropDetails.seasonalWaterNeed,
-          ),
-          _detailRow(Icons.wb_sunny, "Season", farm.cropDetails.season),
-          _detailRow(
-            Icons.calendar_month,
-            "Duration",
-            farm.cropDetails.duration,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _detailRow(IconData icon, String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -612,100 +475,6 @@ class _MyFarmPageState extends State<MyFarmPage> {
           ),
 
           Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
-
-  Widget _npkCard(MyFarmModel farm) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.12),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "RECOMMENDED NPK",
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 18),
-
-          Row(
-            children: [
-              Expanded(
-                child: _npkBox(
-                  "N",
-                  farm.cropDetails.recommendedNPK.n.toString(),
-                  Colors.green,
-                ),
-              ),
-
-              const SizedBox(width: 14),
-
-              Expanded(
-                child: _npkBox(
-                  "P",
-                  farm.cropDetails.recommendedNPK.p.toString(),
-                  Colors.orange,
-                ),
-              ),
-
-              const SizedBox(width: 14),
-
-              Expanded(
-                child: _npkBox(
-                  "K",
-                  farm.cropDetails.recommendedNPK.k.toString(),
-                  Colors.blue,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _npkBox(String title, String value, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 18),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: color,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
         ],
       ),
     );
@@ -775,7 +544,6 @@ class _MyFarmPageState extends State<MyFarmPage> {
           // const Divider(),
 
           // const SizedBox(height: 7),
-
           _detailRow(Icons.science, "pH", farm.soil.ph.toString()),
           _detailRow(Icons.eco, "Nitrogen", farm.soil.n.toString()),
           _detailRow(Icons.spa, "Phosphorus", farm.soil.p.toString()),
@@ -986,7 +754,7 @@ class _MyFarmPageState extends State<MyFarmPage> {
           _locationRow(Icons.home, "Village", location.village),
 
           // const Divider(height: 30),
-          const SizedBox(height: 20,),
+          const SizedBox(height: 20),
 
           Row(
             children: [
@@ -1069,4 +837,234 @@ class _MyFarmPageState extends State<MyFarmPage> {
       ),
     );
   }
+
+  // Widget _recommendationCard(MyFarmModel farm) {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: const EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(22),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.grey.withValues(alpha: 0.12),
+  //           blurRadius: 15,
+  //           offset: const Offset(0, 6),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         const Text(
+  //           "RECOMMENDATION",
+  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+  //         ),
+
+  //         const SizedBox(height: 20),
+
+  //         Row(
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.all(15),
+  //               decoration: BoxDecoration(
+  //                 color: Colors.orange.shade50,
+  //                 shape: BoxShape.circle,
+  //               ),
+  //               child: Icon(Icons.eco, color: Colors.orange.shade700, size: 32),
+  //             ),
+
+  //             const SizedBox(width: 16),
+
+  //             Expanded(
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     farm.recommendedCrop,
+  //                     style: const TextStyle(
+  //                       fontWeight: FontWeight.bold,
+  //                       fontSize: 20,
+  //                     ),
+  //                   ),
+
+  //                   const SizedBox(height: 6),
+
+  //                   Text(
+  //                     "Confidence : ${farm.confidence.toStringAsFixed(1)} %",
+  //                     style: TextStyle(
+  //                       color: Colors.grey.shade700,
+  //                       fontSize: 15,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Widget _cropDetailsCard(MyFarmModel farm) {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: const EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(22),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.grey.withValues(alpha: 0.12),
+  //           blurRadius: 15,
+  //           offset: const Offset(0, 6),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         const Text(
+  //           "CROP DETAILS",
+  //           style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+  //         ),
+
+  //         const SizedBox(height: 18),
+
+  //         _detailRow(Icons.science, "Ideal pH", farm.cropDetails.idealPh),
+  //         _detailRow(
+  //           Icons.thermostat,
+  //           "Temperature",
+  //           farm.cropDetails.idealTemperature,
+  //         ),
+  //         _detailRow(
+  //           Icons.water_drop,
+  //           "Humidity",
+  //           farm.cropDetails.idealHumidity,
+  //         ),
+  //         _detailRow(
+  //           Icons.opacity,
+  //           "Soil Moisture",
+  //           farm.cropDetails.idealSoilMoisture,
+  //         ),
+  //         _detailRow(
+  //           Icons.water,
+  //           "Water Requirement",
+  //           farm.cropDetails.waterRequirement,
+  //         ),
+  //         _detailRow(
+  //           Icons.repeat,
+  //           "Irrigation",
+  //           farm.cropDetails.irrigationFrequency,
+  //         ),
+  //         _detailRow(
+  //           Icons.waves,
+  //           "Seasonal Water",
+  //           farm.cropDetails.seasonalWaterNeed,
+  //         ),
+  //         _detailRow(Icons.wb_sunny, "Season", farm.cropDetails.season),
+  //         _detailRow(
+  //           Icons.calendar_month,
+  //           "Duration",
+  //           farm.cropDetails.duration,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Widget _npkCard(MyFarmModel farm) {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: const EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(22),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.grey.withValues(alpha: 0.12),
+  //           blurRadius: 15,
+  //           offset: const Offset(0, 6),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         const Text(
+  //           "RECOMMENDED NPK",
+  //           style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+  //         ),
+
+  //         const SizedBox(height: 18),
+
+  //         Row(
+  //           children: [
+  //             Expanded(
+  //               child: _npkBox(
+  //                 "N",
+  //                 farm.cropDetails.recommendedNPK.n.toString(),
+  //                 Colors.green,
+  //               ),
+  //             ),
+
+  //             const SizedBox(width: 14),
+
+  //             Expanded(
+  //               child: _npkBox(
+  //                 "P",
+  //                 farm.cropDetails.recommendedNPK.p.toString(),
+  //                 Colors.orange,
+  //               ),
+  //             ),
+
+  //             const SizedBox(width: 14),
+
+  //             Expanded(
+  //               child: _npkBox(
+  //                 "K",
+  //                 farm.cropDetails.recommendedNPK.k.toString(),
+  //                 Colors.blue,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Widget _npkBox(String title, String value, Color color) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 18),
+  //     decoration: BoxDecoration(
+  //       color: color.withValues(alpha: 0.08),
+  //       borderRadius: BorderRadius.circular(18),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           title,
+  //           style: TextStyle(
+  //             color: color,
+  //             fontSize: 22,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+
+  //         const SizedBox(height: 8),
+
+  //         Text(
+  //           value,
+  //           style: TextStyle(
+  //             color: color,
+  //             fontWeight: FontWeight.bold,
+  //             fontSize: 20,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
