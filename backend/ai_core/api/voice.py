@@ -19,11 +19,7 @@ from schemas.voice_schema import (
 
 from services.stt_service import speech_to_text
 from services.chat_service import process_chat
-from fastapi import Depends
-from fastapi.responses import FileResponse
-
 from services.tts_service import text_to_speech
-from fastapi.responses import FileResponse
 
 router = APIRouter(
     prefix="/voice",
@@ -31,6 +27,10 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
+
+# ----------------------------------------
+# Speech to Text
+# ----------------------------------------
 
 @router.post(
     "/stt",
@@ -40,33 +40,40 @@ async def transcribe_audio(
     audio: UploadFile = File(...),
     current_user=Depends(get_current_user)
 ):
+
     try:
+
         temp_path = f"temp_{audio.filename}"
 
         with open(temp_path, "wb") as buffer:
             buffer.write(await audio.read())
 
-        transcript = speech_to_text(temp_path)
+        stt_result = speech_to_text(temp_path)
 
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
-        if transcript is None:
+        if stt_result is None:
             raise HTTPException(
                 status_code=500,
                 detail="Speech transcription failed"
             )
 
         return VoiceResponse(
-            transcript=transcript
+            transcript=stt_result["transcript"]
         )
 
     except Exception as e:
+
         raise HTTPException(
             status_code=500,
             detail=str(e)
         )
 
+
+# ----------------------------------------
+# Voice Chat
+# ----------------------------------------
 
 @router.post(
     "/chat",
@@ -78,30 +85,45 @@ async def voice_chat(
     conversation_id: str | None = None,
     current_user=Depends(get_current_user)
 ):
+
     try:
+
         user_id = str(current_user["_id"])
-        language = current_user["preferred_language"]
+
+        # User's preferred language
+        preferred_language = current_user.get(
+            "preferred_language",
+            "en"
+        )
 
         temp_path = f"temp_{audio.filename}"
 
         with open(temp_path, "wb") as buffer:
             buffer.write(await audio.read())
 
-        transcript = speech_to_text(temp_path)
+        stt_result = speech_to_text(temp_path)
 
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
-        if transcript is None:
+        if stt_result is None:
             raise HTTPException(
                 status_code=500,
                 detail="Speech transcription failed"
             )
 
+        transcript = stt_result["transcript"]
+
+        detected_language = stt_result["language"]
+
+    
+        # Pass detected language to understand the query.
+        # process_chat() will translate the final answer
+        # into preferred_language if you modify it accordingly.
         result = await process_chat(
             user_id=user_id,
             domain=domain,
-            language=language,
+            language=preferred_language,
             query=transcript,
             conversation_id=conversation_id
         )
@@ -113,19 +135,23 @@ async def voice_chat(
         )
 
     except Exception as e:
+
         raise HTTPException(
             status_code=500,
             detail=str(e)
         )
 
 
-
+# ----------------------------------------
+# Text To Speech
+# ----------------------------------------
 
 @router.post("/tts")
 async def generate_tts(
     text: str,
     current_user=Depends(get_current_user)
 ):
+
     try:
 
         language = current_user.get(

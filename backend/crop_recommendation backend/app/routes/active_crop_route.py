@@ -6,9 +6,8 @@ from app.schemas.active_crop_schema import (
     StartCropRequest
 )
 
-from app.controllers.active_crop_controller import (
-    start_crop
-)
+from app.services.active_crop_service import active_crop_service
+
 
 router = APIRouter(
     prefix="/my-farm",
@@ -17,27 +16,25 @@ router = APIRouter(
 
 
 @router.post("/start-crop")
-async def start_crop_route(
+async def start_crop(
     request: StartCropRequest,
     current_user=Depends(get_current_user)
 ):
 
-    return await start_crop(
-        request,
+    result = await active_crop_service.start_crop(
+        request.recommendation_id,
         current_user["sub"]
     )
+
+    return result
+
+
 
 @router.get("/current")
 async def current_crop(
-
-    current_user=Depends(
-        get_current_user
-    )
-
+    current_user=Depends(get_current_user)
 ):
 
-    return await get_current_crop(
-
+    return await active_crop_service.get_current_crop(
         current_user["sub"]
-
     )

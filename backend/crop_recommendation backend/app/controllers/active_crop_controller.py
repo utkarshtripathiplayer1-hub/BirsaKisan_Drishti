@@ -8,7 +8,7 @@ async def start_crop(
     user_id: str
 ):
 
-    return active_crop_service.start_crop(
+    return await active_crop_service.start_crop(
         request.recommendation_id,
         user_id
     )
@@ -17,6 +17,6 @@ async def get_current_crop(
     user_id: str
 ):
 
-    return active_crop_service.get_current_crop(
+    return await active_crop_service.get_current_crop(
         user_id
     )

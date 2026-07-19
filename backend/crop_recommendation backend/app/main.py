@@ -34,7 +34,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(crop_router)
 app.include_router(pdf_router)
 
@@ -44,11 +43,7 @@ app.include_router(
     tags = ["Dashboard"]
 )
 
-app.include_router(
-    weather_router,
-    prefix="/weather",
-    tags=["Weather"]
-)
+app.include_router(weather_router)
 
 
 app.include_router(

@@ -11,9 +11,9 @@ router = APIRouter(
 
 
 @router.get("/rotation/{recommendation_id}")
-def crop_rotation(
+async def crop_rotation(
     recommendation_id: str
 ):
-    return get_crop_rotation(
+    return await get_crop_rotation(
         recommendation_id
     )

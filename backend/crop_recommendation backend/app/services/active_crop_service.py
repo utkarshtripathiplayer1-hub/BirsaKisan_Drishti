@@ -13,14 +13,14 @@ from app.services.crop_knowledge_service import (
 
 class ActiveCropService:
 
-    def start_crop(
+    async def start_crop(
         self,
         recommendation_id: str,
         user_id: str
     ):
 
         # Get crop recommendation
-        recommendation = crop_repository.get_by_id(
+        recommendation = await crop_repository.get_by_id(
             recommendation_id
         )
 
@@ -29,6 +29,7 @@ class ActiveCropService:
                 status_code=404,
                 detail="Recommendation not found."
             )
+
 
         # Get crop knowledge
         crop_info = crop_knowledge_service.get_crop_info(
@@ -43,7 +44,9 @@ class ActiveCropService:
                 120
             )
 
+
         planted_on = datetime.utcnow()
+
 
         crop = {
 
@@ -63,15 +66,17 @@ class ActiveCropService:
 
         }
 
-        crop_id = active_crop_repository.save(
+
+        crop_id = await active_crop_repository.save(
             crop
         )
+
 
         return {
 
             "message": "Crop started successfully.",
 
-            "active_crop_id": crop_id,
+            "active_crop_id": str(crop_id),
 
             "crop_name": recommendation["recommended_crop"],
 
@@ -79,12 +84,13 @@ class ActiveCropService:
 
         }
 
-    def get_current_crop(
+
+    async def get_current_crop(
         self,
         user_id: str
     ):
 
-        crop = active_crop_repository.get_active_crop(
+        crop = await active_crop_repository.get_active_crop(
             user_id
         )
 
@@ -94,11 +100,13 @@ class ActiveCropService:
                 detail="No active crop found."
             )
 
-        return self.build_current_crop(
+
+        return await self.build_current_crop(
             crop
         )
 
-    def build_current_crop(
+
+    async def build_current_crop(
         self,
         crop
     ):
@@ -106,28 +114,38 @@ class ActiveCropService:
         if not crop:
             return None
 
+
         planted_on = crop["planted_on"]
+
         harvest = crop["expected_harvest"]
+
 
         total_days = max(
             (harvest - planted_on).days,
             1
         )
 
+
         completed = max(
             (datetime.utcnow() - planted_on).days,
             0
         )
+
 
         remaining = max(
             total_days - completed,
             0
         )
 
+
         progress = round(
-            min((completed / total_days) * 100, 100),
+            min(
+                (completed / total_days) * 100,
+                100
+            ),
             2
         )
+
 
         return {
 
@@ -146,6 +164,7 @@ class ActiveCropService:
             "progress": progress
 
         }
+
 
 
 active_crop_service = ActiveCropService()

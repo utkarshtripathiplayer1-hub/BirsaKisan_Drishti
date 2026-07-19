@@ -19,13 +19,11 @@ class CropRecommendationService:
         self.crop_encoder = joblib.load(CROP_ENCODER_PATH)
         self.soil_encoder = joblib.load(SOIL_ENCODER_PATH)
 
-    def predict(
+    async def predict(
         self,
         data,
         user_id
     ):
-
-       
 
         soil_type = data.Soil_Type.strip().title()
 
@@ -35,13 +33,11 @@ class CropRecommendationService:
             raise HTTPException(
                 status_code=400,
                 detail={
-
                     "message": "Invalid soil type.",
                     "allowed_values": list(self.soil_encoder.classes_)
                 }
             )
-    
-        # Feature order must match training data
+
         features = pd.DataFrame([{
             "N": data.N,
             "P": data.P,
@@ -54,14 +50,12 @@ class CropRecommendationService:
             "Soil_Type": soil_encoded
         }])
 
-        # Predict crop
         prediction = self.model.predict(features)
 
         crop = self.crop_encoder.inverse_transform(
             prediction
         )[0]
 
-        # Confidence score
         probabilities = self.model.predict_proba(features)
 
         confidence = round(
@@ -69,18 +63,13 @@ class CropRecommendationService:
             2
         )
 
-        # Crop information from knowledge file
         crop_info = crop_knowledge_service.get_crop_info(crop)
 
         result = {
-
             "user_id": user_id,
-
             "recommended_crop": crop,
             "confidence": confidence,
             "crop_details": crop_info,
-
-            # Save the complete input for future dashboard/analytics
             "soil_data": {
                 "N": data.N,
                 "P": data.P,
@@ -93,8 +82,8 @@ class CropRecommendationService:
                 "Soil_Type": data.Soil_Type
             }
         }
-        # Save to MongoDB
-        recommendation_id = crop_repository.save(
+
+        recommendation_id = await crop_repository.save(
             result.copy()
         )
 
