@@ -1,8 +1,9 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
-from auth.config import MONGODB_URL
+from app.auth.config import MONGODB_URL
 
 client = AsyncIOMotorClient(MONGODB_URL)
+
 db = client["crop_recommendation_database"]
 
 crop_collection = db["crop_recommendations"]
