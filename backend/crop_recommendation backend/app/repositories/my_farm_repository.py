@@ -9,21 +9,21 @@ from app.repositories.active_crop_repository import (
 
 class MyFarmRepository:
 
-    def get_latest_crop(
+    async def get_latest_crop(
         self,
         user_id: str
     ):
 
-        return crop_repository.get_latest_by_user(
+        return await crop_repository.get_latest_by_user(
             user_id
         )
 
-    def get_active_crop(
+    async def get_active_crop(
         self,
         user_id: str
     ):
 
-        return active_crop_repository.get_active_crop(
+        return await active_crop_repository.get_active_crop(
             user_id
         )
 

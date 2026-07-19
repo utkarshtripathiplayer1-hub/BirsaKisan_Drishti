@@ -23,12 +23,12 @@ class RotationService:
 
             self.rotation_data = json.load(f)
 
-    def get_rotation(
+    async def get_rotation(
         self,
         recommendation_id: str
     ):
 
-        recommendation = rotation_repository.get_recommendation(
+        recommendation = await rotation_repository.get_recommendation(
             recommendation_id
         )
 
@@ -64,7 +64,7 @@ class RotationService:
 
         }
 
-        rotation_id = rotation_repository.save(
+        rotation_id = await rotation_repository.save(
             result.copy()
         )
 

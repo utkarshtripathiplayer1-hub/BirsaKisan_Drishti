@@ -5,15 +5,16 @@ from app.services.pdf_service import pdf_service
 from app.repositories.crop_repository import crop_repository
 
 
-def generate_pdf(recommendation_id: str):
+async def generate_pdf(recommendation_id: str):
 
-    recommendation = crop_repository.get_by_id(
+    recommendation = await crop_repository.get_by_id(
         recommendation_id
     )
-    print("Recommendation from Mongodb")
+
+    print("Recommendation from MongoDB")
     print(recommendation)
 
-    if not recommendation:
+    if recommendation is None:
         raise HTTPException(
             status_code=404,
             detail="Recommendation not found"
@@ -21,7 +22,7 @@ def generate_pdf(recommendation_id: str):
 
     recommendation.pop("_id", None)
 
-    pdf_path = pdf_service.generate_crop_report(
+    pdf_path = await pdf_service.generate_crop_report(
         recommendation
     )
 

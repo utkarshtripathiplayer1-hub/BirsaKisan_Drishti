@@ -1,23 +1,25 @@
+from pathlib import Path
+from datetime import datetime
+
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
-    Spacer
+    Spacer,
 )
-from reportlab.lib.styles import getSampleStyleSheet
-from pathlib import Path
-from datetime import datetime
+
 from app.repositories.report_repository import report_repository
+
 
 class PDFService:
 
-    def generate_crop_report(self, recommendation: dict):
+    async def generate_crop_report(self, recommendation: dict):
 
         reports_dir = Path("reports")
         reports_dir.mkdir(exist_ok=True)
 
         filename = (
-            f"crop_report_"
-            f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+            f"crop_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         )
 
         pdf_path = reports_dir / filename
@@ -27,6 +29,9 @@ class PDFService:
 
         content = []
 
+        # -----------------------------
+        # Title
+        # -----------------------------
         content.append(
             Paragraph(
                 "Smart Crop Recommendation Report",
@@ -35,41 +40,38 @@ class PDFService:
         )
 
         content.append(Spacer(1, 12))
-        crop_details = recommendation.get(
 
-            "crop_details",
-            {}
-            )
-       
-
-
+        # -----------------------------
+        # Recommendation Summary
+        # -----------------------------
         content.append(
             Paragraph(
-                f"Recommended Crop: "
-                f"{recommendation['recommended_crop']}",
+                f"Recommended Crop: {recommendation.get('recommended_crop', '-')}",
                 styles["Heading2"]
             )
         )
 
         content.append(
             Paragraph(
-                f"Confidence: "
-                f"{recommendation['confidence']}%",
+                f"Confidence: {recommendation.get('confidence', '-')}%",
                 styles["Normal"]
             )
         )
 
-        content.append(Spacer(1, 10))
+        content.append(Spacer(1, 12))
 
+        # -----------------------------
+        # Crop Details
+        # -----------------------------
         crop_details = recommendation.get("crop_details", {})
+
         npk = crop_details.get("recommended_npk", {})
 
-        
-
-    
-
         content.append(
-            Paragraph("Nutrient Requirements", styles["Heading3"])
+            Paragraph(
+                "Nutrient Requirements",
+                styles["Heading3"]
+            )
         )
 
         content.append(
@@ -95,8 +97,14 @@ class PDFService:
 
         content.append(Spacer(1, 10))
 
+        # -----------------------------
+        # Ideal Growing Conditions
+        # -----------------------------
         content.append(
-            Paragraph("Ideal Conditions", styles["Heading3"])
+            Paragraph(
+                "Ideal Growing Conditions",
+                styles["Heading3"]
+            )
         )
 
         fields = [
@@ -119,23 +127,45 @@ class PDFService:
                 )
             )
 
+        content.append(Spacer(1, 12))
+
+        # -----------------------------
+        # Soil Data
+        # -----------------------------
+        soil_data = recommendation.get("soil_data", {})
+
+        if soil_data:
+            content.append(
+                Paragraph(
+                    "Input Soil Data",
+                    styles["Heading3"]
+                )
+            )
+
+            for key, value in soil_data.items():
+                content.append(
+                    Paragraph(
+                        f"{key}: {value}",
+                        styles["Normal"]
+                    )
+                )
+
         doc.build(content)
 
+        # -----------------------------
+        # Save Report Metadata
+        # -----------------------------
         report_data = {
             "report_type": "crop_recommendation",
             "file_name": filename,
             "file_path": str(pdf_path),
-            "recommended_crop": recommendation.get(
-            "recommended_crop"
-            ),
+            "recommended_crop": recommendation.get("recommended_crop"),
             "generated_at": datetime.utcnow()
         }
 
-        report_id = report_repository.save(
-            report_data
-        )
+        await report_repository.save(report_data)
 
-        return str(pdf_path)  
-       
+        return str(pdf_path)
+
 
 pdf_service = PDFService()

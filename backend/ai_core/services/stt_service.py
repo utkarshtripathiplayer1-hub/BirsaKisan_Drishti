@@ -6,8 +6,12 @@ client = SarvamAI(
     api_subscription_key=SARVAM_API_KEY
 )
 
-def speech_to_text(audio_path: str):
 
+def speech_to_text(audio_path: str):
+    """
+    Converts speech to text and returns both
+    transcript and detected language.
+    """
 
     try:
 
@@ -16,9 +20,14 @@ def speech_to_text(audio_path: str):
             model="saaras:v3",
             mode="transcribe"
         )
-    
 
-        return response.transcript
+        print("STT Transcript:", response.transcript)
+        print("Detected Language:", response.language_code)
+
+        return {
+            "transcript": response.transcript,
+            "language": response.language_code.split("-")[0]
+        }
 
     except Exception as e:
 

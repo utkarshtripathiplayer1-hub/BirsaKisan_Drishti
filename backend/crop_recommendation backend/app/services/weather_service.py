@@ -3,12 +3,11 @@ import httpx
 from app.config.settings import settings
 from app.repositories.weather_repository import weather_repository
 
+
 async def get_current_weather(
     lat: float,
     lon: float
-    
 ):
-
     url = (
         f"https://api.openweathermap.org/data/2.5/weather"
         f"?lat={lat}"
@@ -18,14 +17,12 @@ async def get_current_weather(
     )
 
     async with httpx.AsyncClient() as client:
-
         response = await client.get(url)
 
     data = response.json()
 
-    # HANDLE API ERRORS
+    # Handle API errors
     if response.status_code != 200:
-
         return {
             "error": data.get(
                 "message",
@@ -34,7 +31,6 @@ async def get_current_weather(
         }
 
     result = {
-        
         "latitude": lat,
         "longitude": lon,
 
@@ -55,13 +51,15 @@ async def get_current_weather(
         "feels_like": data["main"]["feels_like"]
     }
 
-    weather_id = weather_repository.save(
+    # Save weather data into MongoDB
+    weather_id = await weather_repository.save(
         result.copy()
     )
 
     result["weather_id"] = weather_id
 
     return result
+
 
 class WeatherService:
 

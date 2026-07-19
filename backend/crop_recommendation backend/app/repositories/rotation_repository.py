@@ -9,21 +9,19 @@ from app.database.mongodb import (
 
 class RotationRepository:
 
-    def get_recommendation(self, recommendation_id: str):
+    async def get_recommendation(self, recommendation_id: str):
 
-        return crop_collection.find_one(
+        return await crop_collection.find_one(
             {
                 "_id": ObjectId(recommendation_id)
             }
         )
 
-    def save(self, rotation: dict):
+    async def save(self, rotation: dict):
 
         rotation["created_at"] = datetime.utcnow()
 
-        result = rotation_collection.insert_one(
-            rotation
-        )
+        result = await rotation_collection.insert_one(rotation)
 
         return str(result.inserted_id)
 
