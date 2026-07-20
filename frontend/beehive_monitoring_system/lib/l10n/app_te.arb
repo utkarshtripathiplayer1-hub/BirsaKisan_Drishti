@@ -1,0 +1,19 @@
+{
+    "@@locale": "te",
+
+  "appName": "బిర్సా కిసాన్ దృష్టి",
+
+  "name" : "పేరు",
+  "phoneNumber" : "ఫోన్ నంబర్",
+  "getOTP" : "OTP పొందండి",
+  "otp" : "OTP",
+  "login": "లాగిన్",
+  "signup": "సైన్ అప్",
+  "email": "ఇమెయిల్",
+  "password": "పాస్‌వర్డ్",
+  "confirmPassword": "పాస్‌వర్డ్‌ను నిర్ధారించండి",
+  "forgotPassword": "పాస్‌వర్డ్ మర్చిపోయారా?",
+  "logout": "లాగౌట్",
+  "alreadyUser" : "ఇప్పటికే ఖాతా ఉందా ?",
+  "remember" : "నన్ను గుర్తుంచుకోండి"
+}

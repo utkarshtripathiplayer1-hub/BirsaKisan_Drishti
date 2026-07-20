@@ -1,0 +1,19 @@
+{
+    "@@locale": "ml",
+
+  "appName": "ബിർസ കിസാൻ ദൃഷ്ടി",
+
+  "name": "പേര്",
+  "phoneNumber": "ഫോൺ നമ്പർ",
+  "getOTP": "OTP ലഭിക്കുക",
+  "otp": "OTP",
+  "login": "ലോഗിൻ",
+  "signup": "സൈൻ അപ്പ്",
+  "email": "ഇമെയിൽ",
+  "password": "പാസ്‌വേഡ്",
+  "confirmPassword": "പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക",
+  "forgotPassword": "പാസ്‌വേഡ് മറന്നോ?",
+  "logout": "ലോഗൗട്ട്",
+  "alreadyUser": "ഇതിനകം അക്കൗണ്ട് ഉണ്ടോ ?",
+  "remember": "എന്നെ ഓർക്കുക"
+}

@@ -1,0 +1,15 @@
+class GoogleAuthResult {
+  final String id;
+  final String name;
+  final String email;
+  final String? photoUrl;
+  final String accessToken;
+
+  GoogleAuthResult({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.photoUrl,
+    required this.accessToken,
+  });
+}

@@ -1,0 +1,19 @@
+{
+  "@@locale": "gu",
+
+  "appName": "બિરસા કિસાન દૃષ્ટિ",
+
+  "name": "નામ",
+  "phoneNumber": "ફોન નંબર",
+  "getOTP": "OTP મેળવો",
+  "otp": "OTP",
+  "login": "લોગિન",
+  "signup": "સાઇન અપ",
+  "email": "ઇમેલ",
+  "password": "પાસવર્ડ",
+  "confirmPassword": "પાસવર્ડની પુષ્ટિ કરો",
+  "forgotPassword": "પાસવર્ડ ભૂલી ગયા?",
+  "logout": "લોગઆઉટ",
+  "alreadyUser": "શું તમારી પાસે પહેલેથી એકાઉન્ટ છે ?",
+  "remember": "મને યાદ રાખો"
+}

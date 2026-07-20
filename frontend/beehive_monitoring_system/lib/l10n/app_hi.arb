@@ -1,0 +1,19 @@
+{
+    "@@locale": "hi",
+
+  "appName": "बिरसा किसान दृष्टि",
+
+  "name": "नाम",
+  "phoneNumber": "मोबाइल नंबर",
+  "getOTP": "OTP प्राप्त करें",
+  "otp": "OTP",
+  "login": "लॉगिन",
+  "signup": "साइन अप",
+  "email": "ईमेल",
+  "password": "पासवर्ड",
+  "confirmPassword": "पासवर्ड की पुष्टि करें",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "logout": "लॉगआउट",
+  "alreadyUser": "क्या आपका पहले से खाता है?",
+  "remember": "मुझे याद रखें"
+}

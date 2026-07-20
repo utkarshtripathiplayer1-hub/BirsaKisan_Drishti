@@ -1,0 +1,19 @@
+{
+    "@@locale": "pa",
+
+  "appName": "ਬਿਰਸਾ ਕਿਸਾਨ ਦ੍ਰਿਸ਼ਟੀ",
+
+  "name": "ਨਾਮ",
+  "phoneNumber": "ਫੋਨ ਨੰਬਰ",
+  "getOTP": "OTP ਪ੍ਰਾਪਤ ਕਰੋ",
+  "otp": "OTP",
+  "login": "ਲਾਗਇਨ",
+  "signup": "ਸਾਈਨ ਅੱਪ",
+  "email": "ਈਮੇਲ",
+  "password": "ਪਾਸਵਰਡ",
+  "confirmPassword": "ਪਾਸਵਰਡ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+  "forgotPassword": "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
+  "logout": "ਲਾਗਆਉਟ",
+  "alreadyUser": "ਕੀ ਤੁਹਾਡਾ ਪਹਿਲਾਂ ਤੋਂ ਖਾਤਾ ਹੈ ?",
+  "remember": "ਮੈਨੂੰ ਯਾਦ ਰੱਖੋ"
+}
