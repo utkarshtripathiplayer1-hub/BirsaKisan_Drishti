@@ -6,6 +6,8 @@ class AboutUs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final interStyle = Theme.of(context).textTheme.headlineMedium!;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
@@ -31,9 +33,38 @@ class AboutUs extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Image.asset(
-                  "assets/images/Birsa_Kisan_Drishti_Logo.png",
-                  fit: BoxFit.contain,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Birsa",
+                          style: interStyle.copyWith(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.green.shade900,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Kisan",
+                          style: interStyle.copyWith(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.green,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Drishti",
+                          style: interStyle.copyWith(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.green.shade900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
 
@@ -110,8 +141,9 @@ class AboutUs extends StatelessWidget {
                     AppLocalizations.of(context)!.waterReq,
                   ),
 
-                  featureCard("assets/images/yield.png",
-                  AppLocalizations.of(context)!.yeildProduction
+                  featureCard(
+                    "assets/images/yield.png",
+                    AppLocalizations.of(context)!.yeildProduction,
                   ),
 
                   featureCard(

@@ -2,6 +2,10 @@ import 'package:beehive_monitoring_system/Authentication/auth_api_service.dart';
 import 'package:beehive_monitoring_system/Authentication/auth_provider.dart';
 import 'package:beehive_monitoring_system/Authentication/login_screen.dart';
 import 'package:beehive_monitoring_system/Chatbot/chatbot_screen.dart';
+import 'package:beehive_monitoring_system/OtherScreens/about_us.dart';
+import 'package:beehive_monitoring_system/OtherScreens/faqs.dart';
+import 'package:beehive_monitoring_system/OtherScreens/key_features.dart';
+import 'package:beehive_monitoring_system/OtherScreens/language_selection.dart';
 import 'package:beehive_monitoring_system/feedBack/feedback.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
 import 'package:beehive_monitoring_system/l10n/locale_provider.dart';
@@ -33,14 +37,16 @@ class Setting extends StatelessWidget {
             fontSize: 35,
           ),
         ),
-        backgroundColor: const Color(0xFFFFCB73).withValues(alpha: 0.59),
+        backgroundColor: const Color(0xFFC98D26).withValues(alpha: 0.59),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: 10),
 
-            Center(child: Icon(Icons.settings, color: Color(0xFF574422), size: 150)),
+            Center(
+              child: Icon(Icons.settings, color: Color(0xFF574422), size: 150),
+            ),
 
             SizedBox(height: 10),
 
@@ -86,12 +92,12 @@ class Setting extends StatelessWidget {
                   Icon(Icons.edit, size: 18, color: Color(0xFF574422)),
                 ],
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => LanguageSelectionScreen()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => LanguageSelectionScreen()),
+                );
+              },
             ),
 
             Divider(),
@@ -107,12 +113,12 @@ class Setting extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => KeyFeatures()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => KeyFeatures()),
+                );
+              },
             ),
 
             Divider(),
@@ -152,12 +158,12 @@ class Setting extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => FAQS()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => FAQS()),
+                );
+              },
             ),
 
             Divider(),
@@ -173,12 +179,12 @@ class Setting extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => AboutUs()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AboutUs()),
+                );
+              },
             ),
 
             Divider(),

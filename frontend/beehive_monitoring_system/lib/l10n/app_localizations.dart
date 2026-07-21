@@ -489,6 +489,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quick Actions'**
   String get quickActions;
+
+  /// No description provided for @hiveOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Hive Overview'**
+  String get hiveOverview;
+
+  /// No description provided for @sensorReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensor Reading'**
+  String get sensorReading;
+
+  /// No description provided for @hiveGraph.
+  ///
+  /// In en, this message translates to:
+  /// **'Hive Graph'**
+  String get hiveGraph;
+
+  /// No description provided for @cameraAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Alerts'**
+  String get cameraAlerts;
+
+  /// No description provided for @aboutusDesc1.
+  ///
+  /// In en, this message translates to:
+  /// **'-Your Smart Farming Companion'**
+  String get aboutusDesc1;
+
+  /// No description provided for @aboutusDesc2.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered beekeeping platform enabling real time hive monitoring, early disease detection, and smarter honey production decisions.'**
+  String get aboutusDesc2;
+
+  /// No description provided for @provided.
+  ///
+  /// In en, this message translates to:
+  /// **'What We Provide'**
+  String get provided;
+
+  /// No description provided for @mission.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Mission'**
+  String get mission;
+
+  /// No description provided for @missionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Empowering every farmer with AI-driven knowledge to increase productivity and sustainability'**
+  String get missionDesc;
+
+  /// No description provided for @liveMonitoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Monitoring'**
+  String get liveMonitoring;
+
+  /// No description provided for @hiveHealthScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Hive Health Score'**
+  String get hiveHealthScore;
+
+  /// No description provided for @imageAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Analysis'**
+  String get imageAnalysis;
+
+  /// No description provided for @smartAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Alerts'**
+  String get smartAlerts;
+
+  /// No description provided for @aiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get aiAssistant;
+
+  /// No description provided for @community.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get community;
+
+  /// No description provided for @provideReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Provides Report'**
+  String get provideReport;
+
+  /// No description provided for @qrManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'QR based hive'**
+  String get qrManagement;
+
+  /// No description provided for @mitesdetection.
+  ///
+  /// In en, this message translates to:
+  /// **'Mites Detection'**
+  String get mitesdetection;
+
+  /// No description provided for @deviceManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Device Management'**
+  String get deviceManagement;
+
+  /// No description provided for @guideAndSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Guide & Support'**
+  String get guideAndSupport;
+
+  /// No description provided for @features.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart BeeKeeping Features'**
+  String get features;
+
+  /// No description provided for @keyFeaturedesc1.
+  ///
+  /// In en, this message translates to:
+  /// **'Track real-time data from all sensors'**
+  String get keyFeaturedesc1;
+
+  /// No description provided for @keyFeaturedesc2.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered health score to evaluate condition'**
+  String get keyFeaturedesc2;
+
+  /// No description provided for @keyFeaturedesc3.
+  ///
+  /// In en, this message translates to:
+  /// **'Get instant alerts for abnormal conditions'**
+  String get keyFeaturedesc3;
+
+  /// No description provided for @keyFeaturedesc4.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch live hive activity and record important events'**
+  String get keyFeaturedesc4;
+
+  /// No description provided for @keyFeaturedesc5.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate detailed reports and gain insights'**
+  String get keyFeaturedesc5;
+
+  /// No description provided for @keyFeaturedesc6.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your sensors , devices and connectivity in one place'**
+  String get keyFeaturedesc6;
+
+  /// No description provided for @keyFeaturedesc7.
+  ///
+  /// In en, this message translates to:
+  /// **'Visualize temperature, humidity,gas level and more'**
+  String get keyFeaturedesc7;
+
+  /// No description provided for @keyFeaturedesc8.
+  ///
+  /// In en, this message translates to:
+  /// **'Access helpful resources and get expert support'**
+  String get keyFeaturedesc8;
+
+  /// No description provided for @question1.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I set up a new apiary in the app?'**
+  String get question1;
+
+  /// No description provided for @answer1.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting up a new apiary is simple and only takes a few minutes. Navigate to Settings → Apiary Management → Add New Apiary and complete the guided setup process. Enter your apiary\'s basic information, verify the location, and specify the number of hives. Once the setup is complete, the application automatically creates a unique QR code for each hive. These QR codes help you quickly access individual hive information, monitor sensor data, and manage multiple hives efficiently.'**
+  String get answer1;
+
+  /// No description provided for @question2.
+  ///
+  /// In en, this message translates to:
+  /// **'Why do I need to provide my apiary location?'**
+  String get question2;
+
+  /// No description provided for @answer2.
+  ///
+  /// In en, this message translates to:
+  /// **'The location of your apiary enables the application to deliver   more accurate monitoring and recommendations. By using your geographic location, the app can fetch local weather conditions, estimate environmental risks, provide location-specific alerts, and improve AI-based predictions for hive health. You can either allow automatic GPS detection or manually enter your location details during the setup process.'**
+  String get answer2;
+
+  /// No description provided for @question3.
+  ///
+  /// In en, this message translates to:
+  /// **'What is the purpose of the QR code generated for each hive?'**
+  String get question3;
+
+  /// No description provided for @answer3.
+  ///
+  /// In en, this message translates to:
+  /// **'Every hive is assigned a unique QR code during the setup process. Scanning this QR code instantly opens the complete profile of that hive, including live sensor readings, health score, historical graphs, inspection records, AI analysis, and recent alerts. This eliminates the need to search manually and makes managing multiple hives faster and more organized.'**
+  String get answer3;
+
+  /// No description provided for @question4.
+  ///
+  /// In en, this message translates to:
+  /// **'What can I see in the Sensor Reading section?'**
+  String get question4;
+
+  /// No description provided for @answer4.
+  ///
+  /// In en, this message translates to:
+  /// **'The Sensor Reading section displays real-time data collected from the IoT sensors installed inside the hive. You can monitor brood temperature, overall temperature, humidity, hive weight, vibration levels, carbon dioxide concentration, VOC gases, and hazard detection. Each parameter also includes historical graphs that allow you to compare changes over different time periods such as Live, 1 Hour, 6 Hours, 7 Days, and 1 Month.'**
+  String get answer4;
+
+  /// No description provided for @question5.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are some sensor values highlighted in different colors?'**
+  String get question5;
+
+  /// No description provided for @answer5.
+  ///
+  /// In en, this message translates to:
+  /// **'The application uses a color-based status system to help users quickly identify hive conditions.Green indicates that the sensor reading is within the optimal range.Yellow suggests that the value is approaching a critical threshold and should be monitored.Red indicates that immediate attention may be required because the reading has exceeded the safe operating range.'**
+  String get answer5;
+
+  /// No description provided for @question6.
+  ///
+  /// In en, this message translates to:
+  /// **'Why am I receiving alerts from the application?'**
+  String get question6;
+
+  /// No description provided for @answer6.
+  ///
+  /// In en, this message translates to:
+  /// **'The application continuously monitors all connected sensors in real time. If any parameter exceeds its safe operating range, an alert is generated automatically. Examples include unusually high temperatures, abnormal vibration patterns, poor ventilation, increased CO₂ levels, or possible disease detection. Each alert includes a description of the issue and AI-generated recommendations to help you resolve it quickly'**
+  String get answer6;
+
+  /// No description provided for @question7.
+  ///
+  /// In en, this message translates to:
+  /// **'How does the Camera & Alerts feature work?'**
+  String get question7;
+
+  /// No description provided for @answer7.
+  ///
+  /// In en, this message translates to:
+  /// **'The Camera & Alerts module combines image analysis with smart notifications. Users can upload hive images for AI-based analysis. The application uses deep learning models to identify bee activity, detect potential diseases, and recognize abnormalities within the hive. All detected issues are displayed alongside sensor-based alerts so users can make informed decisions about hive management.'**
+  String get answer7;
+
+  /// No description provided for @question8.
+  ///
+  /// In en, this message translates to:
+  /// **'How does the AI Assistant help me?'**
+  String get question8;
+
+  /// No description provided for @answer8.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI Assistant acts as your virtual beekeeping companion. It explains sensor readings, interprets alerts, answers questions about hive conditions, recommends corrective actions, and helps users understand the information displayed throughout the application. The assistant is available anytime from the main dashboard and is designed to simplify hive management for both beginners and experienced beekeepers.'**
+  String get answer8;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beehive_monitoring_system/ApiServices/WeatherAPI/weather_api_controller.dart';
+import 'package:beehive_monitoring_system/OtherScreens/about_us.dart';
 import 'package:beehive_monitoring_system/OtherScreens/settings.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatelessWidget {
     Widget weatherInfo(IconData icon, String title, String value) {
       return Column(
         children: [
-          Icon(icon, color: Colors.green),
+          Icon(icon, color: Color(0xFFC98D26)),
 
           const SizedBox(height: 5),
 
@@ -38,6 +39,8 @@ class HomePage extends StatelessWidget {
       required String image,
       required String title,
       required Widget page,
+      required Color boxColor,
+      required Color borderColor,
     }) {
       return GestureDetector(
         onTap: () {
@@ -45,15 +48,9 @@ class HomePage extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: boxColor,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, 3),
-              ),
-            ],
+            border: Border.all(color: borderColor, width: 2.0),
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -283,14 +280,14 @@ class HomePage extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFF4F6E5),
+                                    color: Color(0xFFC98D26).withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Row(
                                     children: [
                                       const Icon(
                                         Icons.info_outline,
-                                        color: Colors.green,
+                                        color: Color(0xFFC98D26),
                                       ),
 
                                       const SizedBox(width: 10),
@@ -322,7 +319,7 @@ class HomePage extends StatelessWidget {
                                                 )
                                               : const Icon(
                                                   Icons.refresh,
-                                                  color: Colors.green,
+                                                  color: Color(0xFFC98D26),
                                                   size: 22,
                                                 ),
                                         ),
@@ -365,37 +362,45 @@ class HomePage extends StatelessWidget {
                             mainAxisSpacing: 15,
                             mainAxisExtent: 190,
                             children: [
-                              // farmCard(
-                              //   context,
-                              //   image: "assets/images/hive_overview.png",
-                              //   title: AppLocalizations.of(context)!.hiveOverview,
-                              //   page: const MyFarmPage(),
-                              // ),
+                              farmCard(
+                                context,
+                                image: "assets/images/hive_overview.png",
+                                title: AppLocalizations.of(context)!.hiveOverview,
+                                page: const AboutUs(),
+                                boxColor: Color(0xFF06A84A).withValues(alpha: 0.1),
+                                borderColor: Color(0xFF06A84A),
+                              ),
 
-                              // farmCard(
-                              //   context,
-                              //   image: "assets/images/sensor_reading.png",
-                              //   title: AppLocalizations.of(context)!.sensorReading,
-                              //   page: const CropPage(),
-                              // ),
+                              farmCard(
+                                context,
+                                image: "assets/images/sensor_reading.png",
+                                title: AppLocalizations.of(context)!.sensorReading,
+                                page: const AboutUs(),
+                                boxColor: Color(0xFFC98D26).withValues(alpha: 0.1),
+                                borderColor: Color(0xFFC98D26),
+                              ),
 
-                              // farmCard(
-                              //   context,
-                              //   image: "assets/images/hive_graph.png",
-                              //   title: AppLocalizations.of(
-                              //     context,
-                              //   )!.hiveGraph,
-                              //   page: const Cereals(),
-                              // ),
+                              farmCard(
+                                context,
+                                image: "assets/images/hive_graph.png",
+                                title: AppLocalizations.of(
+                                  context,
+                                )!.hiveGraph,
+                                page: const AboutUs(),
+                                boxColor: Color(0xFF096FCE).withValues(alpha: 0.1),
+                                borderColor: Color(0xFF096FCE),
+                              ),
 
-                              // farmCard(
-                              //   context,
-                              //   image: "assets/images/camera_alerts.png",
-                              //   title: AppLocalizations.of(
-                              //     context,
-                              //   )!.cameraAlerts,
-                              //   page: DiseaseDetectionInput(),
-                              // ),
+                              farmCard(
+                                context,
+                                image: "assets/images/camera_alerts.png",
+                                title: AppLocalizations.of(
+                                  context,
+                                )!.cameraAlerts,
+                                page: AboutUs(),
+                                boxColor: Color(0xFFA80E0E).withValues(alpha: 0.1),
+                                borderColor: Color(0xFFA80E0E),
+                              ),
                             ],
                           ),
                         ),

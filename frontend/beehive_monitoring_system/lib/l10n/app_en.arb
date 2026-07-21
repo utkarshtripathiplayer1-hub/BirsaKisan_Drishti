@@ -74,5 +74,52 @@
   "hiveOverview" : "Hive Overview",
   "sensorReading" : "Sensor Reading",
   "hiveGraph" : "Hive Graph",
-  "cameraAlerts" : "Camera Alerts"
+  "cameraAlerts" : "Camera Alerts",
+
+  "aboutusDesc1" : "-Your Smart Farming Companion",
+  "aboutusDesc2" : "AI-powered beekeeping platform enabling real time hive monitoring, early disease detection, and smarter honey production decisions.",
+  "provided" : "What We Provide",
+  "mission" : "Our Mission",
+  "missionDesc" : "Empowering every farmer with AI-driven knowledge to increase productivity and sustainability",
+
+
+  "liveMonitoring" : "Live Monitoring",
+  "hiveHealthScore" : "Hive Health Score",
+  "imageAnalysis" : "Image Analysis",
+  "smartAlerts" : "Smart Alerts",
+  "aiAssistant" : "AI Assistant",
+  "community" : "Community",
+  "provideReport" : "Provides Report",
+  "qrManagement" : "QR based hive",
+  "mitesdetection" : "Mites Detection",
+  "deviceManagement" : "Device Management",
+  "guideAndSupport" : "Guide & Support",
+  "features" : "Smart BeeKeeping Features",
+  "keyFeaturedesc1" : "Track real-time data from all sensors",
+  "keyFeaturedesc2" : "AI-powered health score to evaluate condition",
+  "keyFeaturedesc3" : "Get instant alerts for abnormal conditions",
+  "keyFeaturedesc4" : "Watch live hive activity and record important events",
+  "keyFeaturedesc5" : "Generate detailed reports and gain insights",
+  "keyFeaturedesc6" : "Manage your sensors , devices and connectivity in one place",
+  "keyFeaturedesc7" : "Visualize temperature, humidity,gas level and more",
+  "keyFeaturedesc8" : "Access helpful resources and get expert support",
+
+  
+  "question1" : "How do I set up a new apiary in the app?",
+  "answer1" : "Setting up a new apiary is simple and only takes a few minutes. Navigate to Settings → Apiary Management → Add New Apiary and complete the guided setup process. Enter your apiary's basic information, verify the location, and specify the number of hives. Once the setup is complete, the application automatically creates a unique QR code for each hive. These QR codes help you quickly access individual hive information, monitor sensor data, and manage multiple hives efficiently.",
+  "question2" : "Why do I need to provide my apiary location?",
+  "answer2" : "The location of your apiary enables the application to deliver   more accurate monitoring and recommendations. By using your geographic location, the app can fetch local weather conditions, estimate environmental risks, provide location-specific alerts, and improve AI-based predictions for hive health. You can either allow automatic GPS detection or manually enter your location details during the setup process.",
+  "question3" : "What is the purpose of the QR code generated for each hive?",
+  "answer3" : "Every hive is assigned a unique QR code during the setup process. Scanning this QR code instantly opens the complete profile of that hive, including live sensor readings, health score, historical graphs, inspection records, AI analysis, and recent alerts. This eliminates the need to search manually and makes managing multiple hives faster and more organized.",
+  "question4" : "What can I see in the Sensor Reading section?",
+  "answer4" : "The Sensor Reading section displays real-time data collected from the IoT sensors installed inside the hive. You can monitor brood temperature, overall temperature, humidity, hive weight, vibration levels, carbon dioxide concentration, VOC gases, and hazard detection. Each parameter also includes historical graphs that allow you to compare changes over different time periods such as Live, 1 Hour, 6 Hours, 7 Days, and 1 Month.",
+  "question5" : "Why are some sensor values highlighted in different colors?",
+  "answer5" : "The application uses a color-based status system to help users quickly identify hive conditions.Green indicates that the sensor reading is within the optimal range.Yellow suggests that the value is approaching a critical threshold and should be monitored.Red indicates that immediate attention may be required because the reading has exceeded the safe operating range.",
+  "question6" : "Why am I receiving alerts from the application?",
+  "answer6" : "The application continuously monitors all connected sensors in real time. If any parameter exceeds its safe operating range, an alert is generated automatically. Examples include unusually high temperatures, abnormal vibration patterns, poor ventilation, increased CO₂ levels, or possible disease detection. Each alert includes a description of the issue and AI-generated recommendations to help you resolve it quickly",
+  "question7" : "How does the Camera & Alerts feature work?",
+  "answer7" : "The Camera & Alerts module combines image analysis with smart notifications. Users can upload hive images for AI-based analysis. The application uses deep learning models to identify bee activity, detect potential diseases, and recognize abnormalities within the hive. All detected issues are displayed alongside sensor-based alerts so users can make informed decisions about hive management.",
+  "question8" : "How does the AI Assistant help me?",
+  "answer8" : "The AI Assistant acts as your virtual beekeeping companion. It explains sensor readings, interprets alerts, answers questions about hive conditions, recommends corrective actions, and helps users understand the information displayed throughout the application. The assistant is available anytime from the main dashboard and is designed to simplify hive management for both beginners and experienced beekeepers."
+
 }

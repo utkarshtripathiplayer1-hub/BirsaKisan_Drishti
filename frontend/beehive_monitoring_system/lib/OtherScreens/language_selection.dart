@@ -27,17 +27,17 @@ class LanguageSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green.shade900,
+        backgroundColor: const Color(0xFFC98D26).withValues(alpha: 0.59),
         title: Text(
           "Choose Language",
           style: TextStyle(
-            color: Colors.white,
+            color: Color(0xFF574422),
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Color(0xFF574422),
           size: 30,
           weight: 40.0,
         ),
@@ -51,7 +51,7 @@ class LanguageSelectionScreen extends StatelessWidget {
             Center(
               child: Icon(
                 Icons.language,
-                color: Colors.green.shade900,
+                color: Color(0xFF574422),
                 size: 150,
               ),
             ),
