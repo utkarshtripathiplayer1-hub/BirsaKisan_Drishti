@@ -1,26 +1,47 @@
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-MONGO_URL = os.getenv("MONGO_URL")
-DB_NAME=os.getenv("DB_NAME")
-SARVAM_API_KEY=os.getenv("SARVAM_API_KEY")
-CROP_BACKEND_URL=os.getenv("CROP_BACKEND_URL")
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
-JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", 1440))
-BHASHINI_INFERENCE_KEY = os.getenv(
-    "BHASHINI_INFERENCE_KEY"
-)
 
-BHASHINI_USER_ID = os.getenv(
-    "BHASHINI_USER_ID"
-)
+def require(key: str) -> str:
+    """Fetch a required env var, or fail loudly at startup."""
+    value = os.getenv(key)
+    if value is None or value.strip() == "":
+        raise RuntimeError(
+            f"Missing required environment variable: {key}. "
+            f"Set it in your .env (local) or Render dashboard (production)."
+        )
+    return value
 
-BHASHINI_UDYAT_API_KEY = os.getenv(
-    "BHASHINI_UDYAT_API_KEY"
-)
+
+def optional(key: str, default=None):
+    """Fetch an optional env var with a default."""
+    return os.getenv(key, default)
+
+
+# ---- Required: app cannot run without these ----
+GROQ_API_KEY   = require("GROQ_API_KEY")
+MONGO_URL      = require("MONGO_URL")
+DB_NAME        = require("DB_NAME")
+SARVAM_API_KEY = require("SARVAM_API_KEY")
+JWT_SECRET_KEY = require("JWT_SECRET_KEY")
+GOOGLE_CLIENT_ID = require("GOOGLE_CLIENT_ID")
+
+# ---- Required with sensible fallbacks ----
+JWT_ALGORITHM     = optional("JWT_ALGORITHM", "HS256")
+JWT_EXPIRE_MINUTES = int(optional("JWT_EXPIRE_MINUTES", 1440))
+CROP_BACKEND_URL  = require("CROP_BACKEND_URL")  # ai_core calls crop backend — required
+
+# ---- CORS ----
+# Comma-separated in env: "https://app.vercel.app,http://localhost:3000"
+ALLOWED_ORIGINS = [
+    o.strip() for o in optional("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if o.strip()
+]
+
+# ---- Optional: Bhashini (not used yet — switching from Sarvam later) ----
+BHASHINI_INFERENCE_KEY = optional("BHASHINI_INFERENCE_KEY")
+BHASHINI_USER_ID       = optional("BHASHINI_USER_ID")
+BHASHINI_UDYAT_API_KEY = optional("BHASHINI_UDYAT_API_KEY")
 
