@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beehive_monitoring_system/ApiServices/WeatherAPI/weather_api_controller.dart';
+import 'package:beehive_monitoring_system/Chatbot/chatbot_screen.dart';
 import 'package:beehive_monitoring_system/OtherScreens/about_us.dart';
 import 'package:beehive_monitoring_system/OtherScreens/settings.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
@@ -478,12 +479,12 @@ class HomePage extends StatelessWidget {
 
             // CHATBOT
             GestureDetector(
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (_) => const ChatbotScreen()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ChatbotScreen()),
+                );
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

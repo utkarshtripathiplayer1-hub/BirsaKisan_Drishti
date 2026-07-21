@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beehive_monitoring_system/Chatbot/chat_history_screen.dart';
 import 'package:beehive_monitoring_system/Chatbot/chatbot_voice_service.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
@@ -248,15 +249,20 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Color(0xFF574422),
           size: 30,
           weight: 40.0,
         ),
         centerTitle: true,
-        backgroundColor: Colors.green.shade900,
-        title: Text(
+        backgroundColor: const Color(0xFFC98D26).withValues(alpha: 0.59),
+        title: AutoSizeText(
+          minFontSize: 15,
           AppLocalizations.of(context)!.chatBot,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            color: Color(0xFF574422),
+            fontWeight: FontWeight.bold,
+            fontSize: 35,
+          ),
         ),
         actions: [
           IconButton(
@@ -290,7 +296,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: msg["isUser"]
-                          ? Color(0xFFC98D26).withValues(alpha: 0.59)
+                          ? Color(0xFFC98D26).withValues(alpha: 0.4)
                           : const Color(0xFFC98D26).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -306,16 +312,16 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(
+                              Icon(
                                 Icons.person,
-                                color: Colors.white,
+                                color: Color(0xFFC98D26),
                                 size: 30,
                               ),
                             ]
                           : [
                               Icon(
                                 Icons.smart_toy,
-                                color: Colors.green.shade900,
+                                color: Color(0xFFC98D26),
                                 size: 30,
                               ),
                               const SizedBox(width: 8),
@@ -352,7 +358,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                         )
                       : TextField(
                           controller: _messageController,
-                          style: TextStyle(color: Colors.green.shade900),
+                          style: TextStyle(color: Color(0xFF574422)),
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)!.askAnything,
                           ),
@@ -361,7 +367,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
                 IconButton(
                   onPressed: sendMessage,
-                  icon: Icon(Icons.send, color: Colors.green.shade900),
+                  icon: Icon(Icons.send, color: Color(0xFF574422)),
                 ),
 
                 GestureDetector(
@@ -386,7 +392,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     child: Icon(
                       Icons.mic,
                       size: 28,
-                      color: Colors.green.shade900,
+                      color: Color(0xFF574422),
                     ),
                   ),
                 ),

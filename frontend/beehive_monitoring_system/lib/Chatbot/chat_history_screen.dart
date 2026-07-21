@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beehive_monitoring_system/Authentication/secure_storage_service.dart';
 import 'package:beehive_monitoring_system/Chatbot/chatbot_screen.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
@@ -141,17 +142,22 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Color(0xFF574422),
           size: 30,
           weight: 40.0,
         ),
-        backgroundColor: Colors.green.shade900,
-        title: Text(
+        centerTitle: true,
+        title: AutoSizeText(
+          minFontSize: 15,
           AppLocalizations.of(context)!.chatHistory,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            color: Color(0xFF574422),
+            fontWeight: FontWeight.bold,
+            fontSize: 35,
+          ),
         ),
+        backgroundColor: const Color(0xFFC98D26).withValues(alpha: 0.59),
       ),
 
       body: isLoading
@@ -162,7 +168,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                 final item = conversations[index];
 
                 return ListTile(
-                  leading: Icon(Icons.chat, color: Colors.green.shade900),
+                  leading: Icon(Icons.chat, color: Color(0xFFC98D26)),
 
                   title: Text(item.title),
 
@@ -186,7 +192,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.rename,
                           style: TextStyle(
-                            color: Colors.green.shade900,
+                            color: Color(0xFF574422),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -197,7 +203,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.delete,
                           style: TextStyle(
-                            color: Colors.green.shade900,
+                            color: Color(0xFF574422),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
