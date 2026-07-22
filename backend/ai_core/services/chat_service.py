@@ -182,7 +182,7 @@ Last Crop Recommendation:
     # --------------------------------------------------
     # Generate AI response
     # --------------------------------------------------
-    ai_response =   ask_groq(
+    ai_response = await ask_groq(
         groq_messages
     )
 
