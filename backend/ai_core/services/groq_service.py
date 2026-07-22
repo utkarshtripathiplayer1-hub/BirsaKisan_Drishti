@@ -1,5 +1,6 @@
 from groq import APIError, RateLimitError
-
+from core.prompts import AGRICULTURE_SYSTEM_PROMPT
+from core.config import GROQ_API_KEY 
 async def ask_groq(messages: list):
     groq_messages = [{"role": "system", "content": AGRICULTURE_SYSTEM_PROMPT}]
     groq_messages.extend(messages)
