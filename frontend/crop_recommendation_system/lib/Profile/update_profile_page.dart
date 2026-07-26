@@ -60,6 +60,19 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     "Manual Irrigation",
   ];
 
+  final List<String> soilTypes = [
+    "Acidic Loam",
+    "Alluvial Soil",
+    "Black Soil",
+    "Clay Loam",
+    "Clayey",
+    "Lateritic Soil",
+    "Loam",
+    "Loamy",
+    "Sandy",
+    "Sandy Loam",
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -271,7 +284,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             const SizedBox(height: 18),
 
             DropdownButtonFormField<String>(
-              value: role.contains(roleController.text)
+              initialValue: role.contains(roleController.text)
                   ? roleController.text
                   : null,
 
@@ -428,9 +441,24 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
             const SizedBox(height: 18),
 
-            TextField(
-              controller: soilTypeController,
+            DropdownButtonFormField<String>(
+              initialValue: irrigationMethods.contains(soilTypeController.text)
+                  ? soilTypeController.text
+                  : null,
               decoration: fieldDecoration("Soil Type", Icons.grass),
+              borderRadius: BorderRadius.circular(18),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded),
+              items: soilTypes.map((method) {
+                return DropdownMenuItem<String>(
+                  value: method,
+                  child: Text(method),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  soilTypeController.text = value ?? "";
+                });
+              },
             ),
 
             const SizedBox(height: 18),
