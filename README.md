@@ -190,23 +190,14 @@ BirsaKisan is designed to **increase crop yield, reduce resource wastage, and pr
 
 <tr>
 <td><b>Utkarsh Tripathi</b></td>
-<td>Team Lead ( Hardware Developer )</td>
+<td>Team Lead ( Hardware Developer,Frontend Developer )</td>
 </tr>
 
 <tr>
 <td>Tanisha Bhatt</td>
-<td>Team Member (Backend  Developer) </td>
+<td>Team Member (Backend  Developer , ML Developer) </td>
 </tr>
 
-<tr>
-<td>Samyak Jain</td>
-<td>Team Member (Frontend  Developer ui/ux) </td>
-</tr>
-
-<tr>
-<td>Bhumika Manral</td>
-<td>Team Member (UI/UX)</td>
-</tr>
 
 
 </table>
