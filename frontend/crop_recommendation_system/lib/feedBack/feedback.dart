@@ -52,6 +52,7 @@ class _FeedBackState extends State<FeedBack> {
               children: [
                 SizedBox(height: 20),
                 Text(
+                  textAlign: TextAlign.center,
                   AppLocalizations.of(context)!.feedbackDesc,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -60,6 +61,7 @@ class _FeedBackState extends State<FeedBack> {
                 ),
                 SizedBox(height: 10),
                 Text(
+                  textAlign: TextAlign.center,
                   AppLocalizations.of(context)!.feedbackDesc2,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -78,7 +80,7 @@ class _FeedBackState extends State<FeedBack> {
                   updateOnDrag: false,
                   direction: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) =>
-                      const Icon(Icons.eco, color: Colors.green),
+                      const Icon(Icons.eco, color: Colors.green, size: 34,),
                   onRatingUpdate: (double value) {
                     ratedValue = value;
                   },

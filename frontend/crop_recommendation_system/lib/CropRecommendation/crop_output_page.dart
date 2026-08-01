@@ -336,23 +336,57 @@ class CropOutputPage extends StatelessWidget {
 
               SizedBox(height: 20),
 
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await StartCrop.startCrop(recommendationId);
-                    if (!context.mounted) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const MyFarmPage()),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(e.toString())));
-                  }
-                },
-                child: const Text("Start Farming"),
+              SizedBox(
+                height: 55,
+                width: width * 0.8,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade900,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      await StartCrop.startCrop(recommendationId);
+                      if (!context.mounted) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MyFarmPage()),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  },
+                  child: Text(
+                    "Start Farming",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
+
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     try {
+              //       await StartCrop.startCrop(recommendationId);
+              //       if (!context.mounted) return;
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(builder: (_) => const MyFarmPage()),
+              //       );
+              //     } catch (e) {
+              //       ScaffoldMessenger.of(
+              //         context,
+              //       ).showSnackBar(SnackBar(content: Text(e.toString())));
+              //     }
+              //   },
+              //   child: const Text("Start Farming"),
+              // ),
             ],
           ),
         ),

@@ -1,0 +1,19 @@
+{
+    "@@locale": "or",
+
+  "appName": "ବିର୍ସା କିସାନ ଦୃଷ୍ଟି",
+
+  "name": "ନାମ",
+  "phoneNumber": "ଫୋନ ନମ୍ବର",
+  "getOTP": "OTP ପାଆନ୍ତୁ",
+  "otp": "OTP",
+  "login": "ଲଗଇନ",
+  "signup": "ସାଇନ ଅପ",
+  "email": "ଇମେଲ",
+  "password": "ପାସୱାର୍ଡ",
+  "confirmPassword": "ପାସୱାର୍ଡ ନିଶ୍ଚିତ କରନ୍ତୁ",
+  "forgotPassword": "ପାସୱାର୍ଡ ଭୁଲିଗଲେ?",
+  "logout": "ଲଗଆଉଟ",
+  "alreadyUser": "ଆପଣଙ୍କର ପୂର୍ବରୁ ଏକ ଆକାଉଣ୍ଟ ଅଛି କି ?",
+  "remember": "ମୋତେ ମନେ ରଖନ୍ତୁ"
+}

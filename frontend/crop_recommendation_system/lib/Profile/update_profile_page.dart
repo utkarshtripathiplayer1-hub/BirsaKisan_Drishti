@@ -1,5 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_api_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 
 import 'profile_controller.dart';
 import 'profile_model.dart';
@@ -18,7 +23,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   late TextEditingController ageController;
   late TextEditingController genderController;
-  // late TextEditingController roleController;
+  late TextEditingController roleController;
   late TextEditingController educationController;
   late TextEditingController phoneController;
 
@@ -35,7 +40,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   late TextEditingController irrigationMethodController;
 
   final List<String> genders = ["Male", "Female", "Other"];
-  // final List<String> role = ["Farmer", "Researcher"];
+  final List<String> role = ["Farmer", "Researcher"];
 
   final List<String> educationLevels = [
     "Primary",
@@ -55,6 +60,19 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     "Manual Irrigation",
   ];
 
+  final List<String> soilTypes = [
+    "Acidic Loam",
+    "Alluvial Soil",
+    "Black Soil",
+    "Clay Loam",
+    "Clayey",
+    "Lateritic Soil",
+    "Loam",
+    "Loamy",
+    "Sandy",
+    "Sandy Loam",
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -67,7 +85,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       text: widget.profile.basicInfo.gender,
     );
 
-    // roleController = TextEditingController(text: widget.profile.basicInfo.role);
+    roleController = TextEditingController(text: widget.profile.basicInfo.role);
 
     educationController = TextEditingController(
       text: widget.profile.basicInfo.education,
@@ -122,7 +140,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   void dispose() {
     ageController.dispose();
     genderController.dispose();
-    // roleController.dispose();
+    roleController.dispose();
     educationController.dispose();
     phoneController.dispose();
 
@@ -152,10 +170,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             child: Icon(icon, color: Colors.white, size: 22),
           ),
           const SizedBox(width: 12),
-          Text(
+          AutoSizeText(
             title,
+            minFontSize: 12,
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 21,
               fontWeight: FontWeight.bold,
               letterSpacing: .3,
             ),
@@ -264,29 +283,29 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
             const SizedBox(height: 18),
 
-            // DropdownButtonFormField<String>(
-            //   value: role.contains(roleController.text)
-            //       ? roleController.text
-            //       : null,
+            DropdownButtonFormField<String>(
+              initialValue: role.contains(roleController.text)
+                  ? roleController.text
+                  : null,
 
-            //   decoration: fieldDecoration("Role", Icons.verified_user),
+              decoration: fieldDecoration("Role", Icons.verified_user),
 
-            //   icon: const Icon(Icons.keyboard_arrow_down_rounded),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded),
 
-            //   borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18),
 
-            //   menuMaxHeight: 250,
+              menuMaxHeight: 250,
 
-            //   items: role.map((roles) {
-            //     return DropdownMenuItem(value: roles, child: Text(roles));
-            //   }).toList(),
+              items: role.map((roles) {
+                return DropdownMenuItem(value: roles, child: Text(roles));
+              }).toList(),
 
-            //   onChanged: (value) {
-            //     setState(() {
-            //       roleController.text = value!;
-            //     });
-            //   },
-            // ),
+              onChanged: (value) {
+                setState(() {
+                  roleController.text = value!;
+                });
+              },
+            ),
             const SizedBox(height: 18),
 
             DropdownButtonFormField<String>(
@@ -319,7 +338,31 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
             const SizedBox(height: 28),
 
-            sectionTitle("Update Your Location", Icons.location_on),
+            Row(
+              children: [
+                sectionTitle("Update Your Location", Icons.location_on),
+                IconButton(
+                  icon: Icon(Icons.my_location, color: Colors.green.shade900,),
+                  onPressed: () async {
+                    try {
+                      Position position = await WeatherApiController().getCurrentLocation();
+                      latitudeController.text = position.latitude
+                          .toStringAsFixed(6);
+                      longitudeController.text = position.longitude
+                          .toStringAsFixed(6);
+                    } catch (e) {
+                      Get.snackbar(
+                        "Error",
+                        e.toString(),
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
 
             TextField(
               controller: countryController,
@@ -398,15 +441,31 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
             const SizedBox(height: 18),
 
-            TextField(
-              controller: soilTypeController,
+            DropdownButtonFormField<String>(
+              initialValue: irrigationMethods.contains(soilTypeController.text)
+                  ? soilTypeController.text
+                  : null,
               decoration: fieldDecoration("Soil Type", Icons.grass),
+              borderRadius: BorderRadius.circular(18),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded),
+              items: soilTypes.map((method) {
+                return DropdownMenuItem<String>(
+                  value: method,
+                  child: Text(method),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  soilTypeController.text = value ?? "";
+                });
+              },
             ),
 
             const SizedBox(height: 18),
 
             DropdownButtonFormField<String>(
-              initialValue: irrigationMethods.contains(irrigationMethodController.text)
+              initialValue:
+                  irrigationMethods.contains(irrigationMethodController.text)
                   ? irrigationMethodController.text
                   : null,
               decoration: fieldDecoration(

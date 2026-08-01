@@ -11,8 +11,6 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await AuthService.initialize();
-
   final localeProvider = LocaleProvider();
   await localeProvider.loadLocale();
   await dotenv.load(fileName: ".env");
@@ -31,7 +29,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final localeProvider = context.watch<LocaleProvider>();

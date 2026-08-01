@@ -305,6 +305,10 @@ class _CropProfilePageState extends State<ProfilePage> {
                     buildDivider(),
 
                     buildInfoRow("Education", profile.basicInfo.education),
+
+                    buildDivider(),
+
+                    buildInfoRow("Role", profile.basicInfo.role),
                   ],
                 ),
 
