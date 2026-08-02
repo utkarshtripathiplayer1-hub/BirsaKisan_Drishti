@@ -1,0 +1,19 @@
+{
+    "@@locale": "kn",
+
+"appName": "ಬಿರ್ಸಾ ಕಿಸಾನ್ ದೃಷ್ಟಿ",
+
+"name": "ಹೆಸರು",
+"phoneNumber": "ಫೋನ್ ಸಂಖ್ಯೆ",
+"getOTP": "OTP ಪಡೆಯಿರಿ",
+"otp": "OTP",
+"login": "ಲಾಗಿನ್",
+"signup": "ಸೈನ್ ಅಪ್",
+"email": "ಇಮೇಲ್",
+"password": "ಪಾಸ್‌ವರ್ಡ್",
+"confirmPassword": "ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+"forgotPassword": "ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿರಾ?",
+"logout": "ಲಾಗ್‌ಔಟ್",
+"alreadyUser": "ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ ?",
+"remember": "ನನ್ನನ್ನು ನೆನಪಿಡಿ"
+}

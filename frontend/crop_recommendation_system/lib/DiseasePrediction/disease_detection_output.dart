@@ -237,7 +237,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
               title: AppLocalizations.of(context)!.precaution,
               icon: Icons.warning,
               iconColor: Colors.red,
-              data: response["precautions"],
+              data: (response["precautions"] as List?) ?? [],
             ),
 
             const SizedBox(height: 20),
@@ -246,7 +246,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
               title: AppLocalizations.of(context)!.organicCure,
               icon: Icons.eco,
               iconColor: Colors.green,
-              data: response["organic_cure"],
+              data: (response["organic_cure"] as List?) ?? [],
             ),
 
             const SizedBox(height: 20),
@@ -255,7 +255,7 @@ class DiseaseDetectionOutput extends StatelessWidget {
               title: AppLocalizations.of(context)!.inOrganicCure,
               icon: Icons.medication,
               iconColor: Colors.blue,
-              data: response["chemical_cure"],
+              data: (response["chemical_cure"] as List?) ?? [],
             ),
 
             const SizedBox(height: 50),

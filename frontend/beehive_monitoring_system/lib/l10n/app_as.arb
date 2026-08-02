@@ -1,0 +1,19 @@
+{
+  "@@locale": "as",
+
+  "appName": "বিৰছা কৃষাণ দৃষ্টি",
+
+  "name": "নাম",
+  "phoneNumber": "মোবাইল নম্বৰ",
+  "getOTP": "OTP লওক",
+  "otp": "OTP",
+  "login": "লগইন",
+  "signup": "চাইন আপ",
+  "email": "ইমেইল",
+  "password": "পাছৱৰ্ড",
+  "confirmPassword": "পাছৱৰ্ড নিশ্চিত কৰক",
+  "forgotPassword": "পাছৱৰ্ড পাহৰিলে নেকি?",
+  "logout": "লগআউট",
+  "alreadyUser": "আপোনাৰ আগতেই একাউণ্ট আছেনে?",
+  "remember": "মোক মনত ৰাখক" 
+}

@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
 class ApiConfig {
-  static String get baseUrl => dotenv.env['BASE_URL']!;
+  static String get baseUrl => dotenv.env['BASE_CORE_URL']!;
 }
 
 class ChatbotVoiceService {

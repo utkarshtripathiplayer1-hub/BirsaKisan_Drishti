@@ -30,6 +30,19 @@ class _CropInputPageState extends State<CropInputPage> {
 
   bool isLoading = false;
 
+  final List<String> soilTypes = [
+    "Acidic Loam",
+    "Alluvial Soil",
+    "Black Soil",
+    "Clay Loam",
+    "Clayey",
+    "Lateritic Soil",
+    "Loam",
+    "Loamy",
+    "Sandy",
+    "Sandy Loam",
+  ];
+
   Future<void> submit() async {
     setState(() {
       isLoading = true;
@@ -50,7 +63,12 @@ class _CropInputPageState extends State<CropInputPage> {
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => CropOutputPage(response: result, recommendationId: result['recommendation_id'],)),
+        MaterialPageRoute(
+          builder: (_) => CropOutputPage(
+            response: result,
+            recommendationId: result['recommendation_id'],
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(
@@ -79,7 +97,6 @@ class _CropInputPageState extends State<CropInputPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Colors.green.shade900,
         title: Text(
@@ -161,7 +178,11 @@ class _CropInputPageState extends State<CropInputPage> {
                                   borderRadius: BorderRadius.circular(25),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Hardware device not connected")),
+                                );
+                              },
                               child: Text(
                                 AppLocalizations.of(context)!.fetchDetails,
                                 style: TextStyle(color: Colors.white),
@@ -220,10 +241,67 @@ class _CropInputPageState extends State<CropInputPage> {
                           iconText: "SM",
                         ),
 
-                        buildCustomField(
-                          controller: soilTypeController,
-                          hint: AppLocalizations.of(context)!.enterSoilType,
-                          iconText: "ST",
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1EFEF),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              initialValue:
+                                  soilTypes.contains(soilTypeController.text)
+                                  ? soilTypeController.text
+                                  : null,
+
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.enterSoilType,
+
+                                prefixIcon: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child: const Text(
+                                      "ST",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 20,
+                                ),
+                              ),
+
+                              borderRadius: BorderRadius.circular(30),
+
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                              ),
+
+                              items: soilTypes.map((soilType) {
+                                return DropdownMenuItem<String>(
+                                  value: soilType,
+                                  child: Text(soilType),
+                                );
+                              }).toList(),
+
+                              onChanged: (value) {
+                                setState(() {
+                                  soilTypeController.text = value ?? "";
+                                });
+                              },
+                            ),
+                          ),
                         ),
 
                         const SizedBox(height: 25),
@@ -242,7 +320,11 @@ class _CropInputPageState extends State<CropInputPage> {
                             onPressed: isLoading ? null : submit,
 
                             child: Text(
-                              isLoading ? AppLocalizations.of(context)!.loading : AppLocalizations.of(context)!.getRecommendation,
+                              isLoading
+                                  ? AppLocalizations.of(context)!.loading
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.getRecommendation,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,

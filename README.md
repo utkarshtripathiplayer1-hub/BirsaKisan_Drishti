@@ -1,230 +1,207 @@
-<img width="4320" height="1440" alt="image" src="https://github.com/user-attachments/assets/c7473b76-a6b7-425a-a879-7a411c6c8a58" />
+# 🌾 Birsa Kisan Drishti — AI-Powered Smart Agriculture Platform
 
-
-
-
-
-
-
-
-# PROJECT TITLE
-# 🌱  Smart Crop Recommendation System
-
-## PROBLEM 
-Agriculture is the backbone of many economies, yet farmers often struggle to select the most suitable crop for their land due to varying soil conditions, environmental factors, and limited access to expert guidance. Incorrect crop selection can lead to lower yields, inefficient use of resources, and financial losses.
-
-Our project is an AI-powered Smart Crop Recommendation System that analyzes key agricultural parameters and recommends the most suitable crop for cultivation. By providing personalized recommendations based on data, the platform helps farmers improve productivity and make informed farming decisions.
+> A production-grade decision-support system that helps farmers choose the right crop, detect crop diseases from a photo, and receive advice in their own language — turning data into better harvests.
 
 ---
-# OBJECTIVE
-## Target users
-- Farmers
-- researchers
-- Agricultural organizations
-## Pain point
-- Difficulty in selecting the right crop
-- Lack of personalized agricultural guidance
-- Low productivity due to unsuitable crop choices
-- Limited access to data-driven decision support.
-## Value our solution provides
-- AI-powered crop recommendations.
-- Personalized farmer and crop profiles
-- Data-driven farming decisions
-- Improved crop productivity
-- Better utilization of available resources.
 
-# TEAM AND APPROACH
-# Team Name: 
-Krishi Drishti
-# Team Members:
-- Utkarsh Tripathi (Github = https://github.com/utkarshtripathiplayer1-hub , Linkedin = https://www.linkedin.com/in/utkarsh-tripathi-616788327 ,Role = Team leader , UI/UX Designer)
-- Tanisha Bhatt (Github = https://github.com/tanishabhatt06 ,Linkedin = https://www.linkedin.com/in/tanisha-bhatt-685b273a9 ,Role =  Backend Developer)
-- Samyak jain ( Github = https://github.com/SamyakJain0195, Linkedin = https://www.linkedin.com/in/samyak-jain0195/ , Role = Frontend Developer)
+## 🎯 The Problem
 
-# Our Approach
-We identified that many farmers still rely on traditional methods or generalized advice when choosing crops. Our goal was to develop a system that provides personalized recommendations using machine learning and agricultural data.
+Millions of farmers make one of the most important decisions of their year — *what to plant* — based on tradition and guesswork rather than data. A wrong choice means wasted seed, water, and fertilizer, degraded soil, and a lost season of income. When crops fall sick, farmers often can't identify the disease in time to act.
 
-# Key Challenges
-- Building an accurate recommendation model.
-- Managing agricultural datasets.
-- Designing a scalable backend architecture.
-- Creating an easy-to-use interface for farmers.
+**BirsaKisan** bridges this gap with an AI-driven platform that gives farmers practical, explainable, data-backed guidance — accessible in their own language, on a low-end phone.
 
-## TECH STACK
-# Frontend 
-- Flutter
-- Dart
+---
 
-# Backend
-- Python
-- FastAPI
-# Machine Learning
-- Pandas
-- Numpy
-- Scikit-learn
-- tensorflow
-# Database
-- Mongodb
+## ✨ Key Features
 
-# API's
-- openweather API
-- groq API
-- Sarvam API
+| Feature | What it does |
+|---|---|
+| 🌱 **Crop Recommendation** | Recommends the most suitable crop from soil nutrients (N, P, K), pH, temperature, humidity, rainfall, soil moisture & soil type — with a confidence score and the reasoning behind it. |
+| 🔬 **Disease Detection** | Farmer uploads a leaf photo; a vision AI model identifies the disease, severity, and stage, then returns organic & chemical treatment plans. |
+| 💬 **Multilingual AI Assistant** | A conversational agriculture chatbot that answers farming questions in 11 Indian languages. |
+| 🔄 **Crop Rotation Advisory** | Suggests healthy rotation cycles to preserve soil fertility. |
+| 🌦️ **Weather Integration** | Location-based weather data feeds into recommendations and advisories. |
+| 📊 **Farm Dashboard** | Tracks a farmer's active crops, history, and personalized insights. |
+| 📄 **PDF Reports** | Generates downloadable crop recommendation reports. |
 
-## KEY FEATURES
+---
 
-- Predicts the best crop based on input parameters.
-- User-friendly interface.
-- Machine Learning model trained on agricultural data.
-- Fast and accurate crop recommendations.
-- Easy to deploy and customize.
+## 🧠 How the Recommendation Works
 
-## How to run the project
+The crop recommendation engine is a trained **machine-learning model** (scikit-learn) served in real time:
 
-### Clone the repository
+1. Farmer submits soil and environmental parameters.
+2. Categorical inputs (soil type) are encoded; features are assembled into a model-ready vector.
+3. The model predicts the best-fit crop **and** a probability distribution across all crops.
+4. The system returns the recommended crop, a **confidence percentage**, and detailed crop knowledge (growing conditions, tips) so the advice is **explainable**, not a black box.
 
-```bash
-git clone https://github.com/utkarshtripathiplayer1/BirsaKisan_Drishti.git
-cd crop-recommendation
+Disease detection uses a **vision-language model** (via Groq) that analyzes the uploaded leaf image against a structured diagnostic schema and returns a consistent JSON result the app can act on.
+
+---
+
+## 🏗️ Architecture
+
+BirsaKisan is built as **two cooperating backend services**, sharing common concerns cleanly:
+
+```
+┌─────────────────────────┐        ┌──────────────────────────┐
+│      AI Core Service     │        │  Crop Recommendation      │
+│  • Auth (Google + JWT)   │◄──────►│  Service                  │
+│  • Multilingual Chatbot  │  HTTP  │  • ML Crop Model          │
+│  • Voice / Translation   │        │  • Disease Detection      │
+│  • Conversation History  │        │  • Weather / Rotation     │
+│                          │        │  • Dashboard / Reports    │
+└───────────┬──────────────┘        └───────────┬──────────────┘
+            │                                    │
+            └──────────────┬─────────────────────┘
+                           ▼
+                    ┌─────────────┐
+                    │  MongoDB     │
+                    │  (Atlas)     │
+                    └─────────────┘
 ```
 
-### Create a virtual environment (Optional)
+This separation lets the AI/language layer and the agriculture/ML layer scale and evolve independently, while sharing authentication and data.
+
+### Tech Stack
+
+- **Framework:** FastAPI (async) on Uvicorn/Gunicorn
+- **ML:** scikit-learn (crop model), Groq vision model (disease detection)
+- **Language AI:** Groq LLM (chatbot), Sarvam AI (translation, 11 languages)
+- **Database:** MongoDB Atlas (async via Motor)
+- **Auth:** Google OAuth + JWT
+- **Reports:** ReportLab (PDF generation)
+- **Deployment:** Render
+
+### Design Principles
+
+- **Fully asynchronous** — external AI calls never block the server, so the platform stays responsive under concurrent load.
+- **Fail-fast configuration** — required secrets are validated at startup.
+- **Resilient by default** — every external API call has timeouts and graceful fallbacks.
+- **Production-ready** — health checks, structured logging, connection pooling, and database indexing.
+
+---
+
+## 🗂️ Project Structure
+
+```
+crop_recommendation_backend/
+├── app/
+│   ├── main.py              # App entry, lifespan, health check
+│   ├── auth/                # Google OAuth + JWT
+│   ├── config/              # Settings & environment
+│   ├── controllers/         # Request orchestration
+│   ├── database/            # MongoDB connection & indexes
+│   ├── ml_models/           # Trained .pkl models & encoders
+│   ├── data/                # Crop knowledge & datasets
+│   ├── routes/              # API endpoints
+│   ├── schemas/             # Pydantic request/response models
+│   ├── services/            # Business logic (ML, Groq, weather…)
+│   └── repositories/        # Data-access layer
+├── requirements.txt
+├── runtime.txt
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.12
+- MongoDB Atlas account
+- API keys: Groq, Sarvam AI, Google OAuth
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd crop_recommendation_backend
+
+# Create & activate a virtual environment
 python -m venv venv
-```
+source venv/bin/activate        # Windows: venv\Scripts\activate
 
-Activate the environment:
-
-**Windows**
-
-```bash
-venv\Scripts\activate
-```
-
-**Linux/macOS**
-
-```bash
-source venv/bin/activate
-```
-
-### Install dependencies
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
 ```
 
----
+### Environment Variables
 
-## ▶️ Run the Project
+Create a `.env` file in the project root:
 
-### Flask
+```env
+MONGODB_URL=your_mongodb_atlas_connection_string
+AI_CORE_URL=http://localhost:8000        # URL of the AI Core service
+GROQ_API_KEY=your_groq_api_key
+ALLOWED_ORIGINS=http://localhost:3000
+```
+
+### Run the server
 
 ```bash
-python app.py
+uvicorn app.main:app --reload
 ```
 
-Open your browser and visit:
-
-```
-http://127.0.0.1:5000
-```
-
-### Streamlit
-
-```bash
-streamlit run app.py
-```
+The API will be available at `http://127.0.0.1:8000`.
+Interactive API docs: `http://127.0.0.1:8000/docs`
 
 ---
 
-## 📂 Project Structure
+## 📡 Core API Endpoints
 
-```
-Crop-Recommendation/
-│
-├── dataset/
-│   └── Crop_recommendation.csv
-│
-├── model/
-│   └── crop_model.pkl
-│
-├── templates/
-│   └── index.html
-│
-├── static/
-│   ├── css/
-│   └── images/
-│
-├── app.py
-├── train_model.py
-├── requirements.txt
-├── README.md
-└── LICENSE
-```
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/crop/predict` | Get a crop recommendation from soil & climate data |
+| `POST` | `/disease/predict` | Detect disease from an uploaded leaf image |
+| `GET`  | `/weather` | Fetch location-based weather |
+| `POST` | `/rotation` | Get crop rotation advice |
+| `GET`  | `/dashboard` | Farmer's crop dashboard |
+| `POST` | `/pdf` | Generate a PDF crop report |
+| `GET`  | `/health` | Service & database health check |
+
+> Full request/response schemas are available in the interactive `/docs`.
 
 ---
 
-## 📈 Model Training
+## 🌍 Impact & Vision
 
-The model is trained using supervised machine learning algorithms such as:
+BirsaKisan is designed to **increase crop yield, reduce resource wastage, and promote sustainable farming** through accessible, data-driven guidance.
 
-- Random Forest Classifier
-- Decision Tree
-- Support Vector Machine
-- Naive Bayes
-
-The best-performing model is saved using `pickle` for future predictions.
-
----
-
-## 💻 Input Parameters
-
-| Parameter | Description |
-|-----------|-------------|
-| Nitrogen | Nitrogen content in soil |
-| Phosphorus | Phosphorus content in soil |
-| Potassium | Potassium content in soil |
-| Temperature | Temperature in °C |
-| Humidity | Relative humidity |
-| pH | Soil pH level |
-| Rainfall | Rainfall in mm |
+**Roadmap:**
+- 🧪 Fertilizer recommendations based on soil-nutrient gaps
+- 📈 Yield prediction from historical & real-time data
+- 💧 Smart irrigation guidance
+- 🛰️ Satellite & IoT sensor integration
+- 💹 Market price insights for profitability-aware recommendations
+- 🗣️ Full voice-first experience for low-literacy users
 
 ---
 
-## 🎯 Output
+## 👥 Team
 
-The system predicts the most suitable crop for the given environmental conditions.
+#Team name = Birsa kisan Drishti
+<table>
+<tr>
+<th>Name</th>
+<th>Role</th>
+</tr>
 
-Example:
+<tr>
+<td><b>Utkarsh Tripathi</b></td>
+<td>Team Lead ( Hardware Developer,Frontend Developer )</td>
+</tr>
 
-```
-Recommended Crop:
-Rice 🌾
-```
+<tr>
+<td>Tanisha Bhatt</td>
+<td>Team Member (Backend  Developer , ML Developer) </td>
+</tr>
 
----
 
-## 📸 Screenshots
 
-Add screenshots of your application here.
+</table>
 
-Example:
 
-```
-screenshots/
-├── home.png
-├── prediction.png
-```
 
----
-
-## 🔮 Future Enhancements
-
-- Fertilizer Recommendation
-- Disease Detection
-- Weather Forecast Integration
-- Crop Yield Prediction
-- Multi-language Support
-- Mobile Application
-
+*Built with the goal of putting the power of AI into the hands of the farmers who feed us.* 🌾
