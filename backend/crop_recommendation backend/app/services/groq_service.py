@@ -65,8 +65,9 @@ async def analyze_plant(image_bytes: bytes, content_type: str = "image/jpeg"):
     start = time.time()
     try:
         response = await client.chat.completions.create(
-            model="qwen/qwen3.6-27b",   # ⚠️ verify this is a current Groq vision model
+            model="qwen/qwen3.6-27b",
             response_format={"type": "json_object"},
+            reasoning_effort="none",          # disable thinking mode → clean JSON output
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": [
@@ -74,7 +75,7 @@ async def analyze_plant(image_bytes: bytes, content_type: str = "image/jpeg"):
                     {"type": "image_url", "image_url": {"url": f"data:{content_type};base64,{image_base64}"}},
                 ]},
             ],
-            temperature=0.1,
+            temperature=0.7,                  # docs recommend ~0.7 for non-thinking mode
             max_tokens=1200,
             timeout=60,
         )
