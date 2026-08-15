@@ -759,6 +759,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The AI Assistant acts as your virtual beekeeping companion. It explains sensor readings, interprets alerts, answers questions about hive conditions, recommends corrective actions, and helps users understand the information displayed throughout the application. The assistant is available anytime from the main dashboard and is designed to simplify hive management for both beginners and experienced beekeepers.'**
   String get answer8;
+
+  /// No description provided for @setupApiary.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s set up your apiary'**
+  String get setupApiary;
+
+  /// No description provided for @lessThanMin.
+  ///
+  /// In en, this message translates to:
+  /// **'This takes less than a minute.'**
+  String get lessThanMin;
+
+  /// No description provided for @cont.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get cont;
 }
 
 class _AppLocalizationsDelegate

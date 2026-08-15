@@ -1,4 +1,4 @@
-package com.example.beehive_monitoring_system
+package com.birsakisandrishti.beehive
 
 import io.flutter.embedding.android.FlutterActivity
 

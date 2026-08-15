@@ -348,4 +348,13 @@ class AppLocalizationsOr extends AppLocalizations {
   @override
   String get answer8 =>
       'The AI Assistant acts as your virtual beekeeping companion. It explains sensor readings, interprets alerts, answers questions about hive conditions, recommends corrective actions, and helps users understand the information displayed throughout the application. The assistant is available anytime from the main dashboard and is designed to simplify hive management for both beginners and experienced beekeepers.';
+
+  @override
+  String get setupApiary => 'Let’s set up your apiary';
+
+  @override
+  String get lessThanMin => 'This takes less than a minute.';
+
+  @override
+  String get cont => 'Continue';
 }

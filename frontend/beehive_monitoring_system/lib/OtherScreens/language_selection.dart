@@ -1,5 +1,5 @@
 import 'package:beehive_monitoring_system/Authentication/auth_provider.dart';
-import 'package:beehive_monitoring_system/OtherScreens/dashboard.dart';
+import 'package:beehive_monitoring_system/Apiary/apiary_basic_info.dart';
 import 'package:beehive_monitoring_system/OtherScreens/permission_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,7 @@ class LanguageSelectionScreen extends StatelessWidget {
 
     await PermissionService.requestAllPermissions();
 
-    Get.off(() => const HomePage());
+    Get.off(() => const ApiaryInfoScreen());
   }
 
   @override
@@ -49,11 +49,7 @@ class LanguageSelectionScreen extends StatelessWidget {
             SizedBox(height: 10),
 
             Center(
-              child: Icon(
-                Icons.language,
-                color: Color(0xFF574422),
-                size: 150,
-              ),
+              child: Icon(Icons.language, color: Color(0xFF574422), size: 150),
             ),
 
             SizedBox(height: 10),
