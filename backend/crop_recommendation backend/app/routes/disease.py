@@ -9,8 +9,7 @@ router = APIRouter(
 ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
 MAX_SIZE = 8 * 1024 * 1024  # 8 MB
 
-
-@router.post("/predict")
+@router.post("/predict", response_model=DiseaseResponse)
 async def predict(image: UploadFile = File(...)):
     if image.content_type not in ALLOWED_TYPES:
         raise HTTPException(400, "Please upload a JPEG, PNG, or WEBP image.")

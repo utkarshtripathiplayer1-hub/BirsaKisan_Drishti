@@ -22,9 +22,11 @@ def optional(key: str, default=None):
 
 # ---- Required: app cannot run without these ----
 GROQ_API_KEY   = require("GROQ_API_KEY")
+GROQ_MODEL = optional("GROQ_MODEL", "qwen/qwen3.6-27b")
 MONGO_URL      = require("MONGO_URL")
 DB_NAME        = require("DB_NAME")
 SARVAM_API_KEY = require("SARVAM_API_KEY")
+SARVAM_CHAT_MODEL = os.getenv("SARVAM_CHAT_MODEL", "sarvam-m")
 JWT_SECRET_KEY = require("JWT_SECRET_KEY")
 GOOGLE_CLIENT_ID = require("GOOGLE_CLIENT_ID")
 
