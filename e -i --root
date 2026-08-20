@@ -1,0 +1,81 @@
+[33mf41e1bf[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/ai_core[m[33m, [m[1;31morigin/feature/ai_core[m[33m)[m added chnages in groq
+[33m60e3724[m added chnages in ai_core
+[33mf1faa61[m added chnages in service file
+[33mcecb090[m added chnages
+[33m8c1d8b4[m added crop backend
+[33m5b21197[m ai_core backend pushed to test for production
+[33mb29c307[m Fix invalid bcc dependency in requirements
+[33med31f5d[m Resolved merge conflict between main and feature/new-updates
+[33m5cbaa73[m[33m ([m[1;31morigin/feature/new-updates[m[33m)[m Added new backend features and improvements
+[33m930c83e[m Update requirements.txt
+[33m510c421[m Merge branch 'feature/core_backend'
+[33m26d6c9f[m[33m ([m[1;31morigin/feature/core_backend[m[33m, [m[1;32mfeature/core_backend[m[33m)[m added final backend changes
+[33m355f746[m Add groq dependency to requirements.txt
+[33m9022895[m Update import path for AI_CORE_URL
+[33me2982ae[m Update mongodb.py
+[33mdbafecc[m[33m ([m[1;31morigin/feature/crop_backend[m[33m)[m added backend changes
+[33m4f64c98[m Create requirements.txt
+[33medb2680[m[33m ([m[1;31morigin/feature/bothbackend[m[33m)[m added some chnages
+[33meb80d9e[m Merge feature/backend into main
+[33m2eba6b5[m Merge branch 'feature/backend'
+[33m01710c0[m[33m ([m[1;31morigin/feature/backend[m[33m)[m Did some changes in backend
+[33mca2af18[m Update import path for AI_CORE_URL
+[33mf1170ee[m Fix import path for MONGODB_URL
+[33m544099c[m Add requirements.txt for crop recommendation backend
+[33mdb9bfcc[m Implement backend updates
+[33m74e1569[m Update requirements.txt
+[33m960ada5[m Update groq package version in requirements
+[33m2f2a86e[m Resolve merge conflict in requirements.txt
+[33mf88fee8[m Merge branch 'tanisha/core'
+[33m767b1b2[m[33m ([m[1;31morigin/tanisha/core[m[33m)[m Update crop recommendation backend for deployment
+[33mee52355[m Add groq dependency to requirements.txt
+[33m4270058[m Update requirements.txt to remove unused packages
+[33m729dcdc[m Update requirements.txt to remove unused packages
+[33ma465530[m Remove unused Keras models and clean up crop backend
+[33m5e55b45[m Remove unused Keras models and update crop backend
+[33m033f8ed[m Added model files in the crop backend
+[33ma6a61d6[m Remove unused Keras models and clean up crop backend
+[33mbbc072d[m Remove unused Keras models and update crop backend
+[33m02fccb9[m Added model files in the crop backend
+[33m20ade1e[m rewriting requriements.txt
+[33m12add3b[m Add requirements.txt for AI core dependencies
+[33m363c795[m[33m ([m[1;32mcheckout[m[33m)[m New changes
+[33mf3f2ac0[m updated Readme
+[33mc3ff9e4[m Altered Android Permission
+[33m331c6dc[m Major changes
+[33m807459a[m changes done in the readme file
+[33m60d0090[m Merge branch 'tanisha/crop_backend'
+[33mdb2ea0d[m pdf changes
+[33m3c16fd9[m added Readme file
+[33m4bd632d[m small changes
+[33m3c1e54b[m enhanced chatbot voice input
+[33m960b5dc[m basic voice chat
+[33m7df40a2[m Added multilanguage in static text
+[33m2a51330[m updated weather and userID
+[33mbc4341d[m improved dashboard
+[33m30c72ed[m pdf, logo and impotant changes
+[33md53b857[m enhanced UI, Implemented crop recommendation
+[33mcab6ce0[m Enhanced UI and Routing
+[33m3150e60[m Enhanced Disease Detection UI
+[33m65f080c[m Implemented disease detection
+[33m3ea777c[m Disease detection initialised with structured code
+[33me7a13d7[m Implemented Dashboard
+[33m44deaf2[m Implemented settings and enhanced UI
+[33mae76913[m Added crop input page design
+[33m47da4ed[m WHEN you write code  add mongodb url
+[33mdad15af[m Update mongodb.py
+[33m38692ed[m Update .gitignore
+[33m3c83295[m Major Changes
+[33m8239fe5[m Delete README.md
+[33maa130fe[m Delete ml directory
+[33m9eda08c[m Delete Hardware directory
+[33m06e8f84[m Create main.ino
+[33ma9036d9[m small changes
+[33me17a34c[m add frontend code
+[33m96364ac[m Added backend code
+[33me994655[m Create hello.py
+[33mebc8d42[m Delete backend/hello.py
+[33mbb17114[m Create machine.py
+[33m33158af[m Create hello.py
+[33m25f8570[m Create hello.dart
+[33m2d4b492[m Initial commit
