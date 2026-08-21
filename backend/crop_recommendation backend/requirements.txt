@@ -1,5 +1,4 @@
-
-python -m pip install -r requirements.txtfastapi==0.136.3
+fastapi==0.136.3
 uvicorn==0.48.0
 gunicorn==23.0.0
 motor==3.7.1
