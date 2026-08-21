@@ -101,11 +101,6 @@ async def analyze_plant(
 
     try:
         response = await client.chat.completions.create(
-
-            model="qwen/qwen3.6-27b",
-            response_format={"type": "json_object"},
-            reasoning_effort="none",        
-
             model=GROQ_MODEL,
 
             response_format={
@@ -138,11 +133,8 @@ async def analyze_plant(
                     ],
                 },
             ],
-            temperature=0.7,                  
-
 
             temperature=0.7,
-
             max_tokens=1200,
             timeout=60,
         )
@@ -180,10 +172,6 @@ async def analyze_plant(
         )
 
     except json.JSONDecodeError:
-
-        logger.error(f"Model returned non-JSON: {result[:200] if result else 'no response'}")
-        raise HTTPException(502, "Could not parse disease result, please retry.")
-
         preview = result[:200] if result else "no response"
 
         logger.error(
