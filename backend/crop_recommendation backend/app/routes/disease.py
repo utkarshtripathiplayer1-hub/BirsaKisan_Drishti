@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
 from app.services.groq_service import analyze_plant
-from app.schemas.disease import DiseaseResponse
+from app.schemas.disease_response import DiseaseResponse
 
 
 router = APIRouter(
