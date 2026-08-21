@@ -8,71 +8,82 @@ from groq import AsyncGroq, APIError, RateLimitError
 from fastapi import HTTPException
 
 
+# ============================================================
+# Logging
+# ============================================================
+
 logger = logging.getLogger("crop_backend")
 
 
 # ============================================================
-# GROQ CONFIGURATION
+# Groq Configuration
 # ============================================================
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "qwen/qwen3.6-27b")
 
-client = AsyncGroq(api_key=GROQ_API_KEY)
+GROQ_MODEL = os.getenv(
+    "GROQ_MODEL",
+    "qwen/qwen3.6-27b"
+)
+
+client = AsyncGroq(
+    api_key=GROQ_API_KEY
+)
 
 
 # ============================================================
-# SYSTEM PROMPT
+# System Prompt
 # ============================================================
 
-SYSTEM_PROMPT = """You are Birsa-Kisan Drishti AI, an expert agricultural assistant
-specializing in plant pathology, agronomy, entomology, soil science, and horticulture.
+SYSTEM_PROMPT = """
+You are Birsa-Kisan Drishti AI, an expert agricultural assistant
+(plant pathology, agronomy, entomology, soil science, horticulture).
 
-You analyze an image of a plant or ANY plant part — whole plant, branch, leaf, stem,
-fruit, flower, or root — for any crop type.
+You analyze an image of a plant or ANY plant part — whole plant,
+branch, leaf, stem, fruit, flower, or root — for any crop type.
 
 Base every conclusion ONLY on visible symptoms.
 
 Never claim absolute certainty from one image.
 Set confidence honestly between 0.0 and 1.0.
 
-If the image is unclear, not a plant, or there is insufficient visual evidence:
+If the image is unclear, not a plant, or there is insufficient
+visual evidence:
 
 - set health_status to "Unknown"
 - set disease_name to "Unknown"
 - use a low confidence value
 - recommend a clearer image or field inspection
 
-IMPORTANT OUTPUT RULES:
+For any field that cannot be determined from the image,
+use null.
 
-- Return ONLY valid JSON.
-- Never return markdown.
-- Never return code blocks.
-- Never return text outside JSON.
-- For list fields, ALWAYS return [] when there is no information.
-- NEVER return null for list fields.
-- For unknown text values, use "Unknown".
-- For optional text values where an empty value is appropriate, use "".
-- Never invent chemical dosages.
-- Never invent disease biology or facts that cannot be supported by the image.
+Never guess chemical dosages, disease biology, or other
+information that cannot be established from the image.
+
+Return ONLY valid JSON.
+No markdown.
+No code blocks.
+No text outside JSON.
 """
 
 
 # ============================================================
-# USER PROMPT
+# User Prompt
 # ============================================================
 
-USER_PROMPT = """Analyze this plant image and return exactly this JSON structure:
+USER_PROMPT = """
+Analyze this plant image and return exactly this JSON:
 
 {
-  "crop_type": "Unknown",
-  "plant_part": "Unknown",
-  "health_status": "Unknown",
-  "disease_name": "Unknown",
+  "crop_type": "",
+  "plant_part": "",
+  "health_status": "",
+  "disease_name": "",
   "confidence": 0.0,
-  "severity": "Unknown",
-  "disease_stage": "Unknown",
-  "spread_risk": "Unknown",
+  "severity": "",
+  "disease_stage": "",
+  "spread_risk": "",
 
   "visual_analysis": {
     "symptoms_detected": [],
@@ -83,7 +94,7 @@ USER_PROMPT = """Analyze this plant image and return exactly this JSON structure
 
   "differential_diagnosis": [
     {
-      "name": "Unknown",
+      "name": "",
       "probability": 0.0,
       "reason": ""
     }
@@ -99,7 +110,7 @@ USER_PROMPT = """Analyze this plant image and return exactly this JSON structure
   "chemical_treatment": []
 }
 
-ENUMS:
+Enums:
 
 health_status:
 Healthy | Diseased | Pest Infested | Nutrient Deficient | Abiotic Stress | Unknown
@@ -115,121 +126,190 @@ Very Low | Low | Moderate | High | Very High | Unknown
 
 IMPORTANT:
 
-If chemical treatment cannot safely be determined from the image,
-return:
-
-"chemical_treatment": []
-
-Do NOT return null.
-
-If there is not enough information for a field, use:
-- "Unknown" for strings
-- [] for lists
-- 0.0 for numeric values where appropriate.
+- Never return null for crop_type.
+- Never return null for plant_part.
+- Never return null for health_status.
+- Never return null for disease_name.
+- Never return null for severity.
+- Never return null for disease_stage.
+- Never return null for spread_risk.
+- Never return null for visual_analysis.
+- Never return null for possible_causes.
+- Never return null for lists.
+- If chemical treatment cannot be determined, return [].
+- If information cannot be determined, use "Unknown" or [].
 """
 
 
 # ============================================================
-# RESPONSE NORMALIZATION
+# Normalize Model Response
 # ============================================================
 
 def normalize_disease_response(data: dict) -> dict:
     """
-    Normalize Qwen's JSON response so that it always matches
-    the FastAPI DiseaseResponse schema.
+    Convert Qwen's response into a safe structure.
 
-    This protects the API from null/missing values generated
-    by the model.
+    This prevents null values from reaching Flutter/FastAPI
+    response validation.
     """
 
+    if not isinstance(data, dict):
+        data = {}
+
+
     # --------------------------------------------------------
-    # Top-level string fields
+    # Basic fields
     # --------------------------------------------------------
 
-    string_defaults = {
-        "crop_type": "Unknown",
-        "plant_part": "Unknown",
-        "health_status": "Unknown",
-        "disease_name": "Unknown",
-        "severity": "Unknown",
-        "disease_stage": "Unknown",
-        "spread_risk": "Unknown",
-    }
+    data["crop_type"] = (
+        data.get("crop_type")
+        or "Unknown"
+    )
 
-    for field, default in string_defaults.items():
+    data["plant_part"] = (
+        data.get("plant_part")
+        or "Unknown"
+    )
 
-        if data.get(field) is None:
-            data[field] = default
+    data["health_status"] = (
+        data.get("health_status")
+        or "Unknown"
+    )
 
-        elif not isinstance(data.get(field), str):
-            data[field] = str(data[field])
+    data["disease_name"] = (
+        data.get("disease_name")
+        or "Unknown"
+    )
+
+    data["severity"] = (
+        data.get("severity")
+        or "Unknown"
+    )
+
+    data["disease_stage"] = (
+        data.get("disease_stage")
+        or "Unknown"
+    )
+
+    data["spread_risk"] = (
+        data.get("spread_risk")
+        or "Unknown"
+    )
 
 
     # --------------------------------------------------------
     # Confidence
     # --------------------------------------------------------
 
-    if data.get("confidence") is None:
-        data["confidence"] = 0.0
+    confidence = data.get("confidence")
+
+    if confidence is None:
+        confidence = 0.0
 
     try:
-        data["confidence"] = float(data["confidence"])
+        confidence = float(confidence)
     except (TypeError, ValueError):
-        data["confidence"] = 0.0
+        confidence = 0.0
 
-    # Keep confidence inside valid range
-    data["confidence"] = max(
+    # Keep confidence inside 0-1
+    confidence = max(
         0.0,
-        min(1.0, data["confidence"])
+        min(1.0, confidence)
     )
 
+    data["confidence"] = confidence
+
 
     # --------------------------------------------------------
-    # Visual analysis
+    # Visual Analysis
     # --------------------------------------------------------
 
-    visual_analysis = data.get("visual_analysis")
+    visual = data.get("visual_analysis")
 
-    if not isinstance(visual_analysis, dict):
-        visual_analysis = {}
+    if not isinstance(visual, dict):
+        visual = {}
 
-    list_fields = [
-        "symptoms_detected",
-        "affected_parts",
-        "color_changes",
+
+    symptoms = visual.get(
+        "symptoms_detected"
+    )
+
+    if not isinstance(symptoms, list):
+        symptoms = []
+
+    visual["symptoms_detected"] = [
+        str(item)
+        for item in symptoms
+        if item is not None
     ]
 
-    for field in list_fields:
 
-        if visual_analysis.get(field) is None:
-            visual_analysis[field] = []
+    affected_parts = visual.get(
+        "affected_parts"
+    )
 
-        elif not isinstance(visual_analysis[field], list):
-            visual_analysis[field] = [str(visual_analysis[field])]
+    if not isinstance(affected_parts, list):
+        affected_parts = []
+
+    visual["affected_parts"] = [
+        str(item)
+        for item in affected_parts
+        if item is not None
+    ]
 
 
-    if visual_analysis.get("estimated_affected_area_percent") is None:
-        visual_analysis["estimated_affected_area_percent"] = 0.0
+    color_changes = visual.get(
+        "color_changes"
+    )
+
+    if not isinstance(color_changes, list):
+        color_changes = []
+
+    visual["color_changes"] = [
+        str(item)
+        for item in color_changes
+        if item is not None
+    ]
+
+
+    affected_area = visual.get(
+        "estimated_affected_area_percent"
+    )
+
+    if affected_area is None:
+        affected_area = 0.0
 
     try:
-        visual_analysis["estimated_affected_area_percent"] = float(
-            visual_analysis["estimated_affected_area_percent"]
+        affected_area = float(
+            affected_area
         )
     except (TypeError, ValueError):
-        visual_analysis["estimated_affected_area_percent"] = 0.0
+        affected_area = 0.0
 
+    # Keep percentage between 0 and 100
+    affected_area = max(
+        0.0,
+        min(100.0, affected_area)
+    )
 
-    data["visual_analysis"] = visual_analysis
+    visual[
+        "estimated_affected_area_percent"
+    ] = affected_area
+
+    data["visual_analysis"] = visual
 
 
     # --------------------------------------------------------
-    # Differential diagnosis
+    # Differential Diagnosis
     # --------------------------------------------------------
 
-    differential = data.get("differential_diagnosis")
+    differential = data.get(
+        "differential_diagnosis"
+    )
 
-    if differential is None or not isinstance(differential, list):
+    if not isinstance(differential, list):
         differential = []
+
 
     normalized_differential = []
 
@@ -238,108 +318,196 @@ def normalize_disease_response(data: dict) -> dict:
         if not isinstance(item, dict):
             continue
 
-        item["name"] = item.get("name") or "Unknown"
-        item["reason"] = item.get("reason") or ""
+        name = (
+            item.get("name")
+            or "Unknown"
+        )
 
-        probability = item.get("probability")
+        reason = (
+            item.get("reason")
+            or ""
+        )
+
+        probability = item.get(
+            "probability"
+        )
 
         if probability is None:
             probability = 0.0
 
         try:
-            probability = float(probability)
+            probability = float(
+                probability
+            )
         except (TypeError, ValueError):
             probability = 0.0
 
-        item["probability"] = max(
+        probability = max(
             0.0,
             min(1.0, probability)
         )
 
-        normalized_differential.append(item)
+        normalized_differential.append(
+            {
+                "name": str(name),
+                "probability": probability,
+                "reason": str(reason),
+            }
+        )
 
-    data["differential_diagnosis"] = normalized_differential
-
-
-    # --------------------------------------------------------
-    # Possible causes
-    # --------------------------------------------------------
-
-    possible_causes = data.get("possible_causes")
-
-    if not isinstance(possible_causes, dict):
-        possible_causes = {}
-
-    if possible_causes.get("primary") is None:
-        possible_causes["primary"] = ""
-
-    if possible_causes.get("secondary") is None:
-        possible_causes["secondary"] = []
-
-    elif not isinstance(possible_causes["secondary"], list):
-        possible_causes["secondary"] = [
-            str(possible_causes["secondary"])
-        ]
-
-    data["possible_causes"] = possible_causes
+    data[
+        "differential_diagnosis"
+    ] = normalized_differential
 
 
     # --------------------------------------------------------
-    # List fields
+    # Possible Causes
     # --------------------------------------------------------
 
-    list_response_fields = [
-        "immediate_actions",
-        "organic_treatment",
-        "chemical_treatment",
+    causes = data.get(
+        "possible_causes"
+    )
+
+    if not isinstance(causes, dict):
+        causes = {}
+
+
+    causes["primary"] = (
+        causes.get("primary")
+        or ""
+    )
+
+
+    secondary = causes.get(
+        "secondary"
+    )
+
+    if not isinstance(secondary, list):
+        secondary = []
+
+
+    causes["secondary"] = [
+        str(item)
+        for item in secondary
+        if item is not None
     ]
 
-    for field in list_response_fields:
 
-        value = data.get(field)
-
-        if value is None:
-            data[field] = []
-
-        elif not isinstance(value, list):
-            data[field] = [str(value)]
+    data["possible_causes"] = causes
 
 
     # --------------------------------------------------------
-    # Metadata
+    # Immediate Actions
     # --------------------------------------------------------
 
-    if data.get("metadata") is None:
-        data["metadata"] = {}
+    immediate_actions = data.get(
+        "immediate_actions"
+    )
 
-    elif not isinstance(data.get("metadata"), dict):
-        data["metadata"] = {}
+    if not isinstance(
+        immediate_actions,
+        list
+    ):
+        immediate_actions = []
+
+
+    data["immediate_actions"] = [
+        str(item)
+        for item in immediate_actions
+        if item is not None
+    ]
+
+
+    # --------------------------------------------------------
+    # Organic Treatment
+    # --------------------------------------------------------
+
+    organic_treatment = data.get(
+        "organic_treatment"
+    )
+
+    if not isinstance(
+        organic_treatment,
+        list
+    ):
+        organic_treatment = []
+
+
+    data["organic_treatment"] = [
+        str(item)
+        for item in organic_treatment
+        if item is not None
+    ]
+
+
+    # --------------------------------------------------------
+    # Chemical Treatment
+    # --------------------------------------------------------
+
+    chemical_treatment = data.get(
+        "chemical_treatment"
+    )
+
+    # Qwen may return:
+    #
+    # null
+    #
+    # or a string
+    #
+    # or a list.
+    #
+    # Always convert it to a list.
+
+    if chemical_treatment is None:
+        chemical_treatment = []
+
+    elif isinstance(
+        chemical_treatment,
+        str
+    ):
+        chemical_treatment = [
+            chemical_treatment
+        ]
+
+    elif not isinstance(
+        chemical_treatment,
+        list
+    ):
+        chemical_treatment = []
+
+
+    data["chemical_treatment"] = [
+        str(item)
+        for item in chemical_treatment
+        if item is not None
+    ]
 
 
     return data
 
 
 # ============================================================
-# ANALYZE PLANT
+# Analyze Plant
 # ============================================================
 
 async def analyze_plant(
     image_bytes: bytes,
     content_type: str = "image/jpeg",
 ):
-    """
-    Analyze a plant image using Qwen multimodal through Groq.
-    """
 
-    image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+    image_base64 = base64.b64encode(
+        image_bytes
+    ).decode("utf-8")
 
     result = None
+
     start = time.time()
+
 
     try:
 
         # ----------------------------------------------------
-        # Call Qwen through Groq
+        # Call Groq / Qwen Vision
         # ----------------------------------------------------
 
         response = await client.chat.completions.create(
@@ -360,10 +528,12 @@ async def analyze_plant(
                 {
                     "role": "user",
                     "content": [
+
                         {
                             "type": "text",
                             "text": USER_PROMPT,
                         },
+
                         {
                             "type": "image_url",
                             "image_url": {
@@ -373,6 +543,7 @@ async def analyze_plant(
                                 )
                             },
                         },
+
                     ],
                 },
             ],
@@ -386,10 +557,16 @@ async def analyze_plant(
 
 
         # ----------------------------------------------------
-        # Get model response
+        # Get response
         # ----------------------------------------------------
 
-        result = response.choices[0].message.content
+        result = (
+            response
+            .choices[0]
+            .message
+            .content
+        )
+
 
         if not result:
 
@@ -412,14 +589,21 @@ async def analyze_plant(
 
         try:
 
-            data = json.loads(result)
+            data = json.loads(
+                result
+            )
 
         except json.JSONDecodeError:
 
-            preview = result[:500]
+            preview = (
+                result[:500]
+                if result
+                else "no response"
+            )
 
             logger.error(
-                f"Qwen returned invalid JSON: {preview}"
+                "Qwen returned invalid JSON: %s",
+                preview
             )
 
             raise HTTPException(
@@ -432,45 +616,51 @@ async def analyze_plant(
 
 
         # ----------------------------------------------------
-        # Validate basic response type
+        # Normalize response
         # ----------------------------------------------------
 
-        if not isinstance(data, dict):
-
-            logger.error(
-                "Qwen response was not a JSON object"
-            )
-
-            raise HTTPException(
-                status_code=502,
-                detail=(
-                    "Disease detection returned "
-                    "an invalid response."
-                ),
-            )
+        data = normalize_disease_response(
+            data
+        )
 
 
         # ----------------------------------------------------
-        # Normalize Qwen response
+        # Metadata
         # ----------------------------------------------------
 
-        data = normalize_disease_response(data)
-
-
-        # ----------------------------------------------------
-        # Add metadata
-        # ----------------------------------------------------
-
-        data.setdefault("metadata", {})
-
-        data["metadata"]["prediction_time_ms"] = int(
+        prediction_time = int(
             (time.time() - start) * 1000
         )
 
 
+        data.setdefault(
+            "metadata",
+            {}
+        )
+
+
+        if not isinstance(
+            data["metadata"],
+            dict
+        ):
+            data["metadata"] = {}
+
+
+        data["metadata"][
+            "prediction_time_ms"
+        ] = prediction_time
+
+
+        # ----------------------------------------------------
+        # Log successful prediction
+        # ----------------------------------------------------
+
         logger.info(
-            "Disease analysis completed successfully "
-            f"in {data['metadata']['prediction_time_ms']} ms"
+            "Disease prediction completed "
+            "in %sms | crop=%s | disease=%s",
+            prediction_time,
+            data.get("crop_type"),
+            data.get("disease_name"),
         )
 
 
@@ -478,13 +668,13 @@ async def analyze_plant(
 
 
     # ========================================================
-    # ERROR HANDLING
+    # Groq Rate Limit
     # ========================================================
 
     except RateLimitError:
 
         logger.warning(
-            "Groq rate limit reached during disease detection"
+            "Groq rate limit reached"
         )
 
         raise HTTPException(
@@ -496,10 +686,15 @@ async def analyze_plant(
         )
 
 
+    # ========================================================
+    # Groq API Error
+    # ========================================================
+
     except APIError as e:
 
         logger.error(
-            f"Groq vision API error: {e}"
+            "Groq vision error: %s",
+            e
         )
 
         raise HTTPException(
@@ -511,14 +706,24 @@ async def analyze_plant(
         )
 
 
+    # ========================================================
+    # FastAPI HTTP Exception
+    # ========================================================
+
     except HTTPException:
+
         raise
 
+
+    # ========================================================
+    # Unexpected Error
+    # ========================================================
 
     except Exception as e:
 
         logger.exception(
-            f"Unexpected disease detection error: {e}"
+            "Unexpected disease detection error: %s",
+            e
         )
 
         raise HTTPException(
