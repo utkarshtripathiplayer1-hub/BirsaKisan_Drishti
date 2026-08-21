@@ -1,47 +1,60 @@
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 class VisualAnalysis(BaseModel):
-    symptoms_detected: list[str] = []
-    affected_parts: list[str] = []
-    color_changes: list[str] = []
-    estimated_affected_area_percent: float = 0
+    symptoms_detected: list[str] = Field(default_factory=list)
+    affected_parts: list[str] = Field(default_factory=list)
+    color_changes: list[str] = Field(default_factory=list)
+    estimated_affected_area_percent: float = 0.0
 
 
 class DifferentialDiagnosis(BaseModel):
-    name: str
-    probability: float = Field(ge=0.0, le=1.0)
-    reason: str
+    name: str = "Unknown"
+    probability: float = Field(default=0.0, ge=0.0, le=1.0)
+    reason: str = ""
 
 
 class PossibleCauses(BaseModel):
-    primary: Optional[str] = None
-    secondary: list[str] = []
+    primary: str = ""
+    secondary: list[str] = Field(default_factory=list)
 
 
 class DiseaseResponse(BaseModel):
-    crop_type: str
-    plant_part: str
-    health_status: str
-    disease_name: str
+    crop_type: str = "Unknown"
+    plant_part: str = "Unknown"
+    health_status: str = "Unknown"
+    disease_name: str = "Unknown"
 
-    confidence: float = Field(ge=0.0, le=1.0)
+    confidence: float = Field(default=0.0, ge=0.0, le=1.0)
 
-    severity: str
-    disease_stage: str
-    spread_risk: str
+    severity: str = "Unknown"
+    disease_stage: str = "Unknown"
+    spread_risk: str = "Unknown"
 
-    visual_analysis: VisualAnalysis
+    visual_analysis: VisualAnalysis = Field(
+        default_factory=VisualAnalysis
+    )
 
-    differential_diagnosis: list[DifferentialDiagnosis] = []
+    differential_diagnosis: list[DifferentialDiagnosis] = Field(
+        default_factory=list
+    )
 
-    possible_causes: PossibleCauses
+    possible_causes: PossibleCauses = Field(
+        default_factory=PossibleCauses
+    )
 
-    immediate_actions: list[str] = []
+    immediate_actions: list[str] = Field(
+        default_factory=list
+    )
 
-    organic_treatment: list[str] = []
+    organic_treatment: list[str] = Field(
+        default_factory=list
+    )
 
-    chemical_treatment: Optional[list[str]] = None
+    chemical_treatment: list[str] = Field(
+        default_factory=list
+    )
 
-    metadata: Optional[dict] = None
+    metadata: dict = Field(
+        default_factory=dict
+    )
