@@ -27,6 +27,7 @@ from schemas.chat import (
 
 async def process_chat(
     user_id: str,
+    access_token: str,
     domain: str,
     language: str,
     query: str,
@@ -65,6 +66,7 @@ async def process_chat(
             language=language,
             first_message=query,
         )
+
         conversation_id = conversation["conversation_id"]
 
     # --------------------------------------------------
@@ -79,7 +81,7 @@ async def process_chat(
             source_language=language,
             target_language="en",
         )
-    
+
     # --------------------------------------------------
     # Save user message
     # --------------------------------------------------
@@ -109,14 +111,23 @@ async def process_chat(
     # Fetch farming context
     # --------------------------------------------------
     try:
-        context = get_user_context(user_id)
-        
+
+        context = get_user_context(
+            user_id=user_id,
+            access_token=access_token,
+        )
+
+        print("========== USER CONTEXT ==========")
+        print(context)
+        print("==================================")
+
     except Exception as e:
+
+        print("Context Fetch Error:", e)
         context = None
-    
-    
+
     # --------------------------------------------------
-    # Build prompt for Groq
+    # Build prompt for AI
     # --------------------------------------------------
     groq_messages = [
         {
@@ -186,11 +197,10 @@ Last Crop Recommendation:
         groq_messages
     )
 
-
     # --------------------------------------------------
     # Translate response back
     # --------------------------------------------------
-    final_response =  ai_response
+    final_response = ai_response
 
     if language != "en":
 
@@ -199,7 +209,7 @@ Last Crop Recommendation:
             source_language="en",
             target_language=language,
         )
-   
+
     # --------------------------------------------------
     # Save AI response
     # --------------------------------------------------
