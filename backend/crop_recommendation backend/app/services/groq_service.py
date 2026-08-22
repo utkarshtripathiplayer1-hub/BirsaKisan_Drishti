@@ -692,13 +692,6 @@ async def analyze_plant(
 
             timeout=60,
 
-                            }
-                        }
-
-                    ]
-                }
-            ],
-
             temperature=0.3,
 
             max_tokens=1200,
@@ -855,6 +848,7 @@ async def analyze_plant(
             "chemical_cure",
             []
         )
+        ) 
 
         # --------------------------------------------------
         # Normalize weather conditions
