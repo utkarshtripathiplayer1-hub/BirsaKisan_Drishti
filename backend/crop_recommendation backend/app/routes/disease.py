@@ -94,7 +94,7 @@ async def predict(
     )
 
 
-        raise HTTPException(
+    raise HTTPException(
             status_code=400,
             detail="Empty file uploaded."
         )
