@@ -10,7 +10,6 @@ security = HTTPBearer(auto_error=False)
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ):
-
     if credentials is None:
         raise HTTPException(
             status_code=401,
@@ -40,5 +39,9 @@ async def get_current_user(
             status_code=404,
             detail="User not found"
         )
+
+    # Preserve the JWT for authenticated requests
+    # to the crop backend.
+    user["_access_token"] = token
 
     return user
