@@ -16,7 +16,7 @@ from app.schemas.disease import DiseaseResponse
 from app.repositories.disease_repository import (
     disease_repository
 )
->>>>>>> feature/backend
+
 
 
 router = APIRouter(
