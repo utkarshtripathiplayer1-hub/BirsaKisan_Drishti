@@ -22,12 +22,11 @@ logger = logging.getLogger("crop_backend")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-=======
 logger = logging.getLogger("crop_backend")
 
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
->>>>>>> feature/backend
+
 GROQ_MODEL = os.getenv(
     "GROQ_MODEL",
     "qwen/qwen3.6-27b"
@@ -49,14 +48,14 @@ You are Birsa-Kisan Drishti AI, an expert agricultural assistant
 
 You analyze an image of a plant or ANY plant part — whole plant,
 branch, leaf, stem, fruit, flower, or root — for any crop type.
-=======
+
 
 
 client = AsyncGroq(
     api_key=GROQ_API_KEY
 )
 
->>>>>>> feature/backend
+
 
 SYSTEM_PROMPT = """
 You are Birsa-Kisan Drishti AI, an expert agricultural
@@ -120,7 +119,7 @@ Analyze this plant image and return exactly this JSON:
     "affected_parts": [],
     "color_changes": [],
     "estimated_affected_area_percent": 0
-  },
+},
 
   "differential_diagnosis": [
     {
@@ -138,7 +137,7 @@ Analyze this plant image and return exactly this JSON:
   "immediate_actions": [],
   "organic_treatment": [],
   "chemical_treatment": []
-=======
+}
 If the image is unclear, not a plant, or there is not
 enough visual evidence, return:
 
@@ -155,7 +154,7 @@ Do not use markdown.
 Do not use code blocks.
 Do not add explanations outside JSON.
 """
-
+}
 
 USER_PROMPT = """
 Analyze the uploaded plant image.
@@ -178,7 +177,6 @@ Return EXACTLY this JSON structure:
   "precautions": [],
   "organic_cure": [],
   "chemical_cure": []
->>>>>>> feature/backend
 }
 
 RULES:
@@ -201,7 +199,7 @@ Very Low | Low | Moderate | High | Critical | Unknown
    Number between 0.0 and 1.0.
 spread_risk:
 Very Low | Low | Moderate | High | Very High | Unknown
-=======
+
 4. severity:
    Number between 0 and 100.
    0 means healthy/no visible disease.
@@ -910,7 +908,7 @@ async def analyze_plant(
             int(
                 (time.time() - start) * 1000
             )
->>>>>>> feature/backend
+
         )
 
 
@@ -953,8 +951,10 @@ async def analyze_plant(
     # ========================================================
 
     except RateLimitError:
-   logger.warning(
-            "Groq rate limit reached"
+
+        logger.warning(
+    
+            "Groq rate limit reached")
 
         raise HTTPException(
             status_code=503,
@@ -1004,7 +1004,7 @@ async def analyze_plant(
         logger.error(
             "Invalid JSON returned by Groq: %s",
             preview
->>>>>>> feature/backend
+
         )
 
         raise HTTPException(
