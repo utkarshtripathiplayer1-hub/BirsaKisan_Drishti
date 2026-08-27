@@ -188,15 +188,8 @@ The user is asking general apiculture knowledge.
 
 Provide practical and accurate information about
 beekeeping and honey bee management.
-""",
+"""
 
-    "general": """
-The question is outside the primary agriculture and
-apiculture domains.
-
-Keep the answer brief and explain that this assistant
-is designed primarily for agriculture and apiculture.
-""",
 }
 
 
