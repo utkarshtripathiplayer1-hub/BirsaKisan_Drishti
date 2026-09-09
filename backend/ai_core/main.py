@@ -46,10 +46,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# ---- CORS: lock to real origins in production ----
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,   # NOT ["*"] with credentials — see notes
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
