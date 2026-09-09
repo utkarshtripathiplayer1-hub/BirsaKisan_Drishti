@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:crop_recommendation_system/ApiServices/WeatherAPI/weather_dashboard.dart';
 import 'package:crop_recommendation_system/Chatbot/chatbot_screen.dart';
 import 'package:crop_recommendation_system/CropRecommendation/common_input_page.dart';
 import 'package:crop_recommendation_system/DiseasePrediction/disease_detection_input.dart';
@@ -179,163 +180,177 @@ class HomePage extends StatelessWidget {
                         const SizedBox(height: 35),
 
                         Obx(() {
-                          return Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(18),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          AutoSizeText(
-                                            minFontSize: 16,
-                                            maxLines: 2,
-                                            wrapWords: true,
-                                            overflow: TextOverflow.visible,
-                                            ctrl.weather['city'] ?? '',
-                                            style: const TextStyle(
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-
-                                          const SizedBox(height: 4),
-
-                                          Text(
-                                            ctrl.weather['condition'] ?? '',
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    Flexible(
-                                      child: AutoSizeText(
-                                        maxLines: 1,
-                                        minFontSize: 12,
-                                        "${ctrl.weather['temperature'] ?? ''}°C",
-                                        style: const TextStyle(
-                                          fontSize: 34,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 15),
-
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Expanded(
-                                      child: weatherInfo(
-                                        Icons.water_drop,
-                                        AppLocalizations.of(context)!.humidity,
-                                        "${ctrl.weather['humidity'] ?? ''}",
-                                      ),
-                                    ),
-
-                                    Expanded(
-                                      child: weatherInfo(
-                                        Icons.device_thermostat,
-                                        AppLocalizations.of(context)!.feelsLike,
-                                        "${ctrl.weather['feels_like'] ?? ''}",
-                                      ),
-                                    ),
-
-                                    Expanded(
-                                      child: weatherInfo(
-                                        Icons.air,
-                                        AppLocalizations.of(context)!.wind,
-                                        "${ctrl.weather['wind_speed'] ?? ''}",
-                                      ),
-                                    ),
-
-                                    Expanded(
-                                      child: weatherInfo(
-                                        Icons.compress,
-                                        AppLocalizations.of(context)!.pressure,
-                                        "${ctrl.weather['pressure'] ?? ''}",
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 15),
-
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF4F6E5),
-                                    borderRadius: BorderRadius.circular(15),
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(() => WeatherForecastScreen());
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 3),
                                   ),
-                                  child: Row(
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const Icon(
-                                        Icons.info_outline,
-                                        color: Colors.green,
-                                      ),
-
-                                      const SizedBox(width: 10),
-
                                       Expanded(
-                                        child: Text(
-                                          ctrl.weather['description'] ?? '',
-                                          style: const TextStyle(fontSize: 13),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            AutoSizeText(
+                                              minFontSize: 16,
+                                              maxLines: 2,
+                                              wrapWords: true,
+                                              overflow: TextOverflow.visible,
+                                              ctrl.weather['city'] ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 4),
+
+                                            Text(
+                                              ctrl.weather['condition'] ?? '',
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
 
-                                      GestureDetector(
-                                        onTap: () async {
-                                          ctrl.isRefreshing.value = true;
-
-                                          await ctrl.fetchWeather();
-
-                                          ctrl.isRefreshing.value = false;
-                                        },
-                                        child: Obx(
-                                          () => ctrl.isRefreshing.value
-                                              ? const SizedBox(
-                                                  width: 22,
-                                                  height: 22,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                      ),
-                                                )
-                                              : const Icon(
-                                                  Icons.refresh,
-                                                  color: Colors.green,
-                                                  size: 22,
-                                                ),
+                                      Flexible(
+                                        child: AutoSizeText(
+                                          maxLines: 1,
+                                          minFontSize: 12,
+                                          "${ctrl.weather['temperature'] ?? ''}°C",
+                                          style: const TextStyle(
+                                            fontSize: 34,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+
+                                  const SizedBox(height: 15),
+
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Expanded(
+                                        child: weatherInfo(
+                                          Icons.water_drop,
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.humidity,
+                                          "${ctrl.weather['humidity'] ?? ''}",
+                                        ),
+                                      ),
+
+                                      Expanded(
+                                        child: weatherInfo(
+                                          Icons.device_thermostat,
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.feelsLike,
+                                          "${ctrl.weather['feels_like'] ?? ''}",
+                                        ),
+                                      ),
+
+                                      Expanded(
+                                        child: weatherInfo(
+                                          Icons.air,
+                                          AppLocalizations.of(context)!.wind,
+                                          "${ctrl.weather['wind_speed'] ?? ''}",
+                                        ),
+                                      ),
+
+                                      Expanded(
+                                        child: weatherInfo(
+                                          Icons.compress,
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.pressure,
+                                          "${ctrl.weather['pressure'] ?? ''}",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 15),
+
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFF4F6E5),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.info_outline,
+                                          color: Colors.green,
+                                        ),
+
+                                        const SizedBox(width: 10),
+
+                                        Expanded(
+                                          child: Text(
+                                            ctrl.weather['description'] ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+
+                                        GestureDetector(
+                                          onTap: () async {
+                                            ctrl.isRefreshing.value = true;
+
+                                            await ctrl.fetchWeather();
+
+                                            ctrl.isRefreshing.value = false;
+                                          },
+                                          child: Obx(
+                                            () => ctrl.isRefreshing.value
+                                                ? const SizedBox(
+                                                    width: 22,
+                                                    height: 22,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                        ),
+                                                  )
+                                                : const Icon(
+                                                    Icons.refresh,
+                                                    color: Colors.green,
+                                                    size: 22,
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }),

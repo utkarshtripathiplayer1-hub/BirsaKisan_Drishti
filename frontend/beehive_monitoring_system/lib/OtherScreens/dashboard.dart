@@ -1,8 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beehive_monitoring_system/ApiServices/WeatherAPI/weather_api_controller.dart';
 import 'package:beehive_monitoring_system/Chatbot/chatbot_screen.dart';
-import 'package:beehive_monitoring_system/OtherScreens/about_us.dart';
+import 'package:beehive_monitoring_system/StaticPages/camera_alerts_page.dart';
+import 'package:beehive_monitoring_system/StaticPages/hive_graph_page1.dart';
+import 'package:beehive_monitoring_system/StaticPages/hive_overview_page.dart';
+// import 'package:beehive_monitoring_system/OtherScreens/about_us.dart';
 import 'package:beehive_monitoring_system/OtherScreens/settings.dart';
+import 'package:beehive_monitoring_system/StaticPages/sensor_reading_page.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -281,7 +285,9 @@ class HomePage extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Color(0xFFC98D26).withValues(alpha: 0.1),
+                                    color: Color(
+                                      0xFFC98D26,
+                                    ).withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Row(
@@ -366,29 +372,37 @@ class HomePage extends StatelessWidget {
                               farmCard(
                                 context,
                                 image: "assets/images/hive_overview.png",
-                                title: AppLocalizations.of(context)!.hiveOverview,
-                                page: const AboutUs(),
-                                boxColor: Color(0xFF06A84A).withValues(alpha: 0.1),
+                                title: AppLocalizations.of(
+                                  context,
+                                )!.hiveOverview,
+                                page: const HiveOverviewPage(),
+                                boxColor: Color(
+                                  0xFF06A84A,
+                                ).withValues(alpha: 0.1),
                                 borderColor: Color(0xFF06A84A),
                               ),
 
                               farmCard(
                                 context,
                                 image: "assets/images/sensor_reading.png",
-                                title: AppLocalizations.of(context)!.sensorReading,
-                                page: const AboutUs(),
-                                boxColor: Color(0xFFC98D26).withValues(alpha: 0.1),
+                                title: AppLocalizations.of(
+                                  context,
+                                )!.sensorReading,
+                                page: const SensorReadingPage(),
+                                boxColor: Color(
+                                  0xFFC98D26,
+                                ).withValues(alpha: 0.1),
                                 borderColor: Color(0xFFC98D26),
                               ),
 
                               farmCard(
                                 context,
                                 image: "assets/images/hive_graph.png",
-                                title: AppLocalizations.of(
-                                  context,
-                                )!.hiveGraph,
-                                page: const AboutUs(),
-                                boxColor: Color(0xFF096FCE).withValues(alpha: 0.1),
+                                title: AppLocalizations.of(context)!.hiveGraph,
+                                page: const HiveGraphPage1(),
+                                boxColor: Color(
+                                  0xFF096FCE,
+                                ).withValues(alpha: 0.1),
                                 borderColor: Color(0xFF096FCE),
                               ),
 
@@ -398,8 +412,10 @@ class HomePage extends StatelessWidget {
                                 title: AppLocalizations.of(
                                   context,
                                 )!.cameraAlerts,
-                                page: AboutUs(),
-                                boxColor: Color(0xFFA80E0E).withValues(alpha: 0.1),
+                                page: CameraAlertsPage(),
+                                boxColor: Color(
+                                  0xFFA80E0E,
+                                ).withValues(alpha: 0.1),
                                 borderColor: Color(0xFFA80E0E),
                               ),
                             ],

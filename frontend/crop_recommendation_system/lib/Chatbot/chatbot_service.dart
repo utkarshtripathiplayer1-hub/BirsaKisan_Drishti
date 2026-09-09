@@ -10,13 +10,15 @@ class ApiConfig {
 
 class ChatbotService {
   Future<Map<String, dynamic>> sendMessage({
-    required String domain,
-    required String query,
+    required String message,
     String? conversationId,
+    Map<String, dynamic>? cropRecommendation,
+    Map<String, dynamic>? diseaseDetection,
+    Map<String, dynamic>? cropProfile,
+    double? latitude,
+    double? longitude,
   }) async {
     final token = await SecureStorageService.getAccessToken();
-
-    print("Token: $token");
 
     if (token == null) {
       throw Exception("User is not logged in");
@@ -29,14 +31,19 @@ class ChatbotService {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
-        "domain": domain,
-        "query": query,
+        "message": message,
         "conversation_id": conversationId,
+        "crop_recommendation": cropRecommendation,
+        "disease_detection": diseaseDetection,
+        "crop_profile": cropProfile,
+
+        "latitude": latitude,
+        "longitude": longitude,
       }),
     );
 
-    print("Status Code: ${response.statusCode}");
-    print("Response Body: ${response.body}");
+    print("Chat status: ${response.statusCode}");
+    print("Chat response: ${response.body}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -67,6 +74,7 @@ class ChatbotService {
       ),
       headers: {"Authorization": "Bearer $token"},
     );
+    print(response.body);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

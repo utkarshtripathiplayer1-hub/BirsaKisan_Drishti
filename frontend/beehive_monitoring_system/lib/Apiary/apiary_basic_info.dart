@@ -134,7 +134,7 @@ class _ApiaryInfoScreenState extends State<ApiaryInfoScreen> {
             const SizedBox(height: 10),
 
             DropdownButtonFormField<String>(
-              value: selectedHiveType,
+              initialValue: selectedHiveType,
 
               decoration: const InputDecoration(border: OutlineInputBorder()),
 

@@ -88,8 +88,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
     try {
       final response = await service.sendMessage(
-        domain: "agriculture",
-        query: query,
+        message: query,
         conversationId: currentConversationId,
       );
       print("Conversation ID: $currentConversationId");
@@ -235,7 +234,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         }
       });
     } catch (e) {
-        if (!mounted) return;
+      if (!mounted) return;
       Get.snackbar(
         AppLocalizations.of(context)!.error,
         AppLocalizations.of(context)!.failLoadConvo,
