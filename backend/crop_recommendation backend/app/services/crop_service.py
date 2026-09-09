@@ -18,6 +18,8 @@ class CropRecommendationService:
         self.model = joblib.load(MODEL_PATH)
         self.crop_encoder = joblib.load(CROP_ENCODER_PATH)
         self.soil_encoder = joblib.load(SOIL_ENCODER_PATH)
+        print("Crop output classes:")
+        print(self.crop_encoder.classes_)  
 
     async def predict(
         self,

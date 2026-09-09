@@ -1,18 +1,18 @@
 import asyncio
 
-from services.chat_service import process_chat
+from services.groq_service import GroqService
 
 
 async def main():
 
-    result = await process_chat(
-        user_id="123",
-        domain="agriculture",
-        language="English",
-        query="My maize crop has rust disease"
+    service = GroqService()
+
+    response = await service.generate_response(
+        "मेरी फसल में बीमारी है"
     )
 
-    print(result)
+    print("\nAI RESPONSE:")
+    print(response)
 
 
 if __name__ == "__main__":

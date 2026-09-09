@@ -1,26 +1,39 @@
-import asyncio
+from services.language_service import LanguageService
 
-from services.message_service import (
-    save_user_message,
-    get_recent_messages
+
+language_service = LanguageService()
+
+
+# Hindi
+hindi_text = "मेरी फसल में बीमारी है"
+
+language = language_service.detect_language(
+    hindi_text
+)
+
+print("Hindi test:")
+print("Text:", hindi_text)
+print("Detected:", language)
+print(
+    "Language:",
+    language_service.get_language_name(language)
 )
 
 
-async def main():
-
-    await save_user_message(
-        conversation_id="conv_test",
-        original_text="My maize crop has rust",
-        english_text="My maize crop has rust",
-        language="English"
-    )
-
-    messages = await get_recent_messages(
-        "conv_test"
-    )
-
-    print(messages)
+print()
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# English
+english_text = "My crop has a disease"
+
+language = language_service.detect_language(
+    english_text
+)
+
+print("English test:")
+print("Text:", english_text)
+print("Detected:", language)
+print(
+    "Language:",
+    language_service.get_language_name(language)
+)

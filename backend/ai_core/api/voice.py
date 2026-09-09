@@ -1,430 +1,247 @@
-import os
-import uuid
-import logging
+import base64
 
 from fastapi import (
     APIRouter,
+    HTTPException,
     UploadFile,
     File,
-    HTTPException,
     Depends,
 )
 
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 from core.dependencies import get_current_user
 
-from schemas.voice_schema import (
-    VoiceResponse,
-    VoiceChatResponse,
-)
-
-from services.stt_service import speech_to_text
-from services.chat_service import (
-    ChatServiceError,
-    chat_service,
-)
-from services.conversation_service import (
-    create_conversation,
-    get_conversation_by_id,
-    update_conversation_timestamp,
-)
-from services.message_service import (
-    get_recent_messages,
-    save_user_message,
-    save_ai_message,
-)
-from services.tts_service import text_to_speech
-
-
-logger = logging.getLogger("ai_core.voice")
+from services.bhashini_service import BhashiniService
+from services.voice_service import VoiceService
 
 
 router = APIRouter(
-    prefix="/voice",
+    prefix="/api/voice",
     tags=["Voice"],
 )
 
+bhashini_service = BhashiniService()
+voice_service = VoiceService()
+
 
 # ============================================================
-# Speech To Text
+# REQUEST MODEL — TEXT TO VOICE
 # ============================================================
 
-@router.post(
-    "/stt",
-    response_model=VoiceResponse,
-)
-async def transcribe_audio(
-    audio: UploadFile = File(...),
-    current_user=Depends(get_current_user),
+
+class TextToVoiceRequest(BaseModel):
+    text: str
+    language: str = "hi"
+    gender: str = "female"
+    speed: float = 1.0
+    sampling_rate: int = 22050
+
+
+# ============================================================
+# TEXT → VOICE
+# ============================================================
+
+
+@router.post("/text-to-voice")
+async def text_to_voice(
+    request: TextToVoiceRequest,
+    current_user: dict = Depends(get_current_user),
 ):
-    temp_path = f"/tmp/{uuid.uuid4().hex}_{audio.filename}"
+    """
+    Authenticated Text → Voice
+
+    Authorization:
+        Bearer <JWT>
+
+    Request:
+    {
+        "text": "आपकी फसल में कौन सी बीमारी है?",
+        "language": "hi",
+        "gender": "female",
+        "speed": 1.0,
+        "sampling_rate": 22050
+    }
+    """
 
     try:
-        with open(temp_path, "wb") as buffer:
-            buffer.write(await audio.read())
 
-        stt_result = speech_to_text(temp_path)
+        # ----------------------------------------------------
+        # Validate text
+        # ----------------------------------------------------
 
-        if not stt_result:
+        if not request.text.strip():
             raise HTTPException(
-                status_code=500,
-                detail="Speech transcription failed.",
+                status_code=400,
+                detail="Text cannot be empty",
             )
 
-        return VoiceResponse(
-            transcript=stt_result["transcript"]
+        # ----------------------------------------------------
+        # Bhashini TTS
+        # ----------------------------------------------------
+
+        result = await bhashini_service.text_to_speech(
+            text=request.text,
+            language=request.language,
+            gender=request.gender,
+            speed=request.speed,
+            sampling_rate=request.sampling_rate,
         )
+
+        # ----------------------------------------------------
+        # Extract audio
+        # ----------------------------------------------------
+
+        audio_bytes = (
+            bhashini_service.extract_tts_audio(
+                result
+            )
+        )
+
+        if not audio_bytes:
+            raise RuntimeError(
+                "Bhashini returned empty audio"
+            )
+
+        # ----------------------------------------------------
+        # Base64
+        # ----------------------------------------------------
+
+        audio_base64 = base64.b64encode(
+            audio_bytes
+        ).decode("utf-8")
+
+        return {
+            "success": True,
+            "user_id": str(current_user["_id"]),
+            "question": request.text,
+            "language": request.language,
+            "gender": request.gender,
+            "speed": request.speed,
+            "sampling_rate": request.sampling_rate,
+            "audio_base64": audio_base64,
+        }
 
     except HTTPException:
         raise
 
-    except Exception as exc:
-        logger.exception(
-            "STT failed: %s",
-            exc,
-        )
+    except Exception as e:
 
         raise HTTPException(
             status_code=500,
-            detail="Speech transcription failed.",
-        ) from exc
-
-    finally:
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+            detail=str(e),
+        )
 
 
 # ============================================================
-# Voice Chat
+# VOICE → VOICE
 # ============================================================
 
-@router.post(
-    "/chat",
-    response_model=VoiceChatResponse,
-)
+
+@router.post("/chat")
 async def voice_chat(
     audio: UploadFile = File(...),
-    conversation_id: str | None = None,
-    current_user=Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
 ):
     """
-    Voice chatbot.
+    Authenticated Voice → Voice
 
     Flow:
 
+        Farmer Voice
+             ↓
+        Bhashini ASR
+             ↓
+        Language Detection
+             ↓
+        Qwen / Groq
+             ↓
+        Bhashini TTS
+             ↓
         Audio
-          ↓
-        STT
-          ↓
-        Existing chat_service.prepare_chat()
-          ↓
-        Language detection
-          ↓
-        Domain + intent
-          ↓
-        Existing chat_service.chat()
-          ↓
-        Bhashini translation
-          ↓
-        Save conversation
-          ↓
-        Return text response
+
+    Flutter sends:
+
+        Authorization: Bearer <JWT>
+
+        audio = WAV file
+
+    No language parameter is required.
     """
-
-    user_id = str(
-        current_user["_id"]
-    )
-
-    preferred_language = current_user.get(
-        "preferred_language",
-        "en",
-    )
-
-    temp_path = f"/tmp/{uuid.uuid4().hex}_{audio.filename}"
 
     try:
 
-        # ----------------------------------------------------
-        # 1. Save audio temporarily
-        # ----------------------------------------------------
+        # ====================================================
+        # VALIDATE FILE
+        # ====================================================
 
-        with open(temp_path, "wb") as buffer:
-            buffer.write(await audio.read())
-
-        # ----------------------------------------------------
-        # 2. Speech → Text
-        # ----------------------------------------------------
-
-        stt_result = speech_to_text(
-            temp_path
-        )
-
-        if not stt_result:
-            raise HTTPException(
-                status_code=500,
-                detail="Speech transcription failed.",
-            )
-
-        transcript = stt_result.get(
-            "transcript",
-            "",
-        )
-
-        if not transcript.strip():
+        if not audio:
             raise HTTPException(
                 status_code=400,
-                detail="Could not understand the audio.",
+                detail="Audio file is required",
             )
 
-        logger.info(
-            "Voice transcript | user=%s | text=%s",
-            user_id,
-            transcript[:100],
-        )
+        # ====================================================
+        # READ AUDIO
+        # ====================================================
 
-        # ----------------------------------------------------
-        # 3. Prepare chatbot message
-        #
-        # This uses your existing language detection layer.
-        # ----------------------------------------------------
+        audio_bytes = await audio.read()
 
-        prepared = await chat_service.prepare_chat(
-            message=transcript,
-            language=preferred_language,
-        )
-
-        domain = prepared["domain"]
-        intent = prepared["intent"]
-
-        logger.info(
-            "Voice routing | user=%s | domain=%s | intent=%s",
-            user_id,
-            domain,
-            intent,
-        )
-
-        # ----------------------------------------------------
-        # 4. Create/load conversation
-        # ----------------------------------------------------
-
-        if conversation_id:
-
-            conversation = await get_conversation_by_id(
-                conversation_id=conversation_id,
-                user_id=user_id,
-            )
-
-            if conversation is None:
-                raise HTTPException(
-                    status_code=404,
-                    detail="Conversation not found.",
-                )
-
-            conversation_id = conversation[
-                "conversation_id"
-            ]
-
-        else:
-
-            conversation = await create_conversation(
-                user_id=user_id,
-                domain=domain,
-                language=prepared["language"],
-                first_message=transcript,
-            )
-
-            conversation_id = conversation[
-                "conversation_id"
-            ]
-
-        # ----------------------------------------------------
-        # 5. Previous conversation
-        # ----------------------------------------------------
-
-        previous_messages = await get_recent_messages(
-            conversation_id=conversation_id,
-            limit=10,
-        )
-
-        # ----------------------------------------------------
-        # 6. Generate chatbot response
-        #
-        # IMPORTANT:
-        # Reuse the SAME chatbot pipeline as text chat.
-        # ----------------------------------------------------
-
-        result = await chat_service.chat(
-            message=transcript,
-
-            language=preferred_language,
-
-            user_id=user_id,
-
-            conversation_history=previous_messages,
-
-            prepared=prepared,
-
-            latitude=None,
-            longitude=None,
-        )
-
-        # ----------------------------------------------------
-        # 7. Save user message
-        # ----------------------------------------------------
-
-        await save_user_message(
-            conversation_id=conversation_id,
-
-            original_text=transcript,
-
-            english_text=result[
-                "english_message"
-            ],
-
-            language=result[
-                "language"
-            ],
-        )
-
-        # ----------------------------------------------------
-        # 8. Save AI response
-        # ----------------------------------------------------
-
-        await save_ai_message(
-            conversation_id=conversation_id,
-
-            original_text=result[
-                "response"
-            ],
-
-            english_text=result[
-                "english_response"
-            ],
-
-            language=result[
-                "language"
-            ],
-        )
-
-        # ----------------------------------------------------
-        # 9. Update conversation
-        # ----------------------------------------------------
-
-        await update_conversation_timestamp(
-            conversation_id
-        )
-
-        # ----------------------------------------------------
-        # 10. Return response
-        # ----------------------------------------------------
-
-        return VoiceChatResponse(
-            conversation_id=conversation_id,
-
-            transcript=transcript,
-
-            response=result[
-                "response"
-            ],
-        )
-
-    except HTTPException:
-        raise
-
-    except ChatServiceError as exc:
-
-        logger.warning(
-            "Voice chat service error: %s",
-            exc,
-        )
-
-        raise HTTPException(
-            status_code=503,
-            detail=str(exc),
-        ) from exc
-
-    except Exception as exc:
-
-        logger.exception(
-            "Voice chat failed: %s",
-            exc,
-        )
-
-        raise HTTPException(
-            status_code=500,
-            detail="Unable to process voice message.",
-        ) from exc
-
-    finally:
-
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-
-
-# ============================================================
-# Text To Speech
-# ============================================================
-
-@router.post(
-    "/tts"
-)
-async def generate_tts(
-    text: str,
-    current_user=Depends(get_current_user),
-):
-    """
-    Convert chatbot response into speech.
-
-    Uses the authenticated user's preferred language.
-    """
-
-    if not text.strip():
-        raise HTTPException(
-            status_code=400,
-            detail="Text cannot be empty.",
-        )
-
-    language = current_user.get(
-        "preferred_language",
-        "en",
-    )
-
-    output_file = (
-        f"/tmp/speech_{uuid.uuid4().hex}.wav"
-    )
-
-    try:
-
-        text_to_speech(
-            text=text,
-            language=language,
-            output_file=output_file,
-        )
-
-        if not os.path.exists(output_file):
+        if not audio_bytes:
             raise HTTPException(
-                status_code=500,
-                detail="Text-to-speech generation failed.",
+                status_code=400,
+                detail="Audio file is empty",
             )
 
-        return FileResponse(
-            path=output_file,
+        # ====================================================
+        # AUDIO → BASE64
+        # ====================================================
+
+        audio_base64 = base64.b64encode(
+            audio_bytes
+        ).decode("utf-8")
+
+        # ====================================================
+        # COMPLETE VOICE PIPELINE
+        # ====================================================
+
+        result = await voice_service.process_voice(
+            audio_base64=audio_base64,
+        )
+
+        # ====================================================
+        # RESPONSE AUDIO
+        # ====================================================
+
+        response_audio = result.get("audio")
+
+        if not response_audio:
+            raise RuntimeError(
+                "Voice service returned empty audio"
+            )
+
+        # ====================================================
+        # RETURN WAV
+        # ====================================================
+
+        return StreamingResponse(
+            iter([response_audio]),
             media_type="audio/wav",
-            filename="response.wav",
+            headers={
+                "Content-Disposition": (
+                    "inline; "
+                    "filename=birsa_kisan_response.wav"
+                )
+            },
         )
 
     except HTTPException:
         raise
 
-    except Exception as exc:
-
-        logger.exception(
-            "TTS failed: %s",
-            exc,
-        )
+    except Exception as e:
 
         raise HTTPException(
             status_code=500,
-            detail="Text-to-speech generation failed.",
-        ) from exc
+            detail=str(e),
+        )

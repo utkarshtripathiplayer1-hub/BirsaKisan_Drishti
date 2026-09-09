@@ -7,14 +7,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.mongo import ping_database, client, create_indexes
 from core.config import ALLOWED_ORIGINS  # add this to config (see notes)
 
-from api.chat import router as chat_router
+from api.chats import router as conversations_router
 from api.auth import router as auth_router
-from api.conversations import router as conversation_router
+from api.chat import router as chat_router
 from api.voice import router as voice_router
 from api.crop_profile import router as crop_profile_router
 from api.account import router as account_router
 from api.feedback import router as feedback_router
-
+from api.bhashini import router as bhashini_router
 # ---- Logging (one place, replaces all print statements) ----
 logging.basicConfig(
     level=logging.INFO,
@@ -82,9 +82,11 @@ async def health_check():
 
 # ---- Routers ----
 app.include_router(auth_router)
+
 app.include_router(chat_router)
-app.include_router(conversation_router)
 app.include_router(voice_router)
 app.include_router(crop_profile_router)
 app.include_router(account_router)
 app.include_router(feedback_router)
+app.include_router(bhashini_router)
+app.include_router(conversations_router)
