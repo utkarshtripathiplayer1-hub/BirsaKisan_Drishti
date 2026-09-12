@@ -574,7 +574,7 @@ class SensorGraphPainter extends CustomPainter {
     // --------------------------------------------------------------
 
     final Paint fillPaint = Paint()
-      ..color = graphColor.withOpacity(0.10)
+      ..color = graphColor.withValues(alpha: 0.10)
       ..style = PaintingStyle.fill;
 
     canvas.drawPath(fillPath, fillPaint);

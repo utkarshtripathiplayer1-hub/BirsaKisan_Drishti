@@ -8,11 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiConfig {
-  static String get baseUrl => dotenv.env['BASE_CROP_URL']!;
+  static String get baseUrl => dotenv.env['BASE_WEATHER_URL']!;
 }
 
 class WeatherForecastDailyController extends GetxController {
-
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
@@ -24,8 +23,6 @@ class WeatherForecastDailyController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-    print("🔥 Daily Weather Controller initialized");
-
     try {
       Position position = await getCurrentLocation();
 
@@ -35,8 +32,6 @@ class WeatherForecastDailyController extends GetxController {
       );
     } catch (e) {
       errorMessage.value = "Unable to get location: $e";
-
-      print("❌ DAILY WEATHER LOCATION ERROR: $e");
     }
   }
 
@@ -51,7 +46,6 @@ class WeatherForecastDailyController extends GetxController {
         backgroundColor: Colors.green.shade900,
         colorText: Colors.white,
       );
-
       throw Exception("Location service disabled");
     }
 
@@ -78,8 +72,6 @@ class WeatherForecastDailyController extends GetxController {
     required double latitude,
     required double longitude,
   }) async {
-    print("🔥 fetchDailyForecast() CALLED");
-
     try {
       isLoading.value = true;
       errorMessage.value = '';
@@ -91,13 +83,10 @@ class WeatherForecastDailyController extends GetxController {
         '&days=7',
       );
 
-      print("=================================");
-      print("🌐 DAILY REQUEST URL: $url");
-
       final response = await http.get(url);
 
-      print("📡 DAILY STATUS CODE: ${response.statusCode}");
-      print("📦 DAILY RESPONSE BODY:");
+      print("DAILY WEATHER STATUS CODE: ${response.statusCode}");
+      print("DAILY WEATHER RESPONSE BODY:");
       print(response.body);
 
       if (response.statusCode == 200) {
@@ -108,26 +97,12 @@ class WeatherForecastDailyController extends GetxController {
         location.value = weatherResponse.location;
 
         forecast.value = weatherResponse.forecast;
-
-        print("📊 DAILY FORECAST COUNT: ${forecast.length}");
-
-        for (final weather in forecast) {
-          print(
-            "🌤️ ${weather.date} | "
-            "${weather.temperatureMin}°C - "
-            "${weather.temperatureMax}°C | "
-            "${weather.condition}",
-          );
-        }
       } else {
         errorMessage.value = "Server Error: ${response.statusCode}";
-
-        print("❌ Daily Server Error: ${response.statusCode}");
       }
     } catch (e) {
       errorMessage.value = "Connection Error: $e";
-
-      print("❌ DAILY FORECAST ERROR: $e");
+      print("DAILY WEATHER FORECAST ERROR: $e");
     } finally {
       isLoading.value = false;
     }

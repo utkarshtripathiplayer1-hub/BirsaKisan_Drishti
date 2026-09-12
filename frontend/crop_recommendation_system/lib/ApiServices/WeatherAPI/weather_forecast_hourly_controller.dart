@@ -8,12 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiConfig {
-  static String get baseUrl => dotenv.env['BASE_CROP_URL']!;
+  static String get baseUrl => dotenv.env['BASE_WEATHER_URL']!;
 }
 
 class WeatherForecastController extends GetxController {
-  // CHANGE THIS TO YOUR BACKEND URL
-
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
@@ -25,7 +23,6 @@ class WeatherForecastController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-    print("🔥 WeatherForecastController initialized");
     Position position = await getCurrentLocation();
 
     fetchForecast(latitude: position.latitude, longitude: position.longitude);
@@ -63,8 +60,6 @@ class WeatherForecastController extends GetxController {
     required double latitude,
     required double longitude,
   }) async {
-    print("🔥 fetchForecast() CALLED");
-
     try {
       isLoading.value = true;
       errorMessage.value = '';
@@ -76,13 +71,10 @@ class WeatherForecastController extends GetxController {
         '&days=7',
       );
 
-      print("=================================");
-      print("🌐 REQUEST URL: $url");
-
       final response = await http.get(url);
 
-      print("📡 STATUS CODE: ${response.statusCode}");
-      print("📦 RESPONSE BODY:");
+      print("STATUS CODE: ${response.statusCode}");
+      print("RESPONSE BODY:");
       print(response.body);
 
       if (response.statusCode == 200) {
@@ -90,36 +82,17 @@ class WeatherForecastController extends GetxController {
 
         final weatherResponse = WeatherForecastResponse.fromJson(data);
 
-        print(
-          "📊 TOTAL FORECAST COUNT: "
-          "${weatherResponse.forecast.length}",
-        );
-
         location.value = weatherResponse.location;
 
-        // Get only required 5 hours
+        // Get required 5 hours
         final requiredHours = getRequiredHours(weatherResponse.forecast);
 
         forecast.value = requiredHours;
-
-        print(
-          "✅ DISPLAY FORECAST COUNT: "
-          "${forecast.length}",
-        );
       } else {
         errorMessage.value = "Server Error: ${response.statusCode}";
-
-        print(
-          "❌ Server Error: "
-          "${response.statusCode}",
-        );
       }
-
-      print("=================================");
     } catch (e) {
       errorMessage.value = "Connection Error: $e";
-
-      print("❌ FORECAST ERROR: $e");
     } finally {
       isLoading.value = false;
     }
@@ -141,18 +114,12 @@ class WeatherForecastController extends GetxController {
     // 3 hours after
     final endTime = currentHour.add(const Duration(hours: 3));
 
-    print("🕐 NOW: $now");
-    print("⬅️ START: $startTime");
-    print("➡️ END: $endTime");
-
     final result = allForecast.where((item) {
       try {
         final itemTime = DateTime.parse(item.time);
 
         return !itemTime.isBefore(startTime) && !itemTime.isAfter(endTime);
       } catch (e) {
-        print("❌ Invalid time: ${item.time}");
-
         return false;
       }
     }).toList();
@@ -161,19 +128,6 @@ class WeatherForecastController extends GetxController {
     result.sort(
       (a, b) => DateTime.parse(a.time).compareTo(DateTime.parse(b.time)),
     );
-
-    print(
-      "🎯 FILTERED FORECAST COUNT: "
-      "${result.length}",
-    );
-
-    for (final item in result) {
-      print(
-        "🌤️ ${item.time} | "
-        "${item.temperature}°C | "
-        "${item.condition}",
-      );
-    }
 
     return result;
   }
