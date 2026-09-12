@@ -12,12 +12,14 @@ class GroqService:
 
     Supports:
         - Text-to-text
+        - Voice-to-text-to-text
         - Conversation history
-        - Automatic language detection
         - Hindi / English responses
+        - Automatic language detection
     """
 
     def __init__(self):
+
         self.client = AsyncGroq(
             api_key=GROQ_API_KEY
         )
@@ -36,15 +38,31 @@ class GroqService:
     ) -> str:
 
         if not user_text or not user_text.strip():
+
             raise ValueError(
                 "User text cannot be empty"
+            )
+
+        # ====================================================
+        # LANGUAGE
+        # ====================================================
+
+        if language == "hi":
+            language_instruction = "Hindi"
+
+        elif language == "en":
+            language_instruction = "English"
+
+        else:
+            language_instruction = (
+                "the same language as the farmer's latest message"
             )
 
         # ====================================================
         # SYSTEM PROMPT
         # ====================================================
 
-        system_prompt = """
+        system_prompt = f"""
 You are Birsa Kisan Drishti, an AI-powered
 agricultural assistant for Indian farmers.
 
@@ -53,20 +71,18 @@ safe agricultural guidance.
 
 LANGUAGE RULES:
 
-1. Detect the language of the farmer's latest message
-   automatically.
+1. Respond in {language_instruction}.
 
-2. If the farmer speaks Hindi, respond in Hindi.
+2. If the requested language is Hindi,
+   respond completely in Hindi.
 
-3. If the farmer speaks English, respond in English.
+3. If the requested language is English,
+   respond completely in English.
 
-4. If the farmer explicitly asks for another supported
-   language, follow that request.
+4. Do not unnecessarily mix Hindi and English.
 
-5. Never require the frontend to provide a language
-   parameter.
-
-6. Do not mix languages unnecessarily.
+5. If language is not explicitly provided,
+   detect the language of the farmer's latest message.
 
 IMPORTANT AGRICULTURAL RULES:
 
@@ -96,12 +112,14 @@ IMPORTANT AGRICULTURAL RULES:
 
 11. Answer the farmer's actual agricultural question.
 
+12. Use the previous conversation messages as context.
+
 You are responding as a helpful agricultural assistant
 for Indian farmers.
 """
 
         # ====================================================
-        # BUILD MESSAGE HISTORY
+        # BUILD MESSAGES
         # ====================================================
 
         messages = [
@@ -111,15 +129,13 @@ for Indian farmers.
             }
         ]
 
-        # Previous conversation
         if conversation_history:
 
             messages.extend(
                 conversation_history
             )
 
-        # Make sure the current message exists
-        if not conversation_history:
+        else:
 
             messages.append(
                 {
@@ -134,11 +150,8 @@ for Indian farmers.
 
         response = await self.client.chat.completions.create(
             model=self.model,
-
             messages=messages,
-
             temperature=0.3,
-
             max_tokens=500,
         )
 
@@ -149,6 +162,7 @@ for Indian farmers.
         answer = response.choices[0].message.content
 
         if not answer:
+
             raise RuntimeError(
                 "Groq returned an empty response"
             )

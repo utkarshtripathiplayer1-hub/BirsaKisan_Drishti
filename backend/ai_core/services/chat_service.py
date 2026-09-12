@@ -1,30 +1,20 @@
+from datetime import datetime
+
 from db.chat_repository import ChatRepository
 from db.message_repository import MessageRepository
 from services.groq_service import GroqService
+from services.language_service import LanguageService
 
 
 class ChatService:
-    """
-    Conversation service for Birsa Kisan Drishti.
-
-    Handles:
-
-        User
-          ↓
-        Conversation history
-          ↓
-        Groq / Qwen
-          ↓
-        AI response
-          ↓
-        Save both messages
-    """
 
     def __init__(self):
+
         self.groq = GroqService()
+        self.language_service = LanguageService()
 
     # ========================================================
-    # CREATE NEW CONVERSATION
+    # CREATE CONVERSATION
     # ========================================================
 
     async def create_conversation(
@@ -33,12 +23,10 @@ class ChatService:
         title: str = "New conversation",
     ):
 
-        conversation = await ChatRepository.create_conversation(
+        return await ChatRepository.create_conversation(
             user_id=user_id,
             title=title,
         )
-
-        return conversation
 
     # ========================================================
     # GET USER CONVERSATIONS
@@ -49,13 +37,9 @@ class ChatService:
         user_id: str,
     ):
 
-        conversations = (
-            await ChatRepository.get_user_conversations(
-                user_id
-            )
+        return await ChatRepository.get_user_conversations(
+            user_id
         )
-
-        return conversations
 
     # ========================================================
     # GET COMPLETE CONVERSATION
@@ -67,17 +51,21 @@ class ChatService:
         user_id: str,
     ):
 
-        conversation = await ChatRepository.get_conversation(
-            conversation_id=conversation_id,
-            user_id=user_id,
+        conversation = (
+            await ChatRepository.get_conversation(
+                conversation_id=conversation_id,
+                user_id=user_id,
+            )
         )
 
         if conversation is None:
             return None
 
-        messages = await MessageRepository.get_messages(
-            conversation_id=conversation_id,
-            user_id=user_id,
+        messages = (
+            await MessageRepository.get_messages(
+                conversation_id=conversation_id,
+                user_id=user_id,
+            )
         )
 
         return {
@@ -86,7 +74,7 @@ class ChatService:
         }
 
     # ========================================================
-    # SEND MESSAGE
+    # SEND TEXT MESSAGE
     # ========================================================
 
     async def send_message(
@@ -94,30 +82,45 @@ class ChatService:
         conversation_id: str,
         user_id: str,
         user_text: str,
-        language: str | None = None,
     ):
 
         if not user_text or not user_text.strip():
+
             raise ValueError(
                 "Message cannot be empty"
             )
 
+        user_text = user_text.strip()
+
         # ----------------------------------------------------
-        # 1. VERIFY CONVERSATION BELONGS TO USER
+        # VERIFY CONVERSATION
         # ----------------------------------------------------
 
-        conversation = await ChatRepository.get_conversation(
-            conversation_id=conversation_id,
-            user_id=user_id,
+        conversation = (
+            await ChatRepository.get_conversation(
+                conversation_id=conversation_id,
+                user_id=user_id,
+            )
         )
 
         if conversation is None:
+
             raise ValueError(
                 "Conversation not found"
             )
 
         # ----------------------------------------------------
-        # 2. GET PREVIOUS MESSAGES
+        # DETECT LANGUAGE
+        # ----------------------------------------------------
+
+        detected_language = (
+            self.language_service.detect_language(
+                user_text
+            )
+        )
+
+        # ----------------------------------------------------
+        # GET HISTORY
         # ----------------------------------------------------
 
         previous_messages = (
@@ -126,23 +129,6 @@ class ChatService:
                 user_id=user_id,
             )
         )
-
-        # ----------------------------------------------------
-        # 3. SAVE USER MESSAGE
-        # ----------------------------------------------------
-
-        await MessageRepository.create_message(
-            conversation_id=conversation_id,
-            user_id=user_id,
-            role="user",
-            content=user_text.strip(),
-            language=language,
-            message_type="text",
-        )
-
-        # ----------------------------------------------------
-        # 4. BUILD CONVERSATION CONTEXT
-        # ----------------------------------------------------
 
         messages_for_ai = []
 
@@ -167,31 +153,48 @@ class ChatService:
                 }
             )
 
-        # Add current user message
+        # ----------------------------------------------------
+        # ADD CURRENT MESSAGE
+        # ----------------------------------------------------
+
         messages_for_ai.append(
             {
                 "role": "user",
-                "content": user_text.strip(),
+                "content": user_text,
             }
         )
 
         # ----------------------------------------------------
-        # 5. SEND CONTEXT TO QWEN
+        # SAVE USER MESSAGE
+        # ----------------------------------------------------
+
+        await MessageRepository.create_message(
+            conversation_id=conversation_id,
+            user_id=user_id,
+            role="user",
+            content=user_text,
+            language=detected_language,
+            message_type="text",
+        )
+
+        # ----------------------------------------------------
+        # AI
         # ----------------------------------------------------
 
         ai_response = await self.groq.generate_response(
-            user_text=user_text.strip(),
+            user_text=user_text,
             conversation_history=messages_for_ai,
-            language=language,
+            language=detected_language,
         )
 
         if not ai_response:
+
             raise RuntimeError(
                 "AI returned an empty response"
             )
 
         # ----------------------------------------------------
-        # 6. SAVE AI RESPONSE
+        # SAVE AI RESPONSE
         # ----------------------------------------------------
 
         await MessageRepository.create_message(
@@ -199,29 +202,27 @@ class ChatService:
             user_id=user_id,
             role="assistant",
             content=ai_response,
-            language=language,
+            language=detected_language,
             message_type="text",
         )
 
         # ----------------------------------------------------
-        # 7. UPDATE CONVERSATION
+        # UPDATE CONVERSATION
         # ----------------------------------------------------
 
         await ChatRepository.update_conversation(
             conversation_id=conversation_id,
             user_id=user_id,
             update_data={
-                "updated_at": __import__(
-                    "datetime"
-                ).datetime.utcnow()
+                "updated_at": datetime.utcnow()
             },
         )
 
         return {
             "conversation_id": conversation_id,
-            "user_text": user_text.strip(),
+            "detected_language": detected_language,
+            "user_text": user_text,
             "ai_response": ai_response,
-            "language": language,
         }
 
     # ========================================================
@@ -234,24 +235,22 @@ class ChatService:
         user_id: str,
     ):
 
-        conversation = await ChatRepository.get_conversation(
-            conversation_id=conversation_id,
-            user_id=user_id,
+        conversation = (
+            await ChatRepository.get_conversation(
+                conversation_id=conversation_id,
+                user_id=user_id,
+            )
         )
 
         if conversation is None:
             return False
 
-        # Delete messages first
         await MessageRepository.delete_messages(
             conversation_id=conversation_id,
             user_id=user_id,
         )
 
-        # Delete conversation
-        deleted = await ChatRepository.delete_conversation(
+        return await ChatRepository.delete_conversation(
             conversation_id=conversation_id,
             user_id=user_id,
         )
-
-        return deleted

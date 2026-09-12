@@ -30,10 +30,11 @@ class ChatRepository:
         result = await user_conversations.insert_one(
             conversation
         )
+        conversation["_id"] = str(result.inserted_id)
 
-        return await user_conversations.find_one(
-            {"_id": result.inserted_id}
-        )
+        return conversation
+
+        
 
     # ========================================================
     # GET USER CONVERSATIONS
