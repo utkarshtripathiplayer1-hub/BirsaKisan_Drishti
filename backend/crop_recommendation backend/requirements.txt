@@ -44,3 +44,4 @@ pydantic-settings
 joblib
 pandas
 scikit-learn
+reportlab
