@@ -2,14 +2,17 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from core.config import MONGO_URL, DB_NAME
 import pymongo
 import logging
+
 logger = logging.getLogger("ai_core")
+
 client = AsyncIOMotorClient(
     MONGO_URL,
-    maxPoolSize=100,        # cap concurrent connections (tune to Atlas tier)
-    minPoolSize=10,         # keep warm connections ready
-    serverSelectionTimeoutMS=5000,   # fail fast if Atlas unreachable
+    maxPoolSize=100,
+    minPoolSize=10,
+    serverSelectionTimeoutMS=5000,
     connectTimeoutMS=5000,
 )
+
 database = client[DB_NAME]
 
 
@@ -23,14 +26,29 @@ async def ping_database():
 
 
 async def create_indexes():
-    # users
-    await database["users"].create_index("google_id", unique=True)
-    await database["users"].create_index("email", unique=True)
 
-    # user_conversations
-    await database["user_conversations"].create_index("conversation_id", unique=True)
-    # compound: filter by user_id, sort by updated_at desc
-    await database["user_conversations"].create_index(
-        [("user_id", pymongo.ASCENDING), ("updated_at", pymongo.DESCENDING)]
+    await database["users"].create_index(
+        "google_id",
+        unique=True,
     )
+
+    await database["users"].create_index(
+        "email",
+        unique=True,
+    )
+
+    await database["user_conversations"].create_index(
+        [
+            ("user_id", pymongo.ASCENDING),
+            ("updated_at", pymongo.DESCENDING),
+        ]
+    )
+
+    await database["messages"].create_index(
+        [
+            ("conversation_id", pymongo.ASCENDING),
+            ("created_at", pymongo.ASCENDING),
+        ]
+    )
+
     logger.info("Indexes ensured")
