@@ -14,7 +14,7 @@ from api.crop_profile import router as crop_profile_router
 from api.account import router as account_router
 from api.feedback import router as feedback_router
 from api.bhashini import router as bhashini_router
-
+from api.chats import router as conversations_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -103,3 +103,4 @@ app.include_router(crop_profile_router)
 app.include_router(account_router)
 app.include_router(feedback_router)
 app.include_router(bhashini_router)
+app.include_router(conversations_router)
