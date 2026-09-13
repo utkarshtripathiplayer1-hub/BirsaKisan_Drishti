@@ -22,8 +22,8 @@ voice_service = VoiceService()
 
 @router.post("/chat")
 async def voice_chat(
-    conversation_id: str | None = None,
     audio: UploadFile = File(...),
+    conversation_id: str | None = None,
     current_user: dict = Depends(get_current_user),
 ):
 
@@ -42,7 +42,7 @@ async def voice_chat(
         print(
             f"Voice upload: "
             f"filename={audio.filename}, "
-            f"content_type={audio.content_type}, "
+            f"type={audio.content_type}, "
             f"size={len(audio_bytes)}"
         )
 
@@ -71,6 +71,7 @@ async def voice_chat(
         )
 
     except Exception as e:
+
         print(f"VOICE ERROR: {e}")
 
         raise HTTPException(

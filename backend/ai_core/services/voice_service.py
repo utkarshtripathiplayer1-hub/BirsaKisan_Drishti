@@ -1,4 +1,7 @@
 import base64
+import os
+import subprocess
+import tempfile
 
 from services.bhashini_service import BhashiniService
 from services.groq_service import GroqService
@@ -25,49 +28,30 @@ class VoiceService:
         if not audio_base64:
             raise ValueError("Audio content cannot be empty")
 
-        # ====================================================
-        # 1. CREATE OR VERIFY CONVERSATION
-        # ====================================================
+        audio_bytes = base64.b64decode(audio_base64)
 
-        if not conversation_id:
+        normalized_audio = self._convert_to_bhashini_audio(
+            audio_bytes
+        )
 
-            conversation = await ChatRepository.create_conversation(
-                user_id=user_id,
-                title="Voice conversation",
-            )
-
-            conversation_id = str(
-                conversation["_id"]
-            )
-
-        else:
-
-            conversation = await ChatRepository.get_conversation(
-                conversation_id=conversation_id,
-                user_id=user_id,
-            )
-
-            if conversation is None:
-                raise ValueError(
-                    "Conversation not found"
-                )
+        normalized_base64 = base64.b64encode(
+            normalized_audio
+        ).decode("utf-8")
 
         # ====================================================
-        # 2. ASR - HINDI
+        # ASR - HINDI
         # ====================================================
 
         hi_text = ""
 
         try:
-            hi_result = await self.bhashini.speech_to_text(
-                audio_base64=audio_base64,
+            result = await self.bhashini.speech_to_text(
+                audio_base64=normalized_base64,
                 language="hi",
             )
 
             hi_text = (
-                self.bhashini.extract_asr_text(
-                    hi_result
-                )
+                self.bhashini.extract_asr_text(result)
                 .strip()
             )
 
@@ -75,30 +59,24 @@ class VoiceService:
             print(f"Hindi ASR failed: {e}")
 
         # ====================================================
-        # 3. ASR - ENGLISH
+        # ASR - ENGLISH
         # ====================================================
 
         en_text = ""
 
         try:
-            en_result = await self.bhashini.speech_to_text(
-                audio_base64=audio_base64,
+            result = await self.bhashini.speech_to_text(
+                audio_base64=normalized_base64,
                 language="en",
             )
 
             en_text = (
-                self.bhashini.extract_asr_text(
-                    en_result
-                )
+                self.bhashini.extract_asr_text(result)
                 .strip()
             )
 
         except Exception as e:
             print(f"English ASR failed: {e}")
-
-        # ====================================================
-        # 4. VALIDATE ASR
-        # ====================================================
 
         if not hi_text and not en_text:
             raise RuntimeError(
@@ -106,7 +84,7 @@ class VoiceService:
             )
 
         # ====================================================
-        # 5. DETECT LANGUAGE
+        # DETECT LANGUAGE
         # ====================================================
 
         hi_detected = None
@@ -126,32 +104,55 @@ class VoiceService:
                 )
             )
 
-        # ====================================================
-        # 6. SELECT BEST TEXT
-        # ====================================================
-
         if hi_text and hi_detected == "hi":
-
             user_text = hi_text
             detected_language = "hi"
 
         elif en_text and en_detected == "en":
-
             user_text = en_text
             detected_language = "en"
 
         elif hi_text:
-
             user_text = hi_text
             detected_language = hi_detected or "hi"
 
         else:
-
             user_text = en_text
             detected_language = en_detected or "en"
 
         # ====================================================
-        # 7. GET HISTORY
+        # CREATE OR VERIFY CONVERSATION
+        # ====================================================
+
+        if not conversation_id:
+
+            conversation = (
+                await ChatRepository.create_conversation(
+                    user_id=user_id,
+                    title=user_text[:50],
+                )
+            )
+
+            conversation_id = str(
+                conversation["_id"]
+            )
+
+        else:
+
+            conversation = (
+                await ChatRepository.get_conversation(
+                    conversation_id=conversation_id,
+                    user_id=user_id,
+                )
+            )
+
+            if conversation is None:
+                raise ValueError(
+                    "Conversation not found"
+                )
+
+        # ====================================================
+        # HISTORY
         # ====================================================
 
         previous_messages = (
@@ -174,22 +175,18 @@ class VoiceService:
             if not content:
                 continue
 
-            messages_for_ai.append(
-                {
-                    "role": role,
-                    "content": content,
-                }
-            )
+            messages_for_ai.append({
+                "role": role,
+                "content": content,
+            })
 
-        messages_for_ai.append(
-            {
-                "role": "user",
-                "content": user_text,
-            }
-        )
+        messages_for_ai.append({
+            "role": "user",
+            "content": user_text,
+        })
 
         # ====================================================
-        # 8. SAVE USER VOICE MESSAGE
+        # SAVE USER MESSAGE
         # ====================================================
 
         await MessageRepository.create_message(
@@ -202,7 +199,7 @@ class VoiceService:
         )
 
         # ====================================================
-        # 9. GROQ
+        # GROQ / QWEN
         # ====================================================
 
         ai_response = await self.groq.generate_response(
@@ -219,7 +216,7 @@ class VoiceService:
         ai_response = ai_response.strip()
 
         # ====================================================
-        # 10. SAVE AI RESPONSE
+        # SAVE AI RESPONSE
         # ====================================================
 
         await MessageRepository.create_message(
@@ -232,7 +229,7 @@ class VoiceService:
         )
 
         # ====================================================
-        # 11. TTS
+        # TTS
         # ====================================================
 
         tts_result = await self.bhashini.text_to_speech(
@@ -254,16 +251,12 @@ class VoiceService:
                 "Bhashini returned empty audio"
             )
 
-        # ====================================================
-        # 12. BASE64 AUDIO
-        # ====================================================
-
         audio_base64_response = base64.b64encode(
             audio_bytes
         ).decode("utf-8")
 
         # ====================================================
-        # 13. UPDATE CONVERSATION
+        # UPDATE CONVERSATION
         # ====================================================
 
         await ChatRepository.update_conversation(
@@ -272,10 +265,6 @@ class VoiceService:
             update_data={},
         )
 
-        # ====================================================
-        # 14. RESPONSE
-        # ====================================================
-
         return {
             "conversation_id": conversation_id,
             "detected_language": detected_language,
@@ -283,3 +272,80 @@ class VoiceService:
             "ai_response": ai_response,
             "audio_base64": audio_base64_response,
         }
+
+    # ========================================================
+    # AUDIO NORMALIZATION
+    # ========================================================
+
+    @staticmethod
+    def _convert_to_bhashini_audio(
+        audio_bytes: bytes,
+    ) -> bytes:
+
+        input_path = None
+        output_path = None
+
+        try:
+
+            with tempfile.NamedTemporaryFile(
+                delete=False
+            ) as input_file:
+
+                input_file.write(audio_bytes)
+                input_path = input_file.name
+
+            output_path = input_path + ".wav"
+
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-y",
+                    "-i",
+                    input_path,
+                    "-ac",
+                    "1",
+                    "-ar",
+                    "16000",
+                    "-sample_fmt",
+                    "s16",
+                    output_path,
+                ],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+
+            with open(
+                output_path,
+                "rb",
+            ) as output_file:
+
+                return output_file.read()
+
+        except FileNotFoundError:
+
+            raise RuntimeError(
+                "FFmpeg is not installed on the server"
+            )
+
+        except subprocess.CalledProcessError as e:
+
+            error = e.stderr.decode(
+                errors="ignore"
+            )
+
+            raise RuntimeError(
+                f"Audio conversion failed: {error}"
+            )
+
+        finally:
+
+            if input_path and os.path.exists(
+                input_path
+            ):
+                os.remove(input_path)
+
+            if output_path and os.path.exists(
+                output_path
+            ):
+                os.remove(output_path)
