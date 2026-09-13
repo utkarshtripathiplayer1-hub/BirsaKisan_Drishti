@@ -9,14 +9,9 @@ class ApiConfig {
 }
 
 class ChatbotService {
-  Future<Map<String, dynamic>> sendMessage({
-    required String message,
+  Future<String> sendMessage({
+    required String text,
     String? conversationId,
-    Map<String, dynamic>? cropRecommendation,
-    Map<String, dynamic>? diseaseDetection,
-    Map<String, dynamic>? cropProfile,
-    double? latitude,
-    double? longitude,
   }) async {
     final token = await SecureStorageService.getAccessToken();
 
@@ -25,21 +20,12 @@ class ChatbotService {
     }
 
     final response = await http.post(
-      Uri.parse("${ApiConfig.baseUrl}/chat"),
+      Uri.parse("${ApiConfig.baseUrl}/api/chat/text"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-      body: jsonEncode({
-        "message": message,
-        "conversation_id": conversationId,
-        "crop_recommendation": cropRecommendation,
-        "disease_detection": diseaseDetection,
-        "crop_profile": cropProfile,
-
-        "latitude": latitude,
-        "longitude": longitude,
-      }),
+      body: jsonEncode({"conversation_id": conversationId, "text": text}),
     );
 
     print("Chat status: ${response.statusCode}");
@@ -69,17 +55,20 @@ class ChatbotService {
 
     final response = await http.get(
       Uri.parse(
-        "${ApiConfig.baseUrl}/conversations"
-        "?domain=$domain",
+        "${ApiConfig.baseUrl}/api/chat/conversations",
+        // "?domain=$domain",
       ),
       headers: {"Authorization": "Bearer $token"},
     );
+
     print(response.body);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      return (data as List).map((e) => ConversationModel.fromJson(e)).toList();
+      final conversations = data['conversations'] as List? ?? [];
+
+      return conversations.map((e) => ConversationModel.fromJson(e)).toList();
     }
 
     throw Exception(

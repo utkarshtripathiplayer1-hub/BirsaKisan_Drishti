@@ -88,17 +88,15 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
     try {
       final response = await service.sendMessage(
-        message: query,
+        text: query,
         conversationId: currentConversationId,
       );
+
       print("Conversation ID: $currentConversationId");
-      currentConversationId = response["conversation_id"];
+      print("Bot response: $response");
 
       setState(() {
-        messages.add({
-          "text": response["response"].replaceAll("**", ""),
-          "isUser": false,
-        });
+        messages.add({"text": response.replaceAll("**", ""), "isUser": false});
       });
     } catch (e) {
       print("ERROR => $e");
