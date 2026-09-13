@@ -9,66 +9,56 @@ from db.message_repository import MessageRepository
 
 
 class VoiceService:
-    """
-    Complete Birsa Kisan Drishti voice pipeline.
-
-    Voice
-        ↓
-    Bhashini ASR
-        ↓
-    Hindi / English detection
-        ↓
-    Conversation history
-        ↓
-    Groq / Qwen
-        ↓
-    AI response
-        ↓
-    Bhashini TTS
-        ↓
-    Text + Audio
-    """
 
     def __init__(self):
-
         self.bhashini = BhashiniService()
         self.groq = GroqService()
         self.language_service = LanguageService()
 
-    # ========================================================
-    # VOICE PROCESSING
-    # ========================================================
-
     async def process_voice(
         self,
         audio_base64: str,
-        conversation_id: str,
+        conversation_id: str | None,
         user_id: str,
     ):
 
+        if not audio_base64:
+            raise ValueError("Audio content cannot be empty")
+
         # ====================================================
-        # 1. VERIFY CONVERSATION
+        # 1. CREATE OR VERIFY CONVERSATION
         # ====================================================
 
-        conversation = await ChatRepository.get_conversation(
-            conversation_id=conversation_id,
-            user_id=user_id,
-        )
+        if not conversation_id:
 
-        if conversation is None:
-
-            raise ValueError(
-                "Conversation not found"
+            conversation = await ChatRepository.create_conversation(
+                user_id=user_id,
+                title="Voice conversation",
             )
 
+            conversation_id = str(
+                conversation["_id"]
+            )
+
+        else:
+
+            conversation = await ChatRepository.get_conversation(
+                conversation_id=conversation_id,
+                user_id=user_id,
+            )
+
+            if conversation is None:
+                raise ValueError(
+                    "Conversation not found"
+                )
+
         # ====================================================
-        # 2. ASR — TRY HINDI
+        # 2. ASR - HINDI
         # ====================================================
 
         hi_text = ""
 
         try:
-
             hi_result = await self.bhashini.speech_to_text(
                 audio_base64=audio_base64,
                 language="hi",
@@ -82,19 +72,15 @@ class VoiceService:
             )
 
         except Exception as e:
-
-            print(
-                f"Hindi ASR failed: {e}"
-            )
+            print(f"Hindi ASR failed: {e}")
 
         # ====================================================
-        # 3. ASR — TRY ENGLISH
+        # 3. ASR - ENGLISH
         # ====================================================
 
         en_text = ""
 
         try:
-
             en_result = await self.bhashini.speech_to_text(
                 audio_base64=audio_base64,
                 language="en",
@@ -108,30 +94,25 @@ class VoiceService:
             )
 
         except Exception as e:
-
-            print(
-                f"English ASR failed: {e}"
-            )
+            print(f"English ASR failed: {e}")
 
         # ====================================================
         # 4. VALIDATE ASR
         # ====================================================
 
         if not hi_text and not en_text:
-
             raise RuntimeError(
                 "Bhashini could not recognize the audio"
             )
 
         # ====================================================
-        # 5. DETECT LANGUAGE OF EACH RESULT
+        # 5. DETECT LANGUAGE
         # ====================================================
 
         hi_detected = None
         en_detected = None
 
         if hi_text:
-
             hi_detected = (
                 self.language_service.detect_language(
                     hi_text
@@ -139,7 +120,6 @@ class VoiceService:
             )
 
         if en_text:
-
             en_detected = (
                 self.language_service.detect_language(
                     en_text
@@ -147,43 +127,31 @@ class VoiceService:
             )
 
         # ====================================================
-        # 6. SELECT BEST TRANSCRIPTION
+        # 6. SELECT BEST TEXT
         # ====================================================
 
-        user_text = ""
-        detected_language = "en"
-
-        # Hindi ASR produced Hindi
-        if (
-            hi_text
-            and hi_detected == "hi"
-        ):
+        if hi_text and hi_detected == "hi":
 
             user_text = hi_text
             detected_language = "hi"
 
-        # English ASR produced English
-        elif (
-            en_text
-            and en_detected == "en"
-        ):
+        elif en_text and en_detected == "en":
 
             user_text = en_text
             detected_language = "en"
 
-        # Fallback
         elif hi_text:
 
             user_text = hi_text
             detected_language = hi_detected or "hi"
 
-        elif en_text:
+        else:
 
             user_text = en_text
             detected_language = en_detected or "en"
 
         # ====================================================
-        # 7. GET CONVERSATION HISTORY
+        # 7. GET HISTORY
         # ====================================================
 
         previous_messages = (
@@ -200,10 +168,7 @@ class VoiceService:
             role = message.get("role")
             content = message.get("content")
 
-            if role not in {
-                "user",
-                "assistant",
-            }:
+            if role not in {"user", "assistant"}:
                 continue
 
             if not content:
@@ -216,7 +181,6 @@ class VoiceService:
                 }
             )
 
-        # Current message
         messages_for_ai.append(
             {
                 "role": "user",
@@ -225,7 +189,7 @@ class VoiceService:
         )
 
         # ====================================================
-        # 8. SAVE USER MESSAGE
+        # 8. SAVE USER VOICE MESSAGE
         # ====================================================
 
         await MessageRepository.create_message(
@@ -238,7 +202,7 @@ class VoiceService:
         )
 
         # ====================================================
-        # 9. GROQ / QWEN
+        # 9. GROQ
         # ====================================================
 
         ai_response = await self.groq.generate_response(
@@ -248,7 +212,6 @@ class VoiceService:
         )
 
         if not ai_response:
-
             raise RuntimeError(
                 "Groq returned an empty response"
             )
@@ -269,7 +232,7 @@ class VoiceService:
         )
 
         # ====================================================
-        # 11. TTS IN DETECTED LANGUAGE
+        # 11. TTS
         # ====================================================
 
         tts_result = await self.bhashini.text_to_speech(
@@ -287,23 +250,30 @@ class VoiceService:
         )
 
         if not audio_bytes:
-
             raise RuntimeError(
                 "Bhashini returned empty audio"
             )
 
         # ====================================================
-        # 12. AUDIO → BASE64
+        # 12. BASE64 AUDIO
         # ====================================================
 
-        audio_base64_response = (
-            base64.b64encode(
-                audio_bytes
-            ).decode("utf-8")
+        audio_base64_response = base64.b64encode(
+            audio_bytes
+        ).decode("utf-8")
+
+        # ====================================================
+        # 13. UPDATE CONVERSATION
+        # ====================================================
+
+        await ChatRepository.update_conversation(
+            conversation_id=conversation_id,
+            user_id=user_id,
+            update_data={},
         )
 
         # ====================================================
-        # 13. RETURN
+        # 14. RESPONSE
         # ====================================================
 
         return {

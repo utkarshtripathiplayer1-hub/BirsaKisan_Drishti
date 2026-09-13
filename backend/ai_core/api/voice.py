@@ -4,6 +4,7 @@ from fastapi import (
     APIRouter,
     Depends,
     File,
+    Form,
     HTTPException,
     UploadFile,
 )
@@ -22,21 +23,18 @@ voice_service = VoiceService()
 
 @router.post("/chat")
 async def voice_chat(
-    conversation_id: str,
+    conversation_id: str | None = Form(None),
     audio: UploadFile = File(...),
     current_user: dict = Depends(get_current_user),
 ):
 
     try:
 
-        user_id = str(
-            current_user["_id"]
-        )
+        user_id = str(current_user["_id"])
 
         audio_bytes = await audio.read()
 
         if not audio_bytes:
-
             raise HTTPException(
                 status_code=400,
                 detail="Audio file is empty",
@@ -61,14 +59,12 @@ async def voice_chat(
         raise
 
     except ValueError as e:
-
         raise HTTPException(
             status_code=400,
             detail=str(e),
         )
 
     except Exception as e:
-
         raise HTTPException(
             status_code=500,
             detail=str(e),

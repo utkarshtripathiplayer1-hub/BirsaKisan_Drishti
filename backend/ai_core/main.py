@@ -5,13 +5,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from db.mongo import (
-    ping_database,
-    client,
-    create_indexes,
-)
+from db.mongo import ping_database, client, create_indexes
 
-from api.chats import router as conversations_router
 from api.auth import router as auth_router
 from api.chat import router as chat_router
 from api.voice import router as voice_router
@@ -21,10 +16,6 @@ from api.feedback import router as feedback_router
 from api.bhashini import router as bhashini_router
 
 
-# ============================================================
-# LOGGING
-# ============================================================
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -33,53 +24,21 @@ logging.basicConfig(
 logger = logging.getLogger("ai_core")
 
 
-# ============================================================
-# LIFESPAN
-# ============================================================
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
-    # --------------------------------------------------------
-    # STARTUP
-    # --------------------------------------------------------
-
     try:
-
         await ping_database()
-
         await create_indexes()
-
-        logger.info(
-            "Startup complete: MongoDB connected, indexes fixed"
-        )
-
+        logger.info("MongoDB connected and indexes ready")
     except Exception as e:
-
-        logger.error(
-            f"Startup failed — cannot reach MongoDB: {e}"
-        )
-
-        # Do not start the application if database
-        # connection fails.
+        logger.error(f"Startup failed: {e}")
         raise
 
     yield
 
-    # --------------------------------------------------------
-    # SHUTDOWN
-    # --------------------------------------------------------
-
     client.close()
+    logger.info("MongoDB connection closed")
 
-    logger.info(
-        "Shutdown complete: MongoDB connection closed"
-    )
-
-
-# ============================================================
-# FASTAPI APPLICATION
-# ============================================================
 
 app = FastAPI(
     title="Birsakisan AI Core",
@@ -87,18 +46,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-# ============================================================
-# CORS
-# ============================================================
-
-# Temporary production configuration.
-#
-# This allows the Flutter/web frontend to communicate
-# with the backend while we complete deployment.
-#
-# credentials=False is intentional because "*" cannot
-# safely be combined with credentialed CORS requests.
 
 app.add_middleware(
     CORSMiddleware,
@@ -109,47 +56,27 @@ app.add_middleware(
 )
 
 
-# ============================================================
-# GLOBAL EXCEPTION HANDLER
-# ============================================================
-
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(
     request: Request,
     exc: Exception,
 ):
-
     logger.error(
-        f"Unhandled error on "
-        f"{request.method} "
-        f"{request.url.path}: "
-        f"{exc}",
+        f"Unhandled error on {request.method} {request.url.path}: {exc}",
         exc_info=True,
     )
 
     return JSONResponse(
         status_code=500,
         content={
-            "detail": (
-                "Internal server error. "
-                "Please try again."
-            )
+            "detail": "Internal server error. Please try again."
         },
     )
 
 
-# ============================================================
-# HEALTH CHECK
-# ============================================================
-
-@app.get(
-    "/health",
-    tags=["system"],
-)
+@app.get("/health", tags=["system"])
 async def health_check():
-
     try:
-
         await ping_database()
 
         return {
@@ -158,10 +85,7 @@ async def health_check():
         }
 
     except Exception as e:
-
-        logger.error(
-            f"Health check failed: {e}"
-        )
+        logger.error(f"Health check failed: {e}")
 
         return JSONResponse(
             status_code=503,
@@ -172,53 +96,10 @@ async def health_check():
         )
 
 
-# ============================================================
-# ROUTERS
-# ============================================================
-
-# Authentication
-app.include_router(
-    auth_router
-)
-
-
-# Text chat + conversations
-app.include_router(
-    chat_router
-)
-
-
-# Voice
-app.include_router(
-    voice_router
-)
-
-
-# Crop profile
-app.include_router(
-    crop_profile_router
-)
-
-
-# Account
-app.include_router(
-    account_router
-)
-
-
-# Feedback
-app.include_router(
-    feedback_router
-)
-
-
-# Bhashini
-app.include_router(
-    bhashini_router
-)
-
-
-# Conversation-related endpoints
-app.include_router(
-    conversations_router
-)
+app.include_router(auth_router)
+app.include_router(chat_router)
+app.include_router(voice_router)
+app.include_router(crop_profile_router)
+app.include_router(account_router)
+app.include_router(feedback_router)
+app.include_router(bhashini_router)
