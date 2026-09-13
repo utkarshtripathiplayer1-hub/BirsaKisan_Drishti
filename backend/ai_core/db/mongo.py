@@ -37,6 +37,17 @@ async def create_indexes():
         unique=True,
     )
 
+    # Remove old incorrect conversation_id index
+    try:
+        await database["user_conversations"].drop_index(
+            "conversation_id_1"
+        )
+        logger.info(
+            "Removed old conversation_id_1 index"
+        )
+    except Exception:
+        pass
+
     await database["user_conversations"].create_index(
         [
             ("user_id", pymongo.ASCENDING),
