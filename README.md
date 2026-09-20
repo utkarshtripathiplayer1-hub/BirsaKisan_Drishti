@@ -178,10 +178,10 @@ BirsaKisan is designed to **increase crop yield, reduce resource wastage, and pr
 - 🗣️ Full voice-first experience for low-literacy users
 
 ---
-
 ## 👥 Team
 
-#Team name = Birsa kisan Drishti
+# Team name = Birsa Kisan Drishti
+
 <table>
 <tr>
 <th>Name</th>
@@ -190,15 +190,33 @@ BirsaKisan is designed to **increase crop yield, reduce resource wastage, and pr
 
 <tr>
 <td><b>Utkarsh Tripathi</b></td>
-<td>Team Lead ( Hardware Developer,Frontend Developer )</td>
+<td>Team Lead (Hardware Developer, Frontend Developer)</td>
 </tr>
 
 <tr>
 <td>Tanisha Bhatt</td>
-<td>Team Member (Backend  Developer , ML Developer) </td>
+<td>Team Member (Backend Developer, ML Developer)</td>
 </tr>
 
+<tr>
+<td>Agampreet Singh</td>
+<td>Team Member (Hardware Developer)</td>
+</tr>
 
+<tr>
+<td>Bhumika Manral</td>
+<td>Team Member (UI/UX Designer, ML Developer)</td>
+</tr>
+
+<tr>
+<td>Samyak Jain</td>
+<td>Team Member (Frontend Developer)</td>
+</tr>
+
+<tr>
+<td>Anushka Singh</td>
+<td>Team Member</td>
+</tr>
 
 </table>
 
