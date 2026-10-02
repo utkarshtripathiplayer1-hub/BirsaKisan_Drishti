@@ -68,30 +68,34 @@ class ChatService:
 
         user_text = user_text.strip()
 
-        # Create conversation on first message
+        print(f"[CHAT DEBUG] Incoming conversation_id: {conversation_id!r}")
+
         if not conversation_id:
+            print("[CHAT DEBUG] Creating a new conversation")
 
             conversation = await self.create_conversation(
                 user_id=user_id,
                 title=user_text[:50],
             )
 
-            conversation_id = str(
-                conversation["_id"]
-            )
+            conversation_id = str(conversation["_id"])
+            print(f"[CHAT DEBUG] Created ID: {conversation_id}")
 
-        # Continue existing conversation
         else:
+            print(f"[CHAT DEBUG] Looking up ID: {conversation_id}")
 
             conversation = await ChatRepository.get_conversation(
                 conversation_id=conversation_id,
                 user_id=user_id,
             )
 
+            print(
+                f"[CHAT DEBUG] Conversation found: "
+                f"{conversation is not None}"
+            )
+
             if conversation is None:
-                raise ValueError(
-                    "Conversation not found"
-                )
+                raise ValueError("Conversation not found")
 
         # Get previous messages
         previous_messages = (
