@@ -15,42 +15,39 @@ class ChatbotVoiceService {
   }) async {
     final token = await SecureStorageService.getAccessToken();
 
-    print("Token: $token");
-
     if (token == null) {
       throw Exception("User is not logged in");
     }
 
-    var request = http.MultipartRequest(
-      "POST",
-      Uri.parse(
-        "${ApiConfig.baseUrl}/voice/chat"
-        "?domain=$domain"
-        "&conversation_id=$conversationId",
-      ),
-    );
+    final uri = Uri.parse("${ApiConfig.baseUrl}/api/voice/chat");
+
+    final request = http.MultipartRequest("POST", uri);
 
     request.headers["Authorization"] = "Bearer $token";
+
     request.fields["domain"] = domain;
 
-    if (conversationId != null) {
+    if (conversationId != null && conversationId.isNotEmpty) {
       request.fields["conversation_id"] = conversationId;
     }
 
     request.files.add(await http.MultipartFile.fromPath("audio", audioPath));
 
+    print("Voice conversation ID: $conversationId");
     print("Final URL: ${request.url}");
 
     final streamedResponse = await request.send();
 
     final response = await http.Response.fromStream(streamedResponse);
 
-    print(response.body);
+    print("Status: ${response.statusCode}");
+    print("Body: ${response.body}");
+    print("status: ${jsonDecode(response.body)['audio_base64']}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     }
 
-    throw Exception("Voice request failed");
+    throw Exception("Voice request failed: ${response.body}");
   }
 }

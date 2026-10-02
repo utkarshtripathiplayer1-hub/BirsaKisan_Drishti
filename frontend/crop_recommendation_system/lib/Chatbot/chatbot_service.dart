@@ -9,7 +9,7 @@ class ApiConfig {
 }
 
 class ChatbotService {
-  Future<String> sendMessage({
+  Future<Map<String, dynamic>> sendMessage({
     required String text,
     String? conversationId,
   }) async {
@@ -20,7 +20,7 @@ class ChatbotService {
     }
 
     final response = await http.post(
-      Uri.parse("${ApiConfig.baseUrl}/api/chat/text"),
+      Uri.parse("${ApiConfig.baseUrl}/api/chat/text-voice"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -30,6 +30,7 @@ class ChatbotService {
 
     print("Chat status: ${response.statusCode}");
     print("Chat response: ${response.body}");
+    print("status: ${jsonDecode(response.body)['audio_base64']}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -55,7 +56,7 @@ class ChatbotService {
 
     final response = await http.get(
       Uri.parse(
-        "${ApiConfig.baseUrl}/api/chat/conversations",
+        "${ApiConfig.baseUrl}/api/conversations",
         // "?domain=$domain",
       ),
       headers: {"Authorization": "Bearer $token"},
@@ -88,7 +89,7 @@ class ChatbotService {
     }
 
     final response = await http.get(
-      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
+      Uri.parse("${ApiConfig.baseUrl}/api/conversations/$conversationId"),
       headers: {"Authorization": "Bearer $token"},
     );
 
@@ -114,7 +115,7 @@ class ChatbotService {
     }
 
     final response = await http.patch(
-      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
+      Uri.parse("${ApiConfig.baseUrl}/api/chat/conversations/$conversationId"),
 
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +143,7 @@ class ChatbotService {
     }
 
     final response = await http.delete(
-      Uri.parse("${ApiConfig.baseUrl}/conversations/$conversationId"),
+      Uri.parse("${ApiConfig.baseUrl}/api/conversations/$conversationId"),
       headers: {"Authorization": "Bearer $token"},
     );
 

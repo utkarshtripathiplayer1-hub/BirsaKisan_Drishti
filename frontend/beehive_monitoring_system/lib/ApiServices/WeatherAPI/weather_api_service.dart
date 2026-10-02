@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiConfig {
-  static String get baseUrl => dotenv.env['BASE_CORE_URL']!;
+  static String get baseUrl => dotenv.env['BASE_CROP_URL']!;
 }
 
 class WeatherApiService extends GetConnect {
@@ -13,6 +13,7 @@ class WeatherApiService extends GetConnect {
     final response = await get(
       '${ApiConfig.baseUrl}/weather/current?lat=$lat&lon=$lon',
     );
+    print(response.body);
     if (response.statusCode == 200) {
       return response.body;
     }
