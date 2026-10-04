@@ -35,6 +35,7 @@ class ChatbotVoiceService {
 
     print("Voice conversation ID: $conversationId");
     print("Final URL: ${request.url}");
+    print("➡️ Multipart conversation_id = ${request.fields["conversation_id"]}");
 
     final streamedResponse = await request.send();
 

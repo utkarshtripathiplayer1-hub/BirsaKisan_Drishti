@@ -135,6 +135,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         conversationId: currentConversationId,
       );
 
+      currentConversationId = response["conversation_id"];
+
       print("Conversation ID: $currentConversationId");
       print("Bot response: $response");
 
@@ -237,11 +239,16 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
       final voiceService = ChatbotVoiceService();
 
+      print("➡️ VOICE ID BEING SENT = $currentConversationId");
+
       final data = await voiceService.sendVoiceMessage(
         audioPath: path,
         domain: "agriculture",
         conversationId: currentConversationId,
       );
+
+      currentConversationId = data["conversation_id"];
+      print("⬅️ VOICE ID RETURNED = ${data["conversation_id"]}");
 
       print("DATA = $data");
       print("USER TEXT = ${data["user_text"]}");

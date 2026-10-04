@@ -19,6 +19,9 @@ class ChatbotService {
       throw Exception("User is not logged in");
     }
 
+    print("➡️ Sending conversation_id: $conversationId");
+    print("➡️ Sending text: $text");
+
     final response = await http.post(
       Uri.parse("${ApiConfig.baseUrl}/api/chat/text-voice"),
       headers: {
