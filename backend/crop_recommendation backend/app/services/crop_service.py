@@ -1,7 +1,9 @@
+
 from pathlib import Path
 import joblib
 import pandas as pd
 from fastapi import HTTPException
+
 from app.repositories.crop_repository import crop_repository
 from app.services.crop_knowledge_service import crop_knowledge_service
 
@@ -18,14 +20,11 @@ class CropRecommendationService:
         self.model = joblib.load(MODEL_PATH)
         self.crop_encoder = joblib.load(CROP_ENCODER_PATH)
         self.soil_encoder = joblib.load(SOIL_ENCODER_PATH)
-        print("Crop output classes:")
-        print(self.crop_encoder.classes_)  
 
-    async def predict(
-        self,
-        data,
-        user_id
-    ):
+        print("Crop output classes:")
+        print(self.crop_encoder.classes_)
+
+    async def predict(self, data, user_id: str):
 
         soil_type = data.Soil_Type.strip().title()
 
@@ -54,16 +53,11 @@ class CropRecommendationService:
 
         prediction = self.model.predict(features)
 
-        crop = self.crop_encoder.inverse_transform(
-            prediction
-        )[0]
+        crop = self.crop_encoder.inverse_transform(prediction)[0]
 
         probabilities = self.model.predict_proba(features)
 
-        confidence = round(
-            max(probabilities[0]) * 100,
-            2
-        )
+        confidence = round(max(probabilities[0]) * 100, 2)
 
         crop_info = crop_knowledge_service.get_crop_info(crop)
 
@@ -85,9 +79,7 @@ class CropRecommendationService:
             }
         }
 
-        recommendation_id = await crop_repository.save(
-            result.copy()
-        )
+        recommendation_id = await crop_repository.save(result.copy())
 
         result["recommendation_id"] = recommendation_id
 

@@ -1,20 +1,22 @@
-from app.ml_models.feedback_model import feedback_document
-from app.database.mongodb import feedback_collection
+
+from fastapi import APIRouter, Depends
+
+from app.auth.dependencies import require_project
+from app.schemas.feedback_Schemas import FeedbackCreate
+from app.services.feedback_service import FeedbackService
+
+router = APIRouter(
+    prefix="/feedback",
+    tags=["Feedback"]
+)
 
 
-class FeedbackService:
-
-    @staticmethod
-    async def submit_feedback(user_id: str, feedback_data):
-        document = feedback_document(
-            user_id=user_id,
-            rating=feedback_data.rating,
-            feedback=feedback_data.feedback
-        )
-
-        result = await feedback_collection.insert_one(document)
-
-        return {
-            "message": "Feedback submitted successfully",
-            "feedback_id": str(result.inserted_id)
-        }
+@router.post("/")
+async def submit_feedback(
+    feedback: FeedbackCreate,
+    current_user: dict = Depends(require_project("crop"))
+):
+    return await FeedbackService.submit_feedback(
+        user_id=current_user["sub"],
+        feedback_data=feedback
+    )

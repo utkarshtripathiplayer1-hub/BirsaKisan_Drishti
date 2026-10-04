@@ -1,4 +1,11 @@
-from pydantic import BaseModel, EmailStr
+
+from enum import Enum
+from pydantic import BaseModel, EmailStr, Field
+
+
+class ProjectType(str, Enum):
+    bee = "bee"
+    crop = "crop"
 
 
 class GoogleLoginRequest(BaseModel):
@@ -11,6 +18,7 @@ class UserResponse(BaseModel):
     email: EmailStr
     picture: str | None = None
     preferred_language: str
+    projects: list[ProjectType] = Field(default_factory=list)
 
 
 class GoogleLoginResponse(BaseModel):
@@ -25,6 +33,7 @@ class MeResponse(BaseModel):
 
 class UpdatePreferencesRequest(BaseModel):
     preferred_language: str
+
 
 class UpdateLanguageRequest(BaseModel):
     preferred_language: str

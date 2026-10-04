@@ -1,4 +1,7 @@
-from datetime import datetime
+
+from datetime import datetime, timezone
+from bson import ObjectId
+from bson.errors import InvalidId
 
 from app.database.mongodb import active_crop_collection
 
@@ -6,19 +9,30 @@ from app.database.mongodb import active_crop_collection
 class ActiveCropRepository:
 
     async def save(self, crop: dict):
-
-        crop["created_at"] = datetime.utcnow()
+        crop["created_at"] = datetime.now(timezone.utc)
 
         result = await active_crop_collection.insert_one(crop)
 
         return str(result.inserted_id)
 
     async def get_active_crop(self, user_id: str):
-
         return await active_crop_collection.find_one(
             {
                 "user_id": user_id,
                 "status": "Growing"
+            }
+        )
+
+    async def get_by_id(self, crop_id: str, user_id: str):
+        try:
+            object_id = ObjectId(crop_id)
+        except (InvalidId, TypeError):
+            return None
+
+        return await active_crop_collection.find_one(
+            {
+                "_id": object_id,
+                "user_id": user_id
             }
         )
 

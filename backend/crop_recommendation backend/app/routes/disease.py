@@ -1,5 +1,7 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
+
+from app.auth.dependencies import require_project
 from app.services.groq_service import analyze_plant
 from app.schemas.disease_response import DiseaseResponse
 from app.repositories.disease_repository import disease_repository
@@ -31,18 +33,13 @@ SUPPORTED_LANGUAGES = {
 )
 async def predict(
     image: UploadFile = File(...),
-    language: str = Form("en")
+    language: str = Form("en"),
+    current_user: dict = Depends(require_project("crop"))
 ):
     """
     Analyze a crop image for disease/pest/nutrient issues.
-
-    The language selected by the farmer is passed forward
-    to the AI service for generating the response.
     """
 
-    # -----------------------------
-    # Validate language
-    # -----------------------------
     language = language.lower().strip()
 
     if language not in SUPPORTED_LANGUAGES:
@@ -51,18 +48,12 @@ async def predict(
             detail="Supported languages are English (en) and Hindi (hi)."
         )
 
-    # -----------------------------
-    # Validate image type
-    # -----------------------------
     if image.content_type not in ALLOWED_TYPES:
         raise HTTPException(
             status_code=400,
             detail="Please upload a JPEG, PNG, or WEBP image."
         )
 
-    # -----------------------------
-    # Read image
-    # -----------------------------
     image_bytes = await image.read()
 
     if not image_bytes:
@@ -71,39 +62,24 @@ async def predict(
             detail="Empty file uploaded."
         )
 
-    # -----------------------------
-    # Validate image size
-    # -----------------------------
     if len(image_bytes) > MAX_SIZE:
         raise HTTPException(
             status_code=400,
             detail="Image too large. Please upload under 8 MB."
         )
 
-    # -----------------------------
-    # AI analysis
-    # -----------------------------
     result = await analyze_plant(
         image_bytes=image_bytes,
         content_type=image.content_type,
         language=language
     )
 
-    # -----------------------------
-    # Validate AI response
-    # -----------------------------
-    disease_result = DiseaseResponse.model_validate(
-        result
-    )
+    disease_result = DiseaseResponse.model_validate(result)
 
-    # -----------------------------
-    # Save result to MongoDB
-    # -----------------------------
-    await disease_repository.save(
-        disease_result.model_dump()
-    )
+    # Associate the result with the authenticated user.
+    saved_result = disease_result.model_dump()
+    saved_result["user_id"] = current_user["sub"]
 
-    # -----------------------------
-    # Return result to Flutter
-    # -----------------------------
+    await disease_repository.save(saved_result)
+
     return disease_result

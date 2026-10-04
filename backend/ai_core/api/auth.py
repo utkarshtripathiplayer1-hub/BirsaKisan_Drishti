@@ -1,16 +1,15 @@
+
 from fastapi import APIRouter, Depends
 
 from schemas.auth import (
     GoogleLoginRequest,
     GoogleLoginResponse,
     MeResponse,
-)
-from services.auth_service import AuthService
-from core.dependencies import get_current_user
-from schemas.auth import (
     UpdateLanguageRequest,
     MessageResponse,
 )
+from services.auth_service import AuthService
+from core.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/auth",
@@ -39,9 +38,13 @@ async def get_me(
             "name": current_user["name"],
             "email": current_user["email"],
             "picture": current_user.get("picture"),
-            "preferred_language": current_user["preferred_language"]
+            "preferred_language": current_user.get(
+                "preferred_language", "en"
+            ),
+            "projects": current_user.get("projects", [])
         }
     }
+
 
 @router.patch(
     "/language",
@@ -51,7 +54,6 @@ async def update_language(
     request: UpdateLanguageRequest,
     current_user=Depends(get_current_user)
 ):
-
     return await AuthService.update_language(
         str(current_user["_id"]),
         request.preferred_language

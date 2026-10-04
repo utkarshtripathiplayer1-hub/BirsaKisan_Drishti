@@ -1,3 +1,4 @@
+
 from datetime import datetime, timedelta
 
 from fastapi import HTTPException
@@ -18,10 +19,10 @@ class ActiveCropService:
         recommendation_id: str,
         user_id: str
     ):
-
-        # Get crop recommendation
+        # Fetch only a recommendation owned by this user
         recommendation = await crop_repository.get_by_id(
-            recommendation_id
+            recommendation_id,
+            user_id
         )
 
         if not recommendation:
@@ -30,69 +31,36 @@ class ActiveCropService:
                 detail="Recommendation not found."
             )
 
-
-        # Get crop knowledge
         crop_info = crop_knowledge_service.get_crop_info(
             recommendation["recommended_crop"]
         )
 
         duration = 120
-
         if crop_info:
-            duration = crop_info.get(
-                "duration_days",
-                120
-            )
-
+            duration = crop_info.get("duration_days", 120)
 
         planted_on = datetime.utcnow()
 
-
         crop = {
-
             "user_id": user_id,
-
             "recommendation_id": recommendation_id,
-
             "crop_name": recommendation["recommended_crop"],
-
             "status": "Growing",
-
             "planted_on": planted_on,
-
-            "expected_harvest": planted_on + timedelta(
-                days=duration
-            )
-
+            "expected_harvest": planted_on + timedelta(days=duration)
         }
 
-
-        crop_id = await active_crop_repository.save(
-            crop
-        )
-
+        crop_id = await active_crop_repository.save(crop)
 
         return {
-
             "message": "Crop started successfully.",
-
             "active_crop_id": str(crop_id),
-
             "crop_name": recommendation["recommended_crop"],
-
             "expected_harvest": crop["expected_harvest"]
-
         }
 
-
-    async def get_current_crop(
-        self,
-        user_id: str
-    ):
-
-        crop = await active_crop_repository.get_active_crop(
-            user_id
-        )
+    async def get_current_crop(self, user_id: str):
+        crop = await active_crop_repository.get_active_crop(user_id)
 
         if not crop:
             raise HTTPException(
@@ -100,71 +68,33 @@ class ActiveCropService:
                 detail="No active crop found."
             )
 
+        return await self.build_current_crop(crop)
 
-        return await self.build_current_crop(
-            crop
-        )
-
-
-    async def build_current_crop(
-        self,
-        crop
-    ):
-
+    async def build_current_crop(self, crop):
         if not crop:
             return None
 
-
         planted_on = crop["planted_on"]
-
         harvest = crop["expected_harvest"]
 
-
-        total_days = max(
-            (harvest - planted_on).days,
-            1
-        )
-
-
-        completed = max(
-            (datetime.utcnow() - planted_on).days,
-            0
-        )
-
-
-        remaining = max(
-            total_days - completed,
-            0
-        )
-
+        total_days = max((harvest - planted_on).days, 1)
+        completed = max((datetime.utcnow() - planted_on).days, 0)
+        remaining = max(total_days - completed, 0)
 
         progress = round(
-            min(
-                (completed / total_days) * 100,
-                100
-            ),
+            min((completed / total_days) * 100, 100),
             2
         )
 
-
         return {
-
             "crop_name": crop["crop_name"],
-
             "status": crop["status"],
-
             "planted_on": planted_on,
-
             "expected_harvest": harvest,
-
             "days_completed": completed,
-
             "days_remaining": remaining,
-
             "progress": progress
-
         }
-
 
 
 active_crop_service = ActiveCropService()

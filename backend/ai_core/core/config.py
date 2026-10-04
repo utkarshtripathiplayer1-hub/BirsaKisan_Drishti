@@ -2,7 +2,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE = BASE_DIR / ".env"
+
+load_dotenv(ENV_FILE, override=False)
 
 
 def get_env(name: str, required: bool = True) -> str | None:
@@ -12,11 +15,6 @@ def get_env(name: str, required: bool = True) -> str | None:
         raise RuntimeError(f"{name} is missing")
 
     return value
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-ENV_FILE = BASE_DIR / ".env"
-
-load_dotenv(ENV_FILE)
 
 # =========================
 # MongoDB
@@ -82,6 +80,8 @@ JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRE_MINUTES = int(
     os.getenv("JWT_EXPIRE_MINUTES", "1440")
 )
+
+JWT_SECRET_KEY = get_env("JWT_SECRET_KEY")
 
 
 # =========================

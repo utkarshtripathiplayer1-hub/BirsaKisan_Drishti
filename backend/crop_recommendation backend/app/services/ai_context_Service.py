@@ -1,14 +1,15 @@
+
 from app.database.mongodb import disease_collection, crop_collection
 
 
 async def get_user_context(user_id: str):
 
-    latest_disease = disease_collection.find_one(
+    latest_disease = await disease_collection.find_one(
         {"user_id": user_id},
         sort=[("created_at", -1)]
     )
 
-    latest_crop = crop_collection.find_one(
+    latest_crop = await crop_collection.find_one(
         {"user_id": user_id},
         sort=[("created_at", -1)]
     )

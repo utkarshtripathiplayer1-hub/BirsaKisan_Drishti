@@ -1,6 +1,7 @@
+
 from fastapi import APIRouter, HTTPException, Depends
 
-from app.auth.dependencies import get_current_user
+from app.auth.dependencies import require_project
 from app.services.ai_context_Service import get_user_context
 from app.schemas.ai_context_schema import AIContextResponse
 
@@ -12,7 +13,7 @@ router = APIRouter()
     response_model=AIContextResponse
 )
 async def fetch_user_context(
-    current_user=Depends(get_current_user)
+    current_user: dict = Depends(require_project("crop"))
 ):
     """
     Returns the latest crop recommendation and disease detection
