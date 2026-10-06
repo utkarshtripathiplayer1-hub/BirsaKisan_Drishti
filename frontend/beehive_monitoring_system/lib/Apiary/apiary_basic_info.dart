@@ -144,7 +144,7 @@ class _ApiaryInfoScreenState extends State<ApiaryInfoScreen> {
                   child: Text('Langstroth'),
                 ),
 
-                DropdownMenuItem(value: 'top-bar', child: Text('Top-Bar')),
+                DropdownMenuItem(value: 'top_bar', child: Text('Top-Bar')),
 
                 DropdownMenuItem(value: 'warre', child: Text('Warre')),
               ],

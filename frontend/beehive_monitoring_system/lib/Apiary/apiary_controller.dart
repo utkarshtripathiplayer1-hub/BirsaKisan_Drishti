@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:beehive_monitoring_system/Apiary/apiary_model.dart';
 import 'package:beehive_monitoring_system/Apiary/apiary_service.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,13 @@ class ApiaryController extends GetxController {
   // -----------------------------
 
   bool isCreatingApiary = false;
+
+  // -----------------------------
+  // CREATED APIARY DATA
+  // -----------------------------
+
+  String? apiaryId;
+  int hiveCount = 0;
 
   // -----------------------------
   // SCREEN 1 DATA
@@ -111,6 +119,9 @@ class ApiaryController extends GetxController {
 
       // Backend returns 201
       if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        apiaryId = data['id'];
+        hiveCount = data['target_hive_count'];
         return true;
       }
 

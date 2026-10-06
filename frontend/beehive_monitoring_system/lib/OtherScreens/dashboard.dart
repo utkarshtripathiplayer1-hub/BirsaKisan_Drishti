@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:beehive_monitoring_system/ApiServices/WeatherAPI/weather_api_controller.dart';
+import 'package:beehive_monitoring_system/BeeOverview/my_apiaries_screen.dart';
 import 'package:beehive_monitoring_system/Chatbot/chatbot_screen.dart';
 import 'package:beehive_monitoring_system/StaticPages/camera_alerts_page.dart';
 import 'package:beehive_monitoring_system/StaticPages/hive_graph_page1.dart';
-import 'package:beehive_monitoring_system/StaticPages/hive_overview_page.dart';
-// import 'package:beehive_monitoring_system/OtherScreens/about_us.dart';
+// import 'package:beehive_monitoring_system/StaticPages/hive_overview_page.dart';
 import 'package:beehive_monitoring_system/OtherScreens/settings.dart';
 import 'package:beehive_monitoring_system/StaticPages/sensor_reading_page.dart';
 import 'package:beehive_monitoring_system/l10n/app_localizations.dart';
@@ -375,7 +375,7 @@ class HomePage extends StatelessWidget {
                                 title: AppLocalizations.of(
                                   context,
                                 )!.hiveOverview,
-                                page: const HiveOverviewPage(),
+                                page: const MyApiariesScreen(),
                                 boxColor: Color(
                                   0xFF06A84A,
                                 ).withValues(alpha: 0.1),

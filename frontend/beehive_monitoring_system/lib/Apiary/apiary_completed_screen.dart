@@ -1,5 +1,8 @@
-import 'package:beehive_monitoring_system/OtherScreens/dashboard.dart';
+import 'package:beehive_monitoring_system/Apiary/apiary_controller.dart';
+import 'package:beehive_monitoring_system/Hives/hive_setup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/route_manager.dart';
 
 class ApiaryCompletedScreen extends StatelessWidget {
   const ApiaryCompletedScreen({super.key});
@@ -42,13 +45,14 @@ class ApiaryCompletedScreen extends StatelessWidget {
 
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => HomePage()),
-                    );
+                    final controller = Get.find<ApiaryController>();
+
+                    print("Apiary ID: ${controller.apiaryId}");
+                    print("Hive Count: ${controller.hiveCount}");
+                    Get.to(() => HiveSetupScreen());
                   },
 
-                  child: const Text('Generate QR Codes'),
+                  child: const Text('Setup Hives Now'),
                 ),
               ),
 
