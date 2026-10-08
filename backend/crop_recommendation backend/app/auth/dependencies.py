@@ -1,4 +1,3 @@
-
 from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPAuthorizationCredentials
 
@@ -24,20 +23,16 @@ def get_current_user(
             detail="Invalid or expired token",
         )
 
-    payload["token"] = token
-    return payload
+    user_id = payload.get("sub")
 
+    if not isinstance(user_id, str) or not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token subject",
+        )
 
-def require_project(project: str):
-    async def project_access(
-        user: dict = Depends(get_current_user),
-    ) -> dict:
-        if project not in user.get("projects", []):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"You do not have access to the {project} project",
-            )
-
-        return user
-
-    return project_access
+    return {
+        "user_id": user_id,
+        "role": payload.get("role", "user"),
+        "token": token,
+    }

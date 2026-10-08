@@ -1,22 +1,38 @@
+from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends
+from fastapi import HTTPException
 
-from app.auth.dependencies import require_project
-from app.schemas.feedback_Schemas import FeedbackCreate
-from app.services.feedback_service import FeedbackService
-
-router = APIRouter(
-    prefix="/feedback",
-    tags=["Feedback"]
-)
+from app.database.mongodb import feedback_collection
 
 
-@router.post("/")
-async def submit_feedback(
-    feedback: FeedbackCreate,
-    current_user: dict = Depends(require_project("crop"))
-):
-    return await FeedbackService.submit_feedback(
-        user_id=current_user["sub"],
-        feedback_data=feedback
-    )
+class FeedbackService:
+
+    @staticmethod
+    async def submit_feedback(
+        user_id: str,
+        feedback_data,
+    ):
+        if not user_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Authenticated user required.",
+            )
+
+        feedback_doc = {
+            "user_id": user_id,
+            "rating": feedback_data.rating,
+            "feedback": feedback_data.feedback.strip(),
+            "created_at": datetime.now(timezone.utc),
+        }
+
+        result = await feedback_collection.insert_one(
+            feedback_doc
+        )
+
+        return {
+            "message": "Feedback submitted successfully.",
+            "feedback_id": str(result.inserted_id),
+        }
+
+
+FeedbackService = FeedbackService
