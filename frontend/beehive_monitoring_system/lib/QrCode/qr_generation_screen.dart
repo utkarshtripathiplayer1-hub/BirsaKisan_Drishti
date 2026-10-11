@@ -32,7 +32,7 @@ class _QrGenerationScreenState extends State<QrGenerationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final QrController qrController = Get.find<QrController>();
+    // final QrController qrController = Get.find<QrController>();
 
     return Scaffold(
       appBar: AppBar(title: const Text('QR Codes')),

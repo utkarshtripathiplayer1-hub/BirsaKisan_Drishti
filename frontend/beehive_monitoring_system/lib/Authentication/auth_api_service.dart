@@ -17,7 +17,10 @@ class AuthApiService {
     final response = await http.post(
       Uri.parse("${ApiConfig.baseUrl}/auth/google"),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"id_token": idToken}),
+      body: jsonEncode({
+        "id_token": idToken,
+        "app_type": "beehive"
+      }),
     );
 
     if (response.statusCode == 200) {

@@ -2,16 +2,16 @@ import 'package:beehive_monitoring_system/QrCode/qr_generation_screen.dart';
 import 'package:beehive_monitoring_system/QrCode/qr_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:beehive_monitoring_system/Apiary/apiary_controller.dart';
+// import 'package:beehive_monitoring_system/Apiary/apiary_controller.dart';
 
 class HiveSetupCompletedScreen extends StatelessWidget {
   const HiveSetupCompletedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ApiaryController apiaryController = Get.find<ApiaryController>();
+    // final ApiaryController apiaryController = Get.find<ApiaryController>();
 
-    final QrController qrController = Get.put(QrController());
+    // final QrController qrController = Get.put(QrController());
 
     return Scaffold(
       body: SafeArea(
