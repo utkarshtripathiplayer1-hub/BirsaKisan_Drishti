@@ -1,8 +1,9 @@
+import 'package:beehive_monitoring_system/Authentication/secure_storage_service.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiConfig {
-  static String get baseUrl => dotenv.env['BASE_CORE_URL']!;
+  static String get baseUrl => dotenv.env['BASE_CROP_URL']!;
 }
 
 class WeatherApiService extends GetConnect {
@@ -10,9 +11,24 @@ class WeatherApiService extends GetConnect {
     required double lat,
     required double lon,
   }) async {
+    final token = await SecureStorageService.getAccessToken();
+
+    print("Token: $token");
+
+    if (token == null) {
+      throw Exception("User is not logged in");
+    }
+
     final response = await get(
       '${ApiConfig.baseUrl}/weather/current?lat=$lat&lon=$lon',
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
     );
+
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return response.body;
     }

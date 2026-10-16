@@ -15,7 +15,7 @@ class AuthResponse {
     return AuthResponse(
       accessToken: json["access_token"],
       user: UserModel.fromJson(json["user"]),
-      isNewUser: json["is_new_user"] ?? false,
+      isNewUser: json["user"]["new_user_beehive"] ?? false,
     );
   }
 }

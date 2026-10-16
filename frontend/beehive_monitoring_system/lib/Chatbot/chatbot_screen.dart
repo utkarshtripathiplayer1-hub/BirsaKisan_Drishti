@@ -389,11 +389,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
                   child: Padding(
                     padding: EdgeInsets.all(8),
-                    child: Icon(
-                      Icons.mic,
-                      size: 28,
-                      color: Color(0xFF574422),
-                    ),
+                    child: Icon(Icons.mic, size: 28, color: Color(0xFF574422)),
                   ),
                 ),
               ],

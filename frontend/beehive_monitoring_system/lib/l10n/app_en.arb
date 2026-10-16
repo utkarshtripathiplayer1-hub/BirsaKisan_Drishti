@@ -120,6 +120,9 @@
   "question7" : "How does the Camera & Alerts feature work?",
   "answer7" : "The Camera & Alerts module combines image analysis with smart notifications. Users can upload hive images for AI-based analysis. The application uses deep learning models to identify bee activity, detect potential diseases, and recognize abnormalities within the hive. All detected issues are displayed alongside sensor-based alerts so users can make informed decisions about hive management.",
   "question8" : "How does the AI Assistant help me?",
-  "answer8" : "The AI Assistant acts as your virtual beekeeping companion. It explains sensor readings, interprets alerts, answers questions about hive conditions, recommends corrective actions, and helps users understand the information displayed throughout the application. The assistant is available anytime from the main dashboard and is designed to simplify hive management for both beginners and experienced beekeepers."
+  "answer8" : "The AI Assistant acts as your virtual beekeeping companion. It explains sensor readings, interprets alerts, answers questions about hive conditions, recommends corrective actions, and helps users understand the information displayed throughout the application. The assistant is available anytime from the main dashboard and is designed to simplify hive management for both beginners and experienced beekeepers.",
 
+  "setupApiary" : "Let’s set up your apiary",
+  "lessThanMin" : "This takes less than a minute.",
+  "cont" : "Continue"
 }

@@ -46,6 +46,7 @@ class WeatherApiController extends GetxController {
         backgroundColor: Colors.green.shade900,
         colorText: Colors.white,
       );
+      throw Exception("Location service is disabled");
     }
 
     LocationPermission permission = await Geolocator.checkPermission();

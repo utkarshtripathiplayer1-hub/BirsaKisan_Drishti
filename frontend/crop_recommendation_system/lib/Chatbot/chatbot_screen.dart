@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:crop_recommendation_system/Chatbot/chat_history_screen.dart';
 import 'package:crop_recommendation_system/Chatbot/chatbot_voice_service.dart';
 import 'package:crop_recommendation_system/l10n/app_localizations.dart';
@@ -19,7 +21,18 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    recorder.dispose();
+    _messageController.dispose();
+    _scrollController.dispose();
+
+    super.dispose();
+  }
+
   final AudioRecorder recorder = AudioRecorder();
+  final AudioPlayer audioPlayer = AudioPlayer();
 
   bool isRecording = false;
 
@@ -46,13 +59,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     super.initState();
 
     if (widget.conversationData != null) {
-      currentConversationId = widget.conversationData!["conversation_id"];
+      currentConversationId = widget.conversationData!["conversation"]["id"];
 
       final oldMessages = widget.conversationData!["messages"];
 
       for (final msg in oldMessages) {
         messages.add({
-          "text": msg["original_text"],
+          "text": msg["content"].toString(),
           "isUser": msg["role"] == "user",
         });
       }
@@ -73,6 +86,36 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     }
   }
 
+  Future<void> playBase64Audio(String base64Audio) async {
+    try {
+      // Stop any audio that is already playing
+      await audioPlayer.stop();
+
+      // Decode Base64 into audio bytes
+      final audioBytes = base64Decode(base64Audio);
+
+      // Get temporary directory
+      final dir = await getTemporaryDirectory();
+
+      // Create a unique WAV file
+      final filePath =
+          '${dir.path}/bot_audio_${DateTime.now().millisecondsSinceEpoch}.wav';
+
+      // Write audio bytes to file
+      final file = File(filePath);
+      await file.writeAsBytes(audioBytes);
+
+      // Play WAV file
+      await audioPlayer.play(DeviceFileSource(filePath));
+    } catch (e) {
+      print("AUDIO PLAY ERROR => $e");
+
+      if (!mounted) return;
+
+      Get.snackbar("Audio Error", "Unable to play the audio response.");
+    }
+  }
+
   Future<void> sendMessage() async {
     final query = _messageController.text.trim();
 
@@ -88,17 +131,20 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
     try {
       final response = await service.sendMessage(
-        domain: "agriculture",
-        query: query,
+        text: query,
         conversationId: currentConversationId,
       );
-      print("Conversation ID: $currentConversationId");
+
       currentConversationId = response["conversation_id"];
+
+      print("Conversation ID: $currentConversationId");
+      print("Bot response: $response");
 
       setState(() {
         messages.add({
-          "text": response["response"].replaceAll("**", ""),
+          "text": response["ai_response"].toString().replaceAll("**", ""),
           "isUser": false,
+          "audioBase64": response["audio_base64"],
         });
       });
     } catch (e) {
@@ -193,22 +239,28 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
       final voiceService = ChatbotVoiceService();
 
+      print("➡️ VOICE ID BEING SENT = $currentConversationId");
+
       final data = await voiceService.sendVoiceMessage(
         audioPath: path,
         domain: "agriculture",
         conversationId: currentConversationId,
       );
 
+      currentConversationId = data["conversation_id"];
+      print("⬅️ VOICE ID RETURNED = ${data["conversation_id"]}");
+
       print("DATA = $data");
-      print("TRANSCRIPT = ${data["transcript"]}");
-      print("RESPONSE = ${data["response"]}");
+      print("USER TEXT = ${data["user_text"]}");
+      print("AI RESPONSE = ${data["ai_response"]}");
 
       setState(() {
-        messages.add({"text": data["transcript"], "isUser": true});
+        messages.add({"text": data["user_text"].toString(), "isUser": true});
 
         messages.add({
-          "text": data["response"].replaceAll("**", ""),
+          "text": data["ai_response"].toString().replaceAll("**", ""),
           "isUser": false,
+          "audioBase64": data["audio_base64"],
         });
       });
     } catch (e) {
@@ -235,7 +287,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         }
       });
     } catch (e) {
-        if (!mounted) return;
+      if (!mounted) return;
       Get.snackbar(
         AppLocalizations.of(context)!.error,
         AppLocalizations.of(context)!.failLoadConvo,
@@ -320,9 +372,48 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                               ),
                               const SizedBox(width: 8),
                               Flexible(
-                                child: Text(
-                                  msg["text"],
-                                  style: const TextStyle(color: Colors.black),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      msg["text"],
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    if (msg["audioBase64"] != null &&
+                                        msg["audioBase64"]
+                                            .toString()
+                                            .isNotEmpty) ...[
+                                      const SizedBox(height: 8),
+
+                                      GestureDetector(
+                                        onTap: () {
+                                          playBase64Audio(
+                                            msg["audioBase64"].toString(),
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.volume_up,
+                                              color: Colors.green.shade900,
+                                              size: 22,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              "Listen",
+                                              style: TextStyle(
+                                                color: Colors.green.shade900,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                               ),
                             ],

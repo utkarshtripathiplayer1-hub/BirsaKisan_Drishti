@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:crop_recommendation_system/Authentication/secure_storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,11 +10,20 @@ class ApiConfig {
 
 class PdfService {
   static Future<File> downloadPdf(String recommendationId) async {
+    final token = await SecureStorageService.getAccessToken();
+
+    print("Token: $token");
+
+    if (token == null) {
+      throw Exception("User is not logged in");
+    }
 
     final response = await http.get(
-      Uri.parse(
-        '${ApiConfig.baseUrl}/pdf/generate/$recommendationId',
-      ),
+      Uri.parse('${ApiConfig.baseUrl}/pdf/generate/$recommendationId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
     );
 
     print('Status Code: ${response.statusCode}');
@@ -25,13 +35,9 @@ class PdfService {
 
     final directory = await getApplicationDocumentsDirectory();
 
-    final file = File(
-      '${directory.path}/report.pdf',
-    );
+    final file = File('${directory.path}/report.pdf');
 
-    await file.writeAsBytes(
-      response.bodyBytes,
-    );
+    await file.writeAsBytes(response.bodyBytes);
 
     return file;
   }

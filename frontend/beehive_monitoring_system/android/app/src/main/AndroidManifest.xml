@@ -7,7 +7,7 @@
 
 
     <application
-        android:label="beehive_monitoring_system"
+        android:label="Birsa kisan Drishti"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
